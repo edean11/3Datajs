@@ -41,7 +41,7 @@ module.exports = function (grunt) {
       },
       server: {
         options: {
-          livereload: true
+          livereload: 1337
         }
       }
     },
@@ -58,7 +58,7 @@ module.exports = function (grunt) {
         tasks: ['copy']
       },
       livereload: {
-        options: { livereload: true },
+        options: { livereload: 1337 },
         files: ['public/{,*/}*.{html,css,js}']
       },
       jade: {

@@ -2,3 +2,13 @@
 	margin: 0;
 	padding: 0;
  }
+
+ .infoBox {
+ 	padding: 50px;
+	border: 20px solid black !important;
+	border-radius: 100px;
+ 	img {
+ 		text-align: center;
+ 		display: inline-block;
+ 	}
+ }
