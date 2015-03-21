@@ -25,8 +25,8 @@ function createTestData(numOfKeys, numOfLinks){
   var obj = {};
   for(var i=0;i<numOfKeys;i++){
     var color = function(){if(i%2 !== 0){return [0,1,0]}else{return [0,0,1]}}
-    var linkColor = function(){if(i%2 !== 0){return [255,0,220]}else{return [1,0,0]}}
-    var nodeSize = function(){if(i%2 !== 0){return 5}else{return 1}}
+    var linkColor = function(){if(i%2 !== 0){return [150,100,0]}else{return [1,0,0]}}
+    var nodeSize = function(){if(i%2 !== 0){return 5}else{return 3}}
     var popup = function(){
       var elem = document.createElement('div');
       elem.className = 'infoBox';
@@ -41,8 +41,14 @@ function createTestData(numOfKeys, numOfLinks){
       nodeSize: nodeSize(),
       popup: popup()
     }
-    for(var j=0;j<numOfLinks;j++){
-      obj[i].links[j] = getRandomInt(0,numOfKeys-1);
+    if(i%2 !== 0){
+      for(var j=0;j<numOfLinks;j++){
+        obj[i].links[j] = getRandomInt(0,numOfKeys-1);
+      }
+    }else{
+      for(var j=0;j<numOfLinks+2;j++){
+        obj[i].links[j] = getRandomInt(0,numOfKeys-1);
+      }
     }
   }
   return obj;
@@ -68,46 +74,60 @@ var testData = createTestData(20,2);
   //objects
   hasAmbientLight = true,
   hasDirectionalLight = false,
-  //variables
+  //grouping
+  groupingType = 'automatic', //random, automatic or defined
+    //if automatic
+    groupSize = 8,
+    //if defined
+    groupingVariableFunction = function(node){
+      if(node){
+        //return node.group;
+      }else{return false}
+    },
+  //general variables
   nodeColorFunction = function(node){
     if(node){
       return node.nodeColor;
     }else{return false}
-  }
+  },
   nodeSizeFunction = function(node){
     if(node){
       return node.nodeSize;
     }else{return false}
-  }
+  },
   nodePopupFunction = function(node){
     if(node){
       return node.popup;
     }else{return false}
-  }
+  },
   linkColorFunction = function(srcNode){
     if(srcNode){
       return srcNode.linkColor;
     }else{return false}
-  }
-
+  },
   //size
   renderSizeWidth = window.innerWidth,
   renderSizeHeight = window.innerHeight,
   nodeSize = 2,
+  //node resolution
   nodeWidthSegments = 128,
   nodeHeightSegments = 128,
+  //bound
   maxBound = 5000,
-  groupSize = 8,
   //density
-  xDensity = 10,
-  yDensity = 5,
-  zDensity = 10,
+  xDensity = 20,
+  yDensity = 20,
+  zDensity = 20,
+  //background
+  backgroundType = 'color'; //image or color
+  backgroundColor = [0,0,0];
+  backgroundImage = 'http://i.imgur.com/x4egEw1.jpg'
   //color
   nodeColor = 0xffffff,
   zoomNodeColor = 0xff0000,
   linkColor = 0x00ff00,
   ambientLightColor = 0xffffff,
-  directionalLightColor = 0xf0f000,
+  directionalLightColor = 0xffffff,
   //directional light pos
   directionalLightPosX = 1,
   directionalLightPosY = 1,
@@ -121,10 +141,45 @@ var testData = createTestData(20,2);
 ///////// PROCESS DATA AND OPTIONS /////////////
 ////////////////////////////////////////////////
 
+function sortUserData(data,groupingType){
+  if(groupingType==='automatic'){
+    var sortedNodes = _.sortBy(data, function(node) {
+      node.linksLength = node.links.length;
+      return node.links.length;
+    });
+    return sortedNodes;
+  }
+}
+
+function chunkUserData(data,groupingType,groupSize){
+  if(groupingType==='automatic'){
+    return _.chunk(data,groupSize);
+  }
+}
+
+chunkUserData(sortUserData(testData,groupingType),groupingType,groupSize);
+
+var boundsArr = [];
+
+function findFullBound(mesh,groupNum,totalGroups){
+  var posArr = []
+  posArr.push(10*(xDensity*(groupNum/totalGroups)));
+  posArr.push(10*(yDensity*(groupNum/totalGroups)));
+  posArr.push(10*(zDensity*(groupNum/totalGroups)));
+  return posArr;
+}
+
 function getRandomNodePos(mesh,xDens,yDens,zDens){
-  mesh.position.x = ( Math.random() - 0.5 ) * 10 * xDens;
-  mesh.position.y = ( Math.random() - 0.5 ) * 10 * yDens;
-  mesh.position.z = ( Math.random() - 0.5 ) * 10 * zDens;
+  mesh.position.x = (Math.random() - 0.5) * 10 * xDens;
+  mesh.position.y = (Math.random() - 0.5) * 10 * yDens;
+  mesh.position.z = (Math.random() - 0.5) * 10 * zDens;
+}
+
+function getRandomNodePosGroup(mesh,groupNum,totalGroups){
+  var pos = findFullBound(mesh,groupNum,totalGroups);
+  mesh.position.x = (Math.random() - 0.5)*pos[0];
+  mesh.position.y = (Math.random() - 0.5)*pos[1];
+  mesh.position.z = (Math.random() - 0.5)*pos[2];
 }
 
 function getNodeUserDataOnClick(node){
@@ -140,35 +195,59 @@ function createNodeMesh(nodeSize,nodeWidthSegments,nodeHeightSegments,nodeColor,
   return mesh;
 }
 
+function createNodeFunction(val,key){
+  var nColor = function(){if(nodeColorFunction(val)){return nodeColorFunction(val)}else{return nodeColor}}
+  var nSize = function(){if(nodeSizeFunction(val)){return nodeSizeFunction(val)}else{return nodeSize}}
+  var mesh = createNodeMesh(nSize(),nodeWidthSegments,nodeHeightSegments,nColor(),true,1);
+  val._nodeColor = [nColor()[0],nColor()[1],nColor()[2]];
+  val.mesh = mesh;
+  mesh.userData.nodeInfo = val;
+  mesh.getUUID = function(){return this.uuid}
+  return mesh;
+}
+
 function createNodes(data,cb){
   var iterator = 1;
+  var groupIterator = 1;
+  var chunkedData = chunkUserData(sortUserData(data,groupingType),groupingType,groupSize);
   _.forEach(data,function(val,key){
-    var nColor = function(){if(nodeColorFunction(val)){return nodeColorFunction(val)}else{return nodeColor}}
-    var nSize = function(){if(nodeSizeFunction(val)){return nodeSizeFunction(val)}else{return nodeSize}}
-    var mesh = createNodeMesh(nSize(),nodeWidthSegments,nodeHeightSegments,nColor(),true,1);
-    val._nodeColor = [nColor()[0],nColor()[1],nColor()[2]];
-    getRandomNodePos(mesh,xDensity,yDensity,zDensity);
+    var mesh = createNodeFunction(val,key);
+    if(groupingType === 'random'){
+      getRandomNodePos(mesh,xDensity,yDensity,zDensity);
+    } else if(groupingType === 'automatic'){
+      for(var i=0;i<chunkedData.length;i++){
+        for(var j=0;j<chunkedData[i].length;j++){
+          getRandomNodePosGroup(mesh,i,chunkedData.length);
+        }
+      }
+    }else{}
     mesh.updateMatrix();
     mesh.matrixAutoUpdate = false;
-    val.mesh = mesh;
-    mesh.userData.nodeInfo = val;
-    mesh.getUUID = function(){return this.uuid}
-    nodes.add(mesh);
-    if(iterator === _.keys(data).length){
+    if(groupingType === 'random' && iterator === _.keys(data).length){
       _.forEach(data,function(val,key){
         findLinkedPos(data,key);
       });
+    } else if(groupingType === 'automatic' && groupIterator === chunkedData.length){
+      _.forEach(data,function(val,key){
+        console.log(val,key);
+        //findLinkedPos(data,key);
+      });
     }
+    console.log(groupIterator)
+    nodes.add(mesh);
     cb(mesh,key);
     iterator++;
+    groupIterator++;
   });
   console.log(scene);
 }
 
 function findLinkedPos(data,id){
   var links = data[id].links;
+  console.log(links);
   var linkPosArr = [];
   for(var i=0;i<links.length;i++){
+    console.log('link',links[i]);
     var linkPos = data[links[i]].mesh.position;
     linkPosArr.push(linkPos);
   }
@@ -241,7 +320,6 @@ function createNodeLink(id,pos2){
   function animate() {
     requestAnimationFrame(animate);
     controls.update();
-    TWEEN.update();
     render();
   }
 
@@ -249,11 +327,21 @@ function createNodeLink(id,pos2){
 
   function createSkyBox(){
     var skyGeometry = new THREE.BoxGeometry( 10000, 10000, 10000 );
-    var skyMaterial = new THREE.MeshBasicMaterial();
-      skyMaterial.color.setRGB(0,50,230);
-    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
-      skyBox.scale.x = -1;
-    scene.add(skyBox);
+    if(backgroundType==='image'){
+      var texture = THREE.ImageUtils.loadTexture(backgroundImage,{},function(){
+      var skyMaterial = new THREE.MeshBasicMaterial({map:texture});
+      //renderer.render(scene);
+      var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+        skyBox.scale.x = -1;
+        scene.add(skyBox);
+      });
+    }else{
+      var skyMaterial = new THREE.MeshBasicMaterial();
+      skyMaterial.color.setRGB(backgroundColor[0],backgroundColor[1],backgroundColor[2]);
+      var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+        skyBox.scale.x = -1;
+        scene.add(skyBox);
+    }
   }
 
 //////////////////////////////////////////
@@ -316,7 +404,7 @@ findSquares(8);
     createSkyBox();
     //loop through objects and add to node group,
       //cb sets the linkLines
-    createNodes(testData,function(mesh,id){});
+      createNodes(testData,function(mesh,id){});
 
     //Trigger Event Listeners on window
       //Handles window responsiveness
@@ -405,34 +493,25 @@ findSquares(8);
   //---------------------//
 
   function onWindowResize() {
-
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-
     renderer.setSize( window.innerWidth, window.innerHeight );
-
     render();
-
   }
 
-  function onMouseMove( event ) {
-
-    // calculate mouse position in normalized device coordinates
-    // (-1 to +1) for both components
-
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1
-
+  function onMouseMove( e ) {
+    mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1
+    mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1
   }
 
   var lastClickedNode;
   function dblClickNode( e ) {
-    revertColor(lastClickedNode);
     raycaster.setFromCamera(mouse,camera);
     // calculate objects intersecting the picking ray
     var intersects = raycaster.intersectObjects(nodes.children);
     var children = nodes.children;
     var objPos = intersects[0].point;
+    revertColor(lastClickedNode);
     lastClickedNode = intersects[0];
     console.log(intersects[0]);
     //zoom into object
