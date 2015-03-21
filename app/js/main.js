@@ -210,35 +210,39 @@ function createNodes(data,cb){
   var iterator = 1;
   var groupIterator = 1;
   var chunkedData = chunkUserData(sortUserData(data,groupingType),groupingType,groupSize);
-  _.forEach(data,function(val,key){
-    var mesh = createNodeFunction(val,key);
-    if(groupingType === 'random'){
+  if(groupingType === 'random'){
+    _.forEach(data,function(val,key){
+      var mesh = createNodeFunction(val,key);
       getRandomNodePos(mesh,xDensity,yDensity,zDensity);
-    } else if(groupingType === 'automatic'){
-      for(var i=0;i<chunkedData.length;i++){
-        for(var j=0;j<chunkedData[i].length;j++){
-          getRandomNodePosGroup(mesh,i,chunkedData.length);
-        }
+      mesh.updateMatrix();
+      mesh.matrixAutoUpdate = false;
+      if(iterator === _.keys(data).length){
+        _.forEach(data,function(val,key){
+          findLinkedPos(data,key);
+        });
       }
-    }else{}
-    mesh.updateMatrix();
-    mesh.matrixAutoUpdate = false;
-    if(groupingType === 'random' && iterator === _.keys(data).length){
-      _.forEach(data,function(val,key){
-        findLinkedPos(data,key);
+      nodes.add(mesh);
+      cb(mesh,key);
+      iterator++;
+    });
+  } else if(groupingType === 'automatic')
+    _.forEach(chunkedData,function(chunk,chunkKey){
+      _.forEach(chunk,function(node,key){
+        var mesh = createNodeFunction(node,key);
+        getRandomNodePosGroup(mesh,groupIterator,chunkedData.length);
+        mesh.updateMatrix();
+        mesh.matrixAutoUpdate = false;
+        nodes.add(mesh);
+        cb(mesh,key);
       });
-    } else if(groupingType === 'automatic' && groupIterator === chunkedData.length){
-      _.forEach(data,function(val,key){
-        console.log(val,key);
-        //findLinkedPos(data,key);
-      });
-    }
-    console.log(groupIterator)
-    nodes.add(mesh);
-    cb(mesh,key);
-    iterator++;
-    groupIterator++;
-  });
+      if(groupIterator === chunkedData.length){
+        _.forEach(data,function(val,key){
+          console.log(val,key);
+          findLinkedPos(data,key);
+        });
+      }
+      groupIterator++;
+    });
   console.log(scene);
 }
 
