@@ -577,6 +577,7 @@ _3DATA.create = function(data,optionsObj){
       document.body.appendChild(cssRenderer.domElement);
     }
     render();
+    return zoomObjMesh;
   }
 
   _3DATA.zoomPosition = function(position,zoomOut){
