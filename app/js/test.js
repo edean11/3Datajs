@@ -80,7 +80,8 @@ var testData = createTestData(20,2);
     hasAmbientLight : true,
     hasDirectionalLight : false,
     showLinks : false,
-    positioningType : 'automatic', //random, automatic, grouped, or defined
+    autoAppendPopup : true,
+    positioningType : 'random', //random, automatic, grouped, or defined
       //if automatic
       groupSize : 2,
       //if grouped

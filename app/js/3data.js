@@ -13,6 +13,7 @@ _3DATA.create = function(data,optionsObj){
     hasAmbientLight = optionsObj.hasAmbientLight || false,
     hasDirectionalLight = optionsObj.hasDirectionalLight || false,
     showLinks = optionsObj.showLinks,
+    autoAppendPopup = optionsObj.autoAppendPopup,
     //grouping
     positioningType = optionsObj.positioningType || 'random', //random, automatic, defined group, or defined position
       //if automatic
@@ -204,9 +205,6 @@ _3DATA.create = function(data,optionsObj){
   function createNodes(data,cb){
     var iterator = 1;
     var groupIterator = 1;
-    var chunkedData = chunkUserData(sortUserData(data,positioningType),positioningType,groupSize);
-    var groupedData = groupData(testData);
-    var groupedDataPos = findGroupPos(groupedData)
     if(positioningType === 'random'){
       _.forEach(data,function(val,key){
         var mesh = createNodeFunction(val,key);
@@ -219,10 +217,14 @@ _3DATA.create = function(data,optionsObj){
           });
         }
         nodes.add(mesh);
+        if(autoAppendPopup){
+          appendPopup(mesh,false)
+        }
         cb(mesh,key);
         iterator++;
       });
     } else if(positioningType === 'automatic') {
+      var chunkedData = chunkUserData(sortUserData(data,positioningType),positioningType,groupSize);
       _.forEach(chunkedData,function(chunk,chunkKey){
         _.forEach(chunk,function(node,key){
           var mesh = createNodeFunction(node,key);
@@ -231,6 +233,9 @@ _3DATA.create = function(data,optionsObj){
           mesh.matrixAutoUpdate = false;
           nodes.add(mesh);
           cb(mesh,key);
+          if(autoAppendPopup){
+            appendPopup(mesh,false);
+          }
         });
         if(groupIterator === chunkedData.length && showLinks){
           _.forEach(data,function(val,key){
@@ -240,6 +245,8 @@ _3DATA.create = function(data,optionsObj){
         groupIterator++;
       });
     } else if(positioningType === 'grouped'){
+      var groupedData = groupData(testData);
+      var groupedDataPos = findGroupPos(groupedData)
       _.forEach(groupedData,function(group,groupNumber){
         _.forEach(group,function(node,nodeKey){
           var mesh = createNodeFunction(node,nodeKey);
@@ -248,6 +255,9 @@ _3DATA.create = function(data,optionsObj){
           mesh.matrixAutoUpdate = false;
           nodes.add(mesh);
           cb(mesh,nodeKey);
+          if(autoAppendPopup){
+            appendPopup(mesh,false);
+          }
         });
         console.log(showLinks);
         console.log(optionsObj.showLinks);
@@ -273,6 +283,9 @@ _3DATA.create = function(data,optionsObj){
           });
         }
         nodes.add(mesh);
+        if(autoAppendPopup){
+          appendPopup(mesh,false);
+        }
         cb(mesh,key);
         iterator++;
       });
@@ -442,9 +455,11 @@ _3DATA.create = function(data,optionsObj){
 
   //create plane mesh
   var lastPlaneMeshName = [];
-  function createMesh(pos){
-    var lastObject = scene.getObjectByName ( 'planeMesh', true );
-    if(lastPlaneMeshName[0]){scene.remove(lastObject)};
+  function createMesh(pos,remove){
+    if(remove){
+      var lastObject = scene.getObjectByName ( 'planeMesh', true );
+      if(lastPlaneMeshName[0]){scene.remove(lastObject)};
+    }
     var meshMat = new THREE.MeshBasicMaterial({wireframe:true});
     meshMat.color.set('black');
     meshMat.opacity = 0;
@@ -462,9 +477,11 @@ _3DATA.create = function(data,optionsObj){
 
   //create dom element
   var lastCssObjectName = [];
-  function createDomElement(elem,planeMesh){
-    var lastObject = cssScene.getObjectByName ( 'cssObject', true );
-    if(lastCssObjectName[0]){cssScene.remove(lastObject)};
+  function createDomElement(elem,planeMesh,remove){
+    if(remove){
+      var lastObject = cssScene.getObjectByName ( 'cssObject', true );
+      if(lastCssObjectName[0]){cssScene.remove(lastObject)};
+    }
     var container = document.createElement('div');
     container.appendChild(elem);
     var cssObject = new THREE.CSS3DObject(container);
@@ -475,6 +492,19 @@ _3DATA.create = function(data,optionsObj){
     cssObject.scale.multiplyScalar(1/350);
     cssScene.add(cssObject);
     return cssObject;
+  }
+
+  function appendPopup(node,remove){
+    //set cssMesh position
+    var cssPos = node.position;
+    cssPos.x += meshPosX;
+    cssPos.y += meshPosY;
+    cssPos.z += meshPosZ;
+    //render css3D
+    var cssMesh = createMesh(cssPos,remove);
+    var cssObj = createDomElement(nodePopupFunction(node.userData.nodeInfo),cssMesh,remove);
+    document.body.appendChild(cssRenderer.domElement);
+    cssRenderer.render(cssScene,camera);
   }
 
   //Render scene and camera
@@ -520,17 +550,8 @@ _3DATA.create = function(data,optionsObj){
     lastClickedNode = intersects[0];
     //zoom into object
     zoomIntoNode(intersects[0]);
-    console.log(intersects[0]);
-    //set cssMesh position
-    var cssPos = objPos;
-    cssPos.x += meshPosX;
-    cssPos.y += meshPosY;
-    cssPos.z += meshPosZ;
-    //render css3D
-    var cssMesh = createMesh(cssPos);
-    var cssObj = createDomElement(nodePopupFunction(intersects[0].object.userData.nodeInfo),cssMesh);
-    document.body.appendChild(cssRenderer.domElement);
-    cssRenderer.render(cssScene,camera);
+    //append popup
+    appendPopup(intersects[0].object,true);
   }
 
   function revertColor(revertNode){
@@ -589,7 +610,7 @@ _3DATA.create = function(data,optionsObj){
   }
 
   _3DATA.getCamera = function(){
-    return camera;
+    return [camera,controls];
   }
 
   _3DATA.render = function(){
@@ -601,6 +622,15 @@ _3DATA.create = function(data,optionsObj){
     var deleteObject = scene.getObjectByName(objectName);
     scene.remove(deleteObject);
     render();
+  }
+
+  _3DATA.revertColor = function(revertNode){
+    nodes.traverse(function(node){
+      if(node.material && revertNode && node === revertNode){
+        var revertColor = node.userData.nodeInfo._nodeColor;
+        node.material.color.setRGB(revertColor[0],revertColor[1],revertColor[2]);
+      }else{}
+    })
   }
 
   return {node: {scene: scene,renderer: renderer},popup: {scene: cssScene,renderer: cssRenderer}}

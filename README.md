@@ -94,6 +94,7 @@ options = {
     hasAmbientLight : true,
     hasDirectionalLight : false,
     showLinks : false,
+    autoAppendPopup : false
     // random, automatic, grouped, or defined
     positioningType : 'automatic',
       //if automatic
@@ -155,6 +156,7 @@ options = {
 - hasAmbientLight = boolean, defines if the scene has an ambient light
 - hasDirectionalLight = boolean, defines if the scene has a directional light
 - showLinks = boolean, defines if the links are shown in the scene
+- autoAppendPopup = boolean, determines if the popups are appended for all nodes to start (true) or if they should only be appended when the node is selected (false)
 - positioningType = this property has a large impact on how the data is positioned in the scene.  There are 4 possible choices:
 
 	1. random - this is the easiest type to implement as it requires no other positioning properties to be defined.  It simply places all data points into the scene randomly, within the bounds set in the xSpread,ySpread and zSpread properties
@@ -234,7 +236,7 @@ Congratulations! You have just created your first 3datajs scene!
 
 - _3DATA.zoomNode(zoomObjMesh,zoomOut,showNodeInfo) = this allows the user to define and zoom into a specific node. You must provide the entire mesh of the node to be zoomed into, the amount you want to zoom out from that object once zoomed in (i.e. 10,100 etc.), and a boolean value of whether the popup displays when zoomed in
 
-- _3DATA.zoomPosition(position,zoomOut) = this allows th user to zoom into any particular point in the scene.  Simply provide the position in an x,y,z array (i.e. [10,12,100]) and the zmount to zoom out once zoomed in on that position
+- _3DATA.zoomPosition(position,zoomOut) = this allows th user to zoom into any particular point in the scene.  Simply provide the position in an x,y,z array (i.e. [10,12,100]) and the amount to zoom out once zoomed in on that position
 
 
 
