@@ -12,7 +12,8 @@ Installation
 	2.  lodash
 	3.  threejs
 
-> The threejs build should have the following folders/files in > the 'build' folder in addition to the standard three.min.js:
+> The threejs build should have the following folders/files in
+> the 'build' folder in addition to the standard three.min.js:
 
 	* build/controls/OrbitControls.js
 	* build/renderers/CanvasRenderer.js
