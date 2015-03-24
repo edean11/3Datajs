@@ -12,6 +12,14 @@ Installation
 	2.  lodash
 	3.  threejs
 
+> The threejs build should have the following folders/files in > the 'build' folder in addition to the standard three.min.js:
+
+	* build/controls/OrbitControls.js
+	* build/renderers/CanvasRenderer.js
+	* build/renderers/CSS3DRenderer.js
+	* build/renderers/Projector.js
+	* build/Detector.js
+
 To Install 3Datajs, install the dependencies above into your project folder then include the 3data.js file or simply use bower as shown below:
 
 ``bower install 3datajs --save``
