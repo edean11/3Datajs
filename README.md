@@ -78,14 +78,17 @@ data = {
 		links: [1,4],
 		popup: popup(this.name)
 	},
-}```
+}
+```
 
-	Each data point's name, color and size properties may be called anything the user desires and more properties of any nature may be added to each object. The only hard coded property name is the links property as described above.
+Each data point's name, color and size properties may be called anything the user desires and more properties of any nature may be added to each object. The only hard coded property name is the links property as described above.
 
 ###### Sample Options Object
-> All available options are included below, but only the bold properties are required (unless otherwise specified)
+> All available options are included below, but only the bold
+> properties are required (unless otherwise specified)
 
-```options = {
+```
+options = {
 	rendererTarget: null,
     hasAmbientLight : true,
     hasDirectionalLight : false,
@@ -144,7 +147,8 @@ data = {
     meshPosZ : -2,
     wireframeMesh: true,
     wireframeWidth: 1
-}```
+}
+```
 
 - rendererTarget = If null, 3datajs append directly to the body of the html.  Otherwise, provide a jquery style selector to define the target of the data rendering (i.e. '#container')
 - hasAmbientLight = boolean, defines if the scene has an ambient light
