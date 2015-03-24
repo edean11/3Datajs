@@ -32,203 +32,203 @@ This object can contain a wide variety of available output options as defined by
 
 ## Example
 
-	###### Sample Data Object with popup function
+###### Sample Data Object with popup function
 
-	```
-	var popup = function(name){
-      var elem = document.createElement('div');
-      elem.className = 'infoBox';
-      elem.innerHTML = name;
-      return elem;
-    }
+```
+var popup = function(name){
+  var elem = document.createElement('div');
+  elem.className = 'infoBox';
+  elem.innerHTML = name;
+  return elem;
+}
 
-	data = {
-		1: {
-			name: 'test1',
-			color: 'blue',
-			size: 3,
-			links: [2,4],
-			popup: popup(this.name)
-		},
-		2: {
-			name: 'test2',
-			color: 'green',
-			size: 2,
-			links: [4,5],
-			popup: popup(this.name)
-		},
-		3: {
-			name: 'test3',
-			color: 'yellow',
-			size: 5,
-			links: [2,1],
-			popup: popup(this.name)
-		},
-		4: {
-			name: 'test4',
-			color: 'red',
-			size: 1,
-			links: [2,3],
-			popup: popup(this.name)
-		},
-		5: {
-			name: 'test5',
-			color: 'blue',
-			size: 3,
-			links: [1,4],
-			popup: popup(this.name)
-		},
-	}```
+data = {
+	1: {
+		name: 'test1',
+		color: 'blue',
+		size: 3,
+		links: [2,4],
+		popup: popup(this.name)
+	},
+	2: {
+		name: 'test2',
+		color: 'green',
+		size: 2,
+		links: [4,5],
+		popup: popup(this.name)
+	},
+	3: {
+		name: 'test3',
+		color: 'yellow',
+		size: 5,
+		links: [2,1],
+		popup: popup(this.name)
+	},
+	4: {
+		name: 'test4',
+		color: 'red',
+		size: 1,
+		links: [2,3],
+		popup: popup(this.name)
+	},
+	5: {
+		name: 'test5',
+		color: 'blue',
+		size: 3,
+		links: [1,4],
+		popup: popup(this.name)
+	},
+}```
 
-		Each data point's name, color and size properties may be called anything the user desires and more properties of any nature may be added to each object. The only hard coded property name is the links property as described above.
+	Each data point's name, color and size properties may be called anything the user desires and more properties of any nature may be added to each object. The only hard coded property name is the links property as described above.
 
-	###### Sample Options Object
-	> All available options are included below, but only the bold properties are required (unless otherwise specified)
+###### Sample Options Object
+> All available options are included below, but only the bold properties are required (unless otherwise specified)
 
-	```options = {
-		rendererTarget: null,
-	    hasAmbientLight : true,
-	    hasDirectionalLight : false,
-	    showLinks : false,
-	    // random, automatic, grouped, or defined
-	    positioningType : 'automatic',
-	      //if automatic
-	      groupSize : 2,
-	      //if grouped
-	      groupingVariable: 'group',
-	      groupingDensity: 30,
-	      //if defined
-	      positioningVariable: 'position',
-	    nodeColorFunction : function(node){
-	      if(node){
-	        return node.color;
-	      }else{return false}
-	    },
-	    nodeSizeFunction : function(node){
-	      if(node){
-	        return node.links.length;
-	      }else{return false}
-	    },
-	    nodePopupFunction : function(node){
-	      if(node){
-	        return node.popup;
-	      }else{return false}
-	    },
-	    linkColorFunction : function(srcNode){
-	      if(srcNode){
-	        return srcNode.linkColor;
-	      }else{return false}
-	    },
-	    renderSizeWidth : null,
-	    renderSizeHeight : null,
-	    nodeSize : 2,
-	    nodeWidthSegments : 128,
-	    nodeHeightSegments : 128,
-	    maxBound : 10000,
-	    xSpread : 40,
-	    ySpread : 40,
-	    zSpread : 40,
-	    backgroundType : 'color', //image or color
-	    backgroundColor : [0,0,0],
-	    backgroundImage : 'http://i.imgur.com/x4egEw1.jpg',
-	    nodeColor : [0,1,0],
-	    nodeHighlightColor : [1,0,0],
-	    linkColor : 0x00ff00,
-	    ambientLightColor : 0xffffff,
-	    directionalLightColor : 0xffffff,
-	    directionalLightPosX : 1,
-	    directionalLightPosY : 1,
-	    directionalLightPosZ : 1,
-	    meshPosX : 2+(2*1.5),
-	    meshPosY : -1,
-	    meshPosZ : -2,
-	    wireframeMesh: true,
-	    wireframeWidth: 1
-	}```
+```options = {
+	rendererTarget: null,
+    hasAmbientLight : true,
+    hasDirectionalLight : false,
+    showLinks : false,
+    // random, automatic, grouped, or defined
+    positioningType : 'automatic',
+      //if automatic
+      groupSize : 2,
+      //if grouped
+      groupingVariable: 'group',
+      groupingDensity: 30,
+      //if defined
+      positioningVariable: 'position',
+    nodeColorFunction : function(node){
+      if(node){
+        return node.color;
+      }else{return false}
+    },
+    nodeSizeFunction : function(node){
+      if(node){
+        return node.links.length;
+      }else{return false}
+    },
+    nodePopupFunction : function(node){
+      if(node){
+        return node.popup;
+      }else{return false}
+    },
+    linkColorFunction : function(srcNode){
+      if(srcNode){
+        return srcNode.linkColor;
+      }else{return false}
+    },
+    renderSizeWidth : null,
+    renderSizeHeight : null,
+    nodeSize : 2,
+    nodeWidthSegments : 128,
+    nodeHeightSegments : 128,
+    maxBound : 10000,
+    xSpread : 40,
+    ySpread : 40,
+    zSpread : 40,
+    backgroundType : 'color', //image or color
+    backgroundColor : [0,0,0],
+    backgroundImage : 'http://i.imgur.com/x4egEw1.jpg',
+    nodeColor : [0,1,0],
+    nodeHighlightColor : [1,0,0],
+    linkColor : 0x00ff00,
+    ambientLightColor : 0xffffff,
+    directionalLightColor : 0xffffff,
+    directionalLightPosX : 1,
+    directionalLightPosY : 1,
+    directionalLightPosZ : 1,
+    meshPosX : 2+(2*1.5),
+    meshPosY : -1,
+    meshPosZ : -2,
+    wireframeMesh: true,
+    wireframeWidth: 1
+}```
 
-	- rendererTarget = If null, 3datajs append directly to the body of the html.  Otherwise, provide a jquery style selector to define the target of the data rendering (i.e. '#container')
-	- hasAmbientLight = boolean, defines if the scene has an ambient light
-	- hasDirectionalLight = boolean, defines if the scene has a directional light
-	- showLinks = boolean, defines if the links are shown in the scene
-	- positioningType = this property has a large impact on how the data is positioned in the scene.  There are 4 possible choices:
+- rendererTarget = If null, 3datajs append directly to the body of the html.  Otherwise, provide a jquery style selector to define the target of the data rendering (i.e. '#container')
+- hasAmbientLight = boolean, defines if the scene has an ambient light
+- hasDirectionalLight = boolean, defines if the scene has a directional light
+- showLinks = boolean, defines if the links are shown in the scene
+- positioningType = this property has a large impact on how the data is positioned in the scene.  There are 4 possible choices:
 
-		1. random - this is the easiest type to implement as it requires no other positioning properties to be defined.  It simply places all data points into the scene randomly, within the bounds set in the xSpread,ySpread and zSpread properties
+	1. random - this is the easiest type to implement as it requires no other positioning properties to be defined.  It simply places all data points into the scene randomly, within the bounds set in the xSpread,ySpread and zSpread properties
 
-		2. automatic - this method requires the links property on each data point as that property is how the position of each point is determined.  In this case, 3datajs will sort the data points(desc) by the number of links each has, it then chunks that data according to the groupSize defined and places the points in a random position (data points with the most links will grvitate towards the center while those with the least points will spread to the outside)
+	2. automatic - this method requires the links property on each data point as that property is how the position of each point is determined.  In this case, 3datajs will sort the data points(desc) by the number of links each has, it then chunks that data according to the groupSize defined and places the points in a random position (data points with the most links will grvitate towards the center while those with the least points will spread to the outside)
 
-		3. grouped - this method allows the user to define which group a data point belongs to.  3datajs will place the points randomly onto the scene while ensuring the groups stay relatively together.  In this case, a 'groupingVariable' and a 'groupingDensity' must be defined.  The groupingVariable tells 3datajs the property name that defines how the data is grouped while the density determines how close the data points are to eachother (higher number is closer together)
+	3. grouped - this method allows the user to define which group a data point belongs to.  3datajs will place the points randomly onto the scene while ensuring the groups stay relatively together.  In this case, a 'groupingVariable' and a 'groupingDensity' must be defined.  The groupingVariable tells 3datajs the property name that defines how the data is grouped while the density determines how close the data points are to eachother (higher number is closer together)
 
-		4. defined - this method allows the user to tell 3datajs exactly where each data point should be by including a position property in the data object.  The value of this position property must be an array of three values corresponding to the x,y, and z coordinates of that data point (i.e. [10,5,7]).  The 'positioningVariable' defines the property name that has the data point's position (so the property name doesn't have to be 'position')
+	4. defined - this method allows the user to tell 3datajs exactly where each data point should be by including a position property in the data object.  The value of this position property must be an array of three values corresponding to the x,y, and z coordinates of that data point (i.e. [10,5,7]).  The 'positioningVariable' defines the property name that has the data point's position (so the property name doesn't have to be 'position')
 
-	- nodeColorFunction = this property should contain a function which returns a color value in RGB array form (i.e. [255,0,0]).  3datajs automatically provides each individual data point as an argument to this function, therefore allowing the user to define colors for each data point based off of any property contained in the data object.
+- nodeColorFunction = this property should contain a function which returns a color value in RGB array form (i.e. [255,0,0]).  3datajs automatically provides each individual data point as an argument to this function, therefore allowing the user to define colors for each data point based off of any property contained in the data object.
 
-	- nodeSizeFunciton = similar to the nodeColorFunction, this property provides the individual data point as a built-in argument to this function.  In the example above, each data point's size is determined by how many links it has.
+- nodeSizeFunciton = similar to the nodeColorFunction, this property provides the individual data point as a built-in argument to this function.  In the example above, each data point's size is determined by how many links it has.
 
-	- nodePopupFunction = this function behaves similar to the two functions above, but in this case, it needs to return a dom element.  This dom element may contain anything the user desires and will determine what shows on each node when dblclicked
+- nodePopupFunction = this function behaves similar to the two functions above, but in this case, it needs to return a dom element.  This dom element may contain anything the user desires and will determine what shows on each node when dblclicked
 
-	- linkColorFunction = similar to the above, this takes in each individual data point as an argument, thus allowing the user to color links based off of any property in the data set
+- linkColorFunction = similar to the above, this takes in each individual data point as an argument, thus allowing the user to color links based off of any property in the data set
 
-	- renderSizeWidth,renderSizeHeight = sets the width and height of the rendered scene, only used if a renderTarget was defined
+- renderSizeWidth,renderSizeHeight = sets the width and height of the rendered scene, only used if a renderTarget was defined
 
-	- nodeSize = this is the default node size if a node size function returns undefined for any node
+- nodeSize = this is the default node size if a node size function returns undefined for any node
 
-	- nodeWidthSegments,nodeHeightSegments = this determines the resolution for each spherical node.  The higher the number, the higher the resolution
+- nodeWidthSegments,nodeHeightSegments = this determines the resolution for each spherical node.  The higher the number, the higher the resolution
 
-	- maxBound = determines the max camera position and the the background dimensions
+- maxBound = determines the max camera position and the the background dimensions
 
-	- xSpread,ySpread,zSpread = determines how close together the nodes may be for each axis. The higher the number the more spread out the nodes will appear
+- xSpread,ySpread,zSpread = determines how close together the nodes may be for each axis. The higher the number the more spread out the nodes will appear
 
-	- backgroundType = choose 'image' or 'color'.  This determines the background of the scene
+- backgroundType = choose 'image' or 'color'.  This determines the background of the scene
 
-	- backgroundColor = RGB array (i.e. [0,255,0]) if 'color' was chosen for backgroundType
+- backgroundColor = RGB array (i.e. [0,255,0]) if 'color' was chosen for backgroundType
 
-	- backgroundImage = image URL if 'image' was chosen as the backgroundType
+- backgroundImage = image URL if 'image' was chosen as the backgroundType
 
-	- nodeColor = default node color if nodeColorFunction returns undefined for any data point
+- nodeColor = default node color if nodeColorFunction returns undefined for any data point
 
-	- nodeHighlightColor = RGB array for the color of the node when selected
+- nodeHighlightColor = RGB array for the color of the node when selected
 
-	- linkColor = RGB array for the default link color if linkColorFunction returns undefined for any data point
+- linkColor = RGB array for the default link color if linkColorFunction returns undefined for any data point
 
-	- ambientLightColor = HEX color value for the color of the ambient light (if hasAmbientLight === true)
+- ambientLightColor = HEX color value for the color of the ambient light (if hasAmbientLight === true)
 
-	- directionalLightColor = HEX color value for the color of the directional light (if hasDirectionalLight === true)
+- directionalLightColor = HEX color value for the color of the directional light (if hasDirectionalLight === true)
 
-	- directionalLightPosX,directionalLightPosY,directionalLightPosZ = position of the directional light if hasDirectionalLight === true
+- directionalLightPosX,directionalLightPosY,directionalLightPosZ = position of the directional light if hasDirectionalLight === true
 
-	- meshPosX,meshPosY,meshPosZ = position of the popup mesh relative to the node (i.e. 0,0,0 would be the center of the node)
+- meshPosX,meshPosY,meshPosZ = position of the popup mesh relative to the node (i.e. 0,0,0 would be the center of the node)
 
-	- wireframeMesh = boolean, determines if the nodes should have wireframe material or not
+- wireframeMesh = boolean, determines if the nodes should have wireframe material or not
 
-	- wireframeWidth = if wireframeMesh === true, this determines the width of each wireframe
+- wireframeWidth = if wireframeMesh === true, this determines the width of each wireframe
 
-	###### Creating the scene
+###### Creating the scene
 
-	Now that we have a data and options object, all we have to do to create a 3datajs scene is pass those two objects as arguments to the _3DATA.create() function
+Now that we have a data and options object, all we have to do to create a 3datajs scene is pass those two objects as arguments to the _3DATA.create() function
 
-		``_3DATA.create(data,options)``
+``_3DATA.create(data,options)``
 
-	Congratulations! You have just created your first 3datajs scene!
+Congratulations! You have just created your first 3datajs scene!
 
 ## User Facing Functions
 
-	- _3DATA.create(data,options) = creates the scene with the data and options specified.  The return value is an object that contains: the data point scene and renderer as well as the popup scene and renderer.  These can be manipulated after the create function has been run to modify the scene as needed.  If modified, run the _3DATA.render() function specified below to show the changes
+- _3DATA.create(data,options) = creates the scene with the data and options specified.  The return value is an object that contains: the data point scene and renderer as well as the popup scene and renderer.  These can be manipulated after the create function has been run to modify the scene as needed.  If modified, run the _3DATA.render() function specified below to show the changes
 
-	> Once the 3DATA.create() function has been called as seen > above, the user will have access to a number of other
-	> functions that will help the user get the most out of
-	> their newly created scene
+> Once the 3DATA.create() function has been called as seen > above, the user will have access to a number of other
+> functions that will help the user get the most out of
+> their newly created scene
 
-	- _3DATA.render() = takes no arguments.  This function forces the re-rendering of the scene in order to show any changes made to the scene
+- _3DATA.render() = takes no arguments.  This function forces the re-rendering of the scene in order to show any changes made to the scene
 
-	- _3DATA.getCamera() = takes no arguments. This returns the camera object with all its useful properties to be examined or manipulated
+- _3DATA.getCamera() = takes no arguments. This returns the camera object with all its useful properties to be examined or manipulated
 
-	- _3DATA.remove(objectName) = this removes the specified object from the scene.  Here, the user must specify the Object Name of the object to be removed.  This object name can be found/changed by digging through the node scene returned in the _3DATA.create() function
+- _3DATA.remove(objectName) = this removes the specified object from the scene.  Here, the user must specify the Object Name of the object to be removed.  This object name can be found/changed by digging through the node scene returned in the _3DATA.create() function
 
-	- _3DATA.search(key,value) = searches the scene for any objects matching the key,value pair provided.  It returns an array of all matching object and colors the matching nodes in the scene according to the defined nodeHighlightColor
+- _3DATA.search(key,value) = searches the scene for any objects matching the key,value pair provided.  It returns an array of all matching object and colors the matching nodes in the scene according to the defined nodeHighlightColor
 
-	- _3DATA.zoomNode(zoomObjMesh,zoomOut,showNodeInfo) = this allows the user to define and zoom into a specific node. You must provide the entire mesh of the node to be zoomed into, the amount you want to zoom out from that object once zoomed in (i.e. 10,100 etc.), and a boolean value of whether the popup displays when zoomed in
+- _3DATA.zoomNode(zoomObjMesh,zoomOut,showNodeInfo) = this allows the user to define and zoom into a specific node. You must provide the entire mesh of the node to be zoomed into, the amount you want to zoom out from that object once zoomed in (i.e. 10,100 etc.), and a boolean value of whether the popup displays when zoomed in
 
-	- _3DATA.zoomPosition(position,zoomOut) = this allows th user to zoom into any particular point in the scene.  Simply provide the position in an x,y,z array (i.e. [10,12,100]) and the zmount to zoom out once zoomed in on that position
+- _3DATA.zoomPosition(position,zoomOut) = this allows th user to zoom into any particular point in the scene.  Simply provide the position in an x,y,z array (i.e. [10,12,100]) and the zmount to zoom out once zoomed in on that position
 
 
 
