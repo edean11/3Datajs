@@ -245,7 +245,9 @@ Congratulations! You have just created your first 3datajs scene!
 
 - _3DATA.zoomNode(zoomObjMesh,zoomOut,showNodeInfo) = this allows the user to define and zoom into a specific node. You must provide the entire mesh of the node to be zoomed into, the amount you want to zoom out from that object once zoomed in (i.e. 10,100 etc.), and a boolean value of whether the popup displays when zoomed in
 
-- _3DATA.zoomPosition(position,zoomOut) = this allows th user to zoom into any particular point in the scene.  Simply provide the position in an x,y,z array (i.e. [10,12,100]) and the amount to zoom out once zoomed in on that position
+- _3DATA.zoomPosition(position,zoomOut) = this allows the user to zoom into any particular point in the scene.  Simply provide the position in an x,y,z array (i.e. [10,12,100]) and the amount to zoom out once zoomed in on that position
+
+- _3DATA.revertColor(revertNode) = this allows the user to revert a node's color back to its original color.  Simply pass in the entire node object into the function.
 
 
 
