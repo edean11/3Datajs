@@ -7,14 +7,14 @@
 Installation
 ------------
 
-	### Dependencies
-		1.  jQuery
-		2.  lodash
-		3.  threejs
+### Dependencies
+	1.  jQuery
+	2.  lodash
+	3.  threejs
 
-	To Install 3Datajs, install the dependencies above into your project folder then include the 3data.js file or simply use bower as shown below:
+To Install 3Datajs, install the dependencies above into your project folder then include the 3data.js file or simply use bower as shown below:
 
-	``bower install 3datajs --save``
+``bower install 3datajs --save``
 
 Using 3Datajs
 -------------
@@ -84,8 +84,9 @@ data = {
 Each data point's name, color and size properties may be called anything the user desires and more properties of any nature may be added to each object. The only hard coded property name is the links property as described above.
 
 ###### Sample Options Object
-> All available options are included below, but only the bold
-> properties are required (unless otherwise specified)
+> All available options are included below, but the only required
+> property is positioningType and any associated sub-requirements
+> for that positioningType
 
 ```
 options = {
@@ -136,7 +137,7 @@ options = {
     backgroundImage : 'http://i.imgur.com/x4egEw1.jpg',
     nodeColor : [0,1,0],
     nodeHighlightColor : [1,0,0],
-    linkColor : 0x00ff00,
+    linkColor : [0,0,1],
     ambientLightColor : 0xffffff,
     directionalLightColor : 0xffffff,
     directionalLightPosX : 1,
@@ -218,7 +219,8 @@ Congratulations! You have just created your first 3datajs scene!
 
 - _3DATA.create(data,options) = creates the scene with the data and options specified.  The return value is an object that contains: the data point scene and renderer as well as the popup scene and renderer.  These can be manipulated after the create function has been run to modify the scene as needed.  If modified, run the _3DATA.render() function specified below to show the changes
 
-> Once the 3DATA.create() function has been called as seen > above, the user will have access to a number of other
+> Once the 3DATA.create() function has been called as seen
+> above, the user will have access to a number of other
 > functions that will help the user get the most out of
 > their newly created scene
 
