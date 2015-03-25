@@ -1,5 +1,4 @@
 
-
 ////////////////////////////////////////////////
 ///////////////// DATA /////////////////////////
 ////////////////////////////////////////////////
@@ -15,61 +14,20 @@ function getWiki(cb){
     cb(elem);
   });
 }
-    // getWiki(function(elem){
-    //   var cssObj = createDomElement(nodeAppenderFunction(elem),cssMesh);
-    // });
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function createTestData(numOfKeys, numOfLinks){
-  var obj = {};
-  for(var i=0;i<numOfKeys;i++){
-    var color = function(){if(i%2 !== 0){return [0,1,0]}else{return [0,0,1]}}
-    var linkColor = function(){if(i%2 !== 0){return [150,0,150]}else{return [1,0,0]}}
-    var nodeSize = function(){if(i%2 !== 0){return 5}else{return 3}}
-    var group = function(){if(i%3 === 0 && i%2 !== 0){return 1}else if(i%2 !== 0){return 3}else{return 2}}
-    var position = function(){return [getRandomInt(-300,300),getRandomInt(-300,300),getRandomInt(-300,300)]}
-    var popup = function(){
-      var elem = document.createElement('div');
-      elem.className = 'infoBox';
-      elem.innerHTML = i;
-      return elem;
-    }
-    obj[i] = {
-      name: i,
-      links: [],
-      nodeColor: color(),
-      linkColor: linkColor(),
-      nodeSize: nodeSize(),
-      popup: popup(),
-      group: group(),
-      position: position()
-    }
-    if(i%2 !== 0){
-      for(var j=0;j<numOfLinks;j++){
-        obj[i].links[j] = getRandomInt(0,numOfKeys-1);
-      }
-    }else{
-      for(var j=0;j<numOfLinks+2;j++){
-        obj[i].links[j] = getRandomInt(0,numOfKeys-1);
-      }
-    }
-  }
-  return obj;
+
+nodeAppenderFunction = function(elem){
+	var element = document.createElement('div');
+	element.innerHTML = elem;
+	element.style.background = 'white';
+	element.style.border = '2px solid black';
+	element.className = element.className + ' infoBox';
+	return element;
 }
-
-var testData = createTestData(20,2);
-
-  nodeAppenderFunction = function(elem){
-    var element = document.createElement('div');
-    element.innerHTML = elem;
-    element.style.background = 'white';
-    element.style.border = '2px solid black';
-    element.className = element.className + ' infoBox';
-    return element;
-  }
 
 ////////////////////////////////////////////////
 ///////////////// OPTIONS //////////////////////
@@ -102,7 +60,7 @@ var testData = createTestData(20,2);
     },
     nodePopupFunction : function(node){
       if(node){
-        return node.popup;
+        return node.getWiki(nodeAppenderFunction(elem));
       }else{return false}
     },
     linkColorFunction : function(srcNode){

@@ -8,6 +8,15 @@ html(lang="en-US")
     link(rel="stylesheet" href="css/main.css")
 
   body
+    h1.title Spotifly
+    .container
+        .searchContainer
+            input(placeholder="album").searchInputAlbum
+            input(placeholder="artist").searchInputArtist
+            input(placeholder="track").searchInputTrack
+            button.searchButton.
+                Search
+        .playContainer.hidden
     // [if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]
     script(src="vendor/jquery/dist/jquery.min.js")
     script(src="vendor/lodash/lodash.min.js")
@@ -18,5 +27,6 @@ html(lang="en-US")
     script(src="vendor/threejs/build/controls/OrbitControls.js")
     script(src="vendor/threejs/build/Detector.js")
     script(src="vendor/threejs/build/tquery.min.js")
+    script(src="vendor/jquery/dist/attrchange.js")
     script(src="js/3data.js")
-    script(src="js/test.js")
+    script(src="js/spotifly.js")

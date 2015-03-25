@@ -4,7 +4,7 @@ var _3DATA = {VERSION: '0.1'};
 
 // Main Create Function
 
-_3DATA.create = function(data,optionsObj){
+_3DATA.create = function(data,optionsObj,cb){
 
 //Get Options
   //target
@@ -12,8 +12,11 @@ _3DATA.create = function(data,optionsObj){
     //objects
     hasAmbientLight = optionsObj.hasAmbientLight || false,
     hasDirectionalLight = optionsObj.hasDirectionalLight || false,
+    hasDblClickZoom = optionsObj.hasDblClickZoom,
     showLinks = optionsObj.showLinks,
     autoAppendPopup = optionsObj.autoAppendPopup,
+    allowZoomThrough = optionsObj.allowZoomThrough,
+    zoomSpeed = optionsObj.zoomSpeed,
     //grouping
     positioningType = optionsObj.positioningType || 'random', //random, automatic, defined group, or defined position
       //if automatic
@@ -117,6 +120,10 @@ _3DATA.create = function(data,optionsObj){
 
   // Grouped Positioning Type
 
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+
   function groupData(data){
     var grouped = _.groupBy(data, function(node) {
       var key = groupingVariable;
@@ -138,7 +145,6 @@ _3DATA.create = function(data,optionsObj){
       positionObj[i] = {x:{},y:{},z:{}};
       //if needs a new x and y coordinate
       if(lastGroupEndPos[0]+groupSideLength >= sceneLength/2 && lastGroupEndPos[1]-groupSideLength <= -(sceneLength/2)){
-        console.log('1')
         positionObj[i].x.start = -(sceneLength/2);
         positionObj[i].x.end = -(sceneLength/2)+groupSideLength;sceneLength
         positionObj[i].y.start = sceneLength/2;
@@ -149,7 +155,6 @@ _3DATA.create = function(data,optionsObj){
         lastGroupEndPos.push(positionObj[i].x.end,positionObj[i].y.end,positionObj[i].z.end)
       //if needs a new y coordinate
       } else if(lastGroupEndPos[0]+groupSideLength >= sceneLength/2 && lastGroupEndPos[1]-groupSideLength>= -(sceneLength/2)){
-        console.log('2')
         positionObj[i].x.start = -(sceneLength/2);
         positionObj[i].x.end = -(sceneLength/2)+groupSideLength;
         positionObj[i].y.start = lastGroupEndPos[1]+groupSideLength;
@@ -160,7 +165,6 @@ _3DATA.create = function(data,optionsObj){
         lastGroupEndPos.push(positionObj[i].x.end,positionObj[i].y.end,positionObj[i].z.end)
       //if does not need any new coordinates
       } else{
-        console.log('3')
         positionObj[i].x.start = lastGroupEndPos[0];
         positionObj[i].x.end = lastGroupEndPos[0]+groupSideLength;
         positionObj[i].y.start = lastGroupEndPos[1]+groupSideLength;
@@ -169,7 +173,6 @@ _3DATA.create = function(data,optionsObj){
         positionObj[i].z.end = lastGroupEndPos[2];
         lastGroupEndPos = [];
         lastGroupEndPos.push(positionObj[i].x.end,positionObj[i].y.end,positionObj[i].z.end)
-        console.log(lastGroupEndPos);
       }
     }
     return positionObj;
@@ -185,15 +188,15 @@ _3DATA.create = function(data,optionsObj){
 
   function createNodeMesh(nodeSize,nodeWidthSegments,nodeHeightSegments,nodeColor,isWireframe,wireframeWidth){
     var geometry  = new THREE.SphereGeometry( nodeSize,nodeWidthSegments,nodeHeightSegments);
-    var material  = new THREE.MeshBasicMaterial({ wireframe: isWireframe, wireframeLinewidth: wireframeWidth, color: nodeColor});
-    material.color.setRGB(nodeColor[0],nodeColor[1],nodeColor[2]);
+    var material  = new THREE.MeshBasicMaterial({ wireframe: isWireframe, wireframeLinewidth: wireframeWidth});
+    if(nodeColor[1] === 'x'){material.color.setHex(nodeColor)}else{material.color.setRGB(nodeColor[0],nodeColor[1],nodeColor[2])};
     var mesh = new THREE.Mesh(geometry, material);
     return mesh;
   }
 
   function createNodeFunction(val,key){
-    var nColor = function(){if(nodeColorFunction(val)){return nodeColorFunction(val)}else{return nodeColor}}
-    var nSize = function(){if(nodeSizeFunction(val)){return nodeSizeFunction(val)}else{return nodeSize}}
+    var nColor = function(){if(nodeColorFunction && nodeColorFunction(val)){return nodeColorFunction(val)}else{return nodeColor}}
+    var nSize = function(){if(nodeSizeFunction && nodeSizeFunction(val)){return nodeSizeFunction(val)}else{return nodeSize}}
     var mesh = createNodeMesh(nSize(),nodeWidthSegments,nodeHeightSegments,nColor(),wireframeMesh,wireframeWidth);
     val._nodeColor = [nColor()[0],nColor()[1],nColor()[2]];
     val.mesh = mesh;
@@ -259,8 +262,6 @@ _3DATA.create = function(data,optionsObj){
             appendPopup(mesh,false);
           }
         });
-        console.log(showLinks);
-        console.log(optionsObj.showLinks);
         if(groupIterator === _.keys(groupedData).length && showLinks){
           _.forEach(data,function(val,key){
             findLinkedPos(data,key);
@@ -310,7 +311,8 @@ _3DATA.create = function(data,optionsObj){
   function createNodeLink(id,pos2,mesh2){
     var linkMaterial = new THREE.LineBasicMaterial();
     var linkColor = linkColorFunction(id) || linkColor;
-    linkMaterial.color.setRGB(linkColor[0],linkColor[1],linkColor[2]);
+    if(linkColor[1]==='x'){linkMaterial.color.setHex(linkColor)}
+      else{linkMaterial.color.setRGB(linkColor[0],linkColor[1],linkColor[2])}
     var pos1 = id.mesh.position;
     var linkGeometry = new THREE.Geometry();
       linkGeometry.vertices.push(new THREE.Vector3(pos1.x, pos1.y, pos1.z));
@@ -366,7 +368,10 @@ _3DATA.create = function(data,optionsObj){
     //Initialize Orbit Controls
     var controls = new THREE.OrbitControls(camera);
     controls.maxDistance = maxBound-10;
-      controls.damping = 0.2;
+    if(allowZoomThrough){
+      controls.minDistance = -(maxBound-10)
+    }
+      controls.zoomSpeed = zoomSpeed;
       controls.addEventListener('change', render);
 
   //Action!//
@@ -390,7 +395,8 @@ _3DATA.create = function(data,optionsObj){
       });
     }else{
       var skyMaterial = new THREE.MeshBasicMaterial();
-      skyMaterial.color.setRGB(backgroundColor[0],backgroundColor[1],backgroundColor[2]);
+      if(skyMaterial[1] === 'x'){skyMaterial.color.setHex(backgroundColor)}
+        else{skyMaterial.color.setRGB(backgroundColor[0],backgroundColor[1],backgroundColor[2])}
       var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
         skyBox.scale.x = -1;
         scene.add(skyBox);
@@ -415,18 +421,19 @@ _3DATA.create = function(data,optionsObj){
     createSkyBox();
     //loop through objects and add to node group,
       //cb can access each node
-      createNodes(testData,function(mesh,id){});
+      createNodes(data,function(mesh,id){});
 
     //Trigger Event Listeners
       window.addEventListener( 'resize', onWindowResize, false );
       //Updates mouseX and mouseY coords
       window.addEventListener( 'mousemove', onMouseMove, false );
       //zoom into dbl clicked node and grab/append node info
-      window.addEventListener( 'dblclick', dblClickNode, false );
+      if(hasDblClickZoom){
+        window.addEventListener( 'dblclick', dblClickNode, false );
+      }
 
     //Call animation loop on init
     animate();
-    console.log(scene);
 
   }
 
@@ -442,7 +449,8 @@ _3DATA.create = function(data,optionsObj){
     }else{}
     camera.updateProjectionMatrix();
     //obj.object.material.color = new THREE.Color( 0xff0000 );
-    obj.object.material.color.setRGB(nodeHighlightColor[0],nodeHighlightColor[1],nodeHighlightColor[2]);
+    if(nodeHighlightColor[1] === 'x'){obj.object.material.color.setHex(nodeHighlightColor)}
+      else{obj.object.material.color.setRGB(nodeHighlightColor[0],nodeHighlightColor[1],nodeHighlightColor[2])}
     render();
   }
 
@@ -558,8 +566,9 @@ _3DATA.create = function(data,optionsObj){
     nodes.traverse(function(node){
       if(node.material && revertNode && node === revertNode.object){
         var revertColor = node.userData.nodeInfo._nodeColor;
-        node.material.color.setRGB(revertColor[0],revertColor[1],revertColor[2]);
-      }else{}
+        if(revertColor[1]==='x'){node.material.color.setHex(revertColor)}
+          else{node.material.color.setRGB(revertColor[0],revertColor[1],revertColor[2])}
+      }
     })
   }
 
@@ -628,11 +637,12 @@ _3DATA.create = function(data,optionsObj){
     nodes.traverse(function(node){
       if(node.material && revertNode && node === revertNode){
         var revertColor = node.userData.nodeInfo._nodeColor;
-        node.material.color.setRGB(revertColor[0],revertColor[1],revertColor[2]);
-      }else{}
+        if(revertColor[1]==='x'){node.material.color.setHex(revertColor)}
+          else{node.material.color.setRGB(revertColor[0],revertColor[1],revertColor[2])}
+      }
     })
   }
-
+  if(cb){cb()}
   return {node: {scene: scene,renderer: renderer},popup: {scene: cssScene,renderer: cssRenderer}}
 } // End Create function
 
