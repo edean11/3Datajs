@@ -9,7 +9,7 @@ html(lang="en-US")
 
   body
     h1.title Spotifly
-    .container
+    .spotiflyContainer
         .searchContainer
             input(placeholder="album").searchInputAlbum
             input(placeholder="artist").searchInputArtist
@@ -17,6 +17,14 @@ html(lang="en-US")
             button.searchButton.
                 Search
         .playContainer.hidden
+    //- h1.wikimapTitle WikiMap
+    //- .wikimapContainer
+    //-     .searchContainer
+    //-         input(placeholder="search 1").searchWikiInput.searchWiki1
+    //-         input(placeholder="search 2").searchWikiInput.searchWiki2
+    //-         input(placeholder="search 3").searchWikiInput.searchWiki3
+    //-         button.wikiSearchButton.
+    //-             Search
     // [if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]
     script(src="vendor/jquery/dist/jquery.min.js")
     script(src="vendor/lodash/lodash.min.js")

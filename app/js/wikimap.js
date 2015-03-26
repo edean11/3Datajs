@@ -2,30 +2,67 @@
 ////////////////////////////////////////////////
 ///////////////// DATA /////////////////////////
 ////////////////////////////////////////////////
+var increment = 0;
 
-var searchTerm="toyota";
-var url="http://en.wikipedia.org/w/api.php?action=parse&format=json&page="+searchTerm+"&redirects&prop=text&callback=?";
+function searchButtonClick(){
+  function input1(){if($('.searchWiki1').val() !== ''){increment++;return $('.searchWiki1').val()}else{return null}}
+  function input2(){if($('.searchWiki2').val() !== ''){increment++;return $('.searchWiki2').val()}else{return null}}
+  function input3(){if($('.searchWiki3').val() !== ''){increment++;return $('.searchWiki3').val()}else{return null}}
+  var searchTerms = [input1(),input2(),input3()];
+  var dataObj = {};
+  for(var i=0;i<increment;i++){
+    if(searchTerms[i] !== null){
+      console.log(searchTerms[i]);
+      var url = "http://en.wikipedia.org/w/api.php?action=parse&format=json&page="+searchTerms[i]+"&redirects&prop=text&callback=?";
+      getWiki(url,dataObj,i,callback);
+    }
+  }
+    $('.wikimapContainer').toggleClass('hidden');
+    _3DATA.create(dataObj,optionsObj);
+}
 
-function getWiki(cb){
+function getWiki(url,dataObj,key){
   $.getJSON(url,function(data){
     wikiPage = data.parse.text["*"];
     $wikiDOM = $("<document>"+wikiPage+"</document>");
     var elem = $wikiDOM.find('.infobox').html();
-    cb(elem);
+    var title = data.parse.title;
+    dataObj[title] = {};
+    dataObj[title].elem = elem;
+    dataObj[title].links = []
+    var seeAlso = $wikiDOM.find('#See_also');
+    var lis = seeAlso.parent().next().next().children();
+    console.log(lis);
+    // _.forEach(lis,function(li){
+    //   var $li = $(li.innerHTML);
+    //   var href = $li.attr('href')
+    //   var linkTitle = $li.attr('title')
+    //   console.log(linkTitle);
+    //   dataObj[title].links.push(linkTitle);
+    //   var linkUrl = "http://en.wikipedia.org/w/api.php?action=parse&format=json&page="+linkTitle+"&redirects&prop=text&callback=?"
+    //   $.getJSON(linkUrl,function(linkData){
+    //     var linkPage = linkData.parse.text["*"];
+    //     var linkDom = $("<document>"+linkPage+"</document>");
+    //     var linkElem = linkDom.find('.infobox').html();
+    //     dataObj[linkTitle] = {};
+    //     dataObj[linkTitle].elem = linkElem;
+    //     dataObj[linkTitle].links = [title];
+    //     if(key===increment-1){
+    //       $('.wikimapContainer').toggleClass('hidden');
+    //       console.log(dataObj);
+    //       _3DATA.create(dataObj,optionsObj);
+    //     }
+    //   })
+    // })
   });
 }
 
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-
-
 nodeAppenderFunction = function(elem){
 	var element = document.createElement('div');
-	element.innerHTML = elem;
+  var table = '<table>'+elem+'</table>'
+	element.innerHTML = table;
 	element.style.background = 'white';
-	element.style.border = '2px solid black';
-	element.className = element.className + ' infoBox';
+	element.className = element.className + ' wikimapInfoBox';
 	return element;
 }
 
@@ -34,49 +71,30 @@ nodeAppenderFunction = function(elem){
 ////////////////////////////////////////////////
 
   var optionsObj = {
-    rendererTarget: null,
     hasAmbientLight : true,
     hasDirectionalLight : false,
+    hasDblClickZoom : true,
     showLinks : false,
-    autoAppendPopup : true,
-    allowZoomThrough : true,
+    autoAppendPopup : false,
     positioningType : 'random', //random, automatic, grouped, or defined
       //if automatic
-      groupSize : 2,
+      groupSize : 1,
       //if grouped
       groupingVariable: 'group',
       groupingDensity: 30,
       //if defined
       positioningVariable: 'position',
-    nodeColorFunction : function(node){
-      if(node){
-        return node.nodeColor;
-      }else{return false}
-    },
-    nodeSizeFunction : function(node){
-      if(node){
-        return node.links.length;
-      }else{return false}
-    },
     nodePopupFunction : function(node){
-      if(node){
-        return node.getWiki(nodeAppenderFunction(elem));
-      }else{return false}
+      return nodeAppenderFunction(node.elem);
     },
-    linkColorFunction : function(srcNode){
-      if(srcNode){
-        return srcNode.linkColor;
-      }else{return false}
-    },
-    renderSizeWidth : null,
-    renderSizeHeight : null,
-    nodeSize : 2,
-    nodeWidthSegments : 128,
-    nodeHeightSegments : 128,
-    maxBound : 10000,
-    xSpread : 40,
-    ySpread : 40,
-    zSpread : 40,
+    nodeSize : 4,
+    nodeWidthSegments : 16,
+    nodeHeightSegments : 16,
+    maxBound : 100000,
+    zoomSpeed : 1,
+    xSpread : 10,
+    ySpread : 10,
+    zSpread : 10,
     backgroundType : 'color', //image or color
     backgroundColor : [0,0,0],
     backgroundImage : 'http://i.imgur.com/x4egEw1.jpg',
@@ -88,14 +106,22 @@ nodeAppenderFunction = function(elem){
     directionalLightPosX : 1,
     directionalLightPosY : 1,
     directionalLightPosZ : 1,
-    meshPosX : 2+(2*1.5),
-    meshPosY : -1,
-    meshPosZ : -2,
+    meshPosX : -0.5,
+    meshPosY : 0,
+    meshPosZ : 2,
     wireframeMesh: true,
     wireframeWidth: 1
   }
 
-// Create 3DATA Scene
+////////////////////////////////////////////
+//////// Container Functions ///////////////
+////////////////////////////////////////////
 
-_3DATA.create(testData,optionsObj);
+$('.wikiSearchButton').on('click',function(){
+  searchButtonClick();
+})
+
+// x: -4.902929835952818 y: 47.02781974337995 z: -30.183731555007398
+
+
 

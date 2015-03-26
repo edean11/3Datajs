@@ -41,64 +41,49 @@ This object can contain a wide variety of available output options as defined by
 
 ## Example
 
-###### Sample Data Object with popup function
+###### Sample Data Object With Name
 
 ```
-var popup = function(name){
-  var elem = document.createElement('div');
-  elem.className = 'infoBox';
-  elem.innerHTML = name;
-  return elem;
-}
-
 data = {
 	1: {
-		name: 'test1',
-		color: 'blue',
-		size: 3,
-		links: [2,4],
-		popup: popup(this.name)
+		name: 'test1'
 	},
 	2: {
-		name: 'test2',
-		color: 'green',
-		size: 2,
-		links: [4,5],
-		popup: popup(this.name)
+		name: 'test2'
 	},
 	3: {
-		name: 'test3',
-		color: 'yellow',
-		size: 5,
-		links: [2,1],
-		popup: popup(this.name)
+		name: 'test3'
 	},
 	4: {
-		name: 'test4',
-		color: 'red',
-		size: 1,
-		links: [2,3],
-		popup: popup(this.name)
+		name: 'test4'
 	},
 	5: {
-		name: 'test5',
-		color: 'blue',
-		size: 3,
-		links: [1,4],
-		popup: popup(this.name)
+		name: 'test5'
 	},
 }
 ```
 
-Each data point's name, color and size properties may be called anything the user desires and more properties of any nature may be added to each object. The only hard coded property name is the links property as described above.
-
 ###### Sample Options Object
-> All available options are included below, but the only required
-> property is positioningType and any associated sub-requirements
-> for that positioningType
 
 ```
 options = {
+  //place the nodes in a random position
+  positioningType: random
+}
+
+```
+
+###### Creating the scene
+
+Now that we have a data and options object, all we have to do to create a 3datajs scene is pass those two objects as arguments to the _3DATA.create() function
+
+``_3DATA.create(data,options)``
+
+Congratulations! You have just created your first 3datajs scene!
+
+## Available Options
+
+allOptions = {
 	rendererTarget: null,
     hasAmbientLight : true,
     hasDirectionalLight : false,
@@ -114,25 +99,20 @@ options = {
       //if defined
       positioningVariable: 'position',
     nodeColorFunction : function(node){
-      if(node){
         return node.color;
-      }else{return false}
     },
     nodeSizeFunction : function(node){
-      if(node){
         return node.links.length;
-      }else{return false}
     },
     nodePopupFunction : function(node){
-      if(node){
         return node.popup;
-      }else{return false}
     },
     linkColorFunction : function(srcNode){
-      if(srcNode){
         return srcNode.linkColor;
-      }else{return false}
     },
+    dblClickFunction : function(clickedNode){
+      return clickedNode.userData.nodeInfo.exampleFunction();
+    }
     renderSizeWidth : null,
     renderSizeHeight : null,
     nodeSize : 2,
@@ -184,11 +164,13 @@ options = {
 
 - linkColorFunction = similar to the above, this takes in each individual data point as an argument, thus allowing the user to color links based off of any property in the data set
 
+- linkColorFunction = similar to the above, this takes in each individual data point as an argument, thus allowing the user to run any custom function upon the dblClick event. (note: the node argument for this function is slightly different than the above.  Console.log the result to find its structure)
+
 - renderSizeWidth,renderSizeHeight = sets the width and height of the rendered scene, only used if a renderTarget was defined
 
 - nodeSize = this is the default node size if a node size function returns undefined for any node
 
-- nodeWidthSegments,nodeHeightSegments = this determines the resolution for each spherical node.  The higher the number, the higher the resolution
+- nodeWidthSegments,nodeHeightSegments = this determines the resolution for each spherical node.  The higher the number, the higher the resolution **these properties have a significant effect on latency.  Unless high resolutions are required stay in the 8-64 range
 
 - maxBound = determines the max camera position and the the background dimensions
 
@@ -218,13 +200,6 @@ options = {
 
 - wireframeWidth = if wireframeMesh === true, this determines the width of each wireframe
 
-###### Creating the scene
-
-Now that we have a data and options object, all we have to do to create a 3datajs scene is pass those two objects as arguments to the _3DATA.create() function
-
-``_3DATA.create(data,options)``
-
-Congratulations! You have just created your first 3datajs scene!
 
 ## User Facing Functions
 
@@ -238,6 +213,8 @@ Congratulations! You have just created your first 3datajs scene!
 - _3DATA.render() = takes no arguments.  This function forces the re-rendering of the scene in order to show any changes made to the scene
 
 - _3DATA.getCamera() = takes no arguments. This returns the camera object with all its useful properties to be examined or manipulated
+
+- _3DATA.getNodeScene,_3DATA.getPopupScene,_3DATA.getNodeRenderer,_3DATA.getPopupRenderer = behave like getCamera() described above
 
 - _3DATA.remove(objectName) = this removes the specified object from the scene.  Here, the user must specify the Object Name of the object to be removed.  This object name can be found/changed by digging through the node scene returned in the _3DATA.create() function
 

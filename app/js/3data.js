@@ -16,7 +16,7 @@ _3DATA.create = function(data,optionsObj,cb){
     showLinks = optionsObj.showLinks,
     autoAppendPopup = optionsObj.autoAppendPopup,
     allowZoomThrough = optionsObj.allowZoomThrough,
-    zoomSpeed = optionsObj.zoomSpeed,
+    zoomSpeed = optionsObj.zoomSpeed || 1,
     //grouping
     positioningType = optionsObj.positioningType || 'random', //random, automatic, defined group, or defined position
       //if automatic
@@ -31,13 +31,14 @@ _3DATA.create = function(data,optionsObj,cb){
     nodeSizeFunction = optionsObj.nodeSizeFunction || null,
     nodePopupFunction = optionsObj.nodePopupFunction || null,
     linkColorFunction = optionsObj.linkColorFunction || null,
+    dblClickFunction = optionsObj.dblClickFunction || null,
     //size
     renderSizeWidth = optionsObj.renderSizeWidth || window.innerWidth,
     renderSizeHeight = optionsObj.renderSizeHeight || window.innerHeight,
     nodeSize = optionsObj.nodeSize || 1,
     //node resolution
-    nodeWidthSegments = optionsObj.nodeWidthSegments || 128,
-    nodeHeightSegments = optionsObj.nodeHeightSegments || 128,
+    nodeWidthSegments = optionsObj.nodeWidthSegments || 32,
+    nodeHeightSegments = optionsObj.nodeHeightSegments || 32,
     //bound
     maxBound = optionsObj.maxBound || 10000,
     //density
@@ -146,7 +147,7 @@ _3DATA.create = function(data,optionsObj,cb){
       //if needs a new x and y coordinate
       if(lastGroupEndPos[0]+groupSideLength >= sceneLength/2 && lastGroupEndPos[1]-groupSideLength <= -(sceneLength/2)){
         positionObj[i].x.start = -(sceneLength/2);
-        positionObj[i].x.end = -(sceneLength/2)+groupSideLength;sceneLength
+        positionObj[i].x.end = -(sceneLength/2)+groupSideLength;
         positionObj[i].y.start = sceneLength/2;
         positionObj[i].y.end = (sceneLength/2)-groupSideLength;
         positionObj[i].z.start = lastGroupEndPos[2];
@@ -368,9 +369,6 @@ _3DATA.create = function(data,optionsObj,cb){
     //Initialize Orbit Controls
     var controls = new THREE.OrbitControls(camera);
     controls.maxDistance = maxBound-10;
-    if(allowZoomThrough){
-      controls.minDistance = -(maxBound-10)
-    }
       controls.zoomSpeed = zoomSpeed;
       controls.addEventListener('change', render);
 
@@ -560,6 +558,7 @@ _3DATA.create = function(data,optionsObj,cb){
     zoomIntoNode(intersects[0]);
     //append popup
     appendPopup(intersects[0].object,true);
+    if(dblClickFunction){dblClickFunction(intersects[0].object)}else{};
   }
 
   function revertColor(revertNode){
@@ -620,6 +619,22 @@ _3DATA.create = function(data,optionsObj,cb){
 
   _3DATA.getCamera = function(){
     return [camera,controls];
+  }
+
+  _3DATA.getNodeScene = function(){
+    return scene;
+  }
+
+  _3DATA.getNodeRenderer = function(){
+    return renderer;
+  }
+
+  _3DATA.getPopupScene = function(){
+    return cssScene;
+  }
+
+  _3DATA.getPopupRenderer = function(){
+    return cssRenderer;
   }
 
   _3DATA.render = function(){

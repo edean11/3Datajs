@@ -7,7 +7,6 @@
 
 function init(url,type){
 	$.getJSON(url,function(data){
-		console.log(data);
 		var dataObj = {}
 		var path = data[type+'s'].items;
 		var length = path.length;
@@ -60,7 +59,6 @@ function init(url,type){
 
   var optionsObj = {
     hasDblClickZoom : false,
-    showLinks : false,
     autoAppendPopup : true,
     allowZoomThrough : true,
     zoomSpeed : 0.08,
@@ -89,7 +87,7 @@ function init(url,type){
 //////// Container Functions ////////////
 //////////////////////////////////////////
 
-var container = $('.container');
+var container = $('.spotiflyContainer');
 var searchInputAlbum = $('.searchInputAlbum');
 var searchInputArtist = $('.searchInputArtist');
 var searchInputTrack = $('.searchInputTrack');
