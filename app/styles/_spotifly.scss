@@ -1,0 +1,58 @@
+ .spotiflyTitle {
+ 	position: absolute;
+ 	z-index: 1000;
+ 	top: 20px;
+ 	left: 45%;
+ 	margin: auto;
+ 	border: 2px solid black;
+ 	border-radius: 10px;
+ 	padding: 5px;
+ 	background-color: #B2D72C;
+ }
+
+ .spotiflyContainer {
+ 	width: 35%;
+ 	height: 450px;
+ 	margin: 150px auto;
+ 	border: 2px solid black;
+ 	border-radius: 10px;
+ 	.searchContainer{
+ 		text-align: center;
+ 		width: 75%;
+ 		margin: 10px auto;
+		input {
+			display: block;
+			margin: 50px auto;
+			padding: 10px;
+			width: 80%;
+			border-radius: 25px;
+		}
+		.searchButton {
+			margin-bottom: 50px;
+			width: 100px;
+			height: 50px;
+			border-radius: 5px;
+			font-size: 1.7em;
+			color: #B2D72C;
+			background-color: black;
+
+			&:hover {
+				color: black;
+				background-color: #B2D72C;
+			}
+		}
+ 	}
+
+ 	.playContainer {
+ 		text-align: center;
+ 		width: 100%;
+ 		height: 100%;
+ 		padding: 10px auto;
+ 		background-color: lightgrey;
+
+ 		.playImage {
+ 			width: 200px;
+ 			margin: 20px 0;
+ 		}
+ 	}
+ }

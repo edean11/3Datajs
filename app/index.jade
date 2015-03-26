@@ -4,19 +4,127 @@ html(lang="en-US")
     meta(charset="utf-8")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1")
-    title 3Data Projects
+    title 3Datajs
+    link(href='http://fonts.googleapis.com/css?family=Poiret+One|PT+Sans+Narrow:400,700|Lobster|Alegreya:400italic,400,700' rel='stylesheet' type='text/css')
     link(rel="stylesheet" href="css/main.css")
 
   body
-    h1.title Spotifly
-    .spotiflyContainer
-        .searchContainer
-            input(placeholder="album").searchInputAlbum
-            input(placeholder="artist").searchInputArtist
-            input(placeholder="track").searchInputTrack
-            button.searchButton.
-                Search
-        .playContainer.hidden
+    .title
+        .logo 3Datajs
+    .navbar
+        a(href="https://s3.amazonaws.com/3datajs.com/downloads/3datajs-bundle-0.1.3.zip")
+            button.navbtn.download-nav Download
+        a(href="https://s3.amazonaws.com/3datajs.com/downloads/README.md")
+            button.navbtn.docs-nav Docs
+    .description
+        p.description-text 3Datajs is a small, customizable javascript library used to quickly implement 3D visualizations of data and html content
+    .install
+        .install-image
+        .install-info
+            p.install-info-title.section-title Installation
+            p.install-info-description To install 3datajs, click the download link above and include it in your project folder, or use bower as shown below:
+            code.install-info-code bower install 3datajs-bundle --save
+    .docs
+        .docs-info
+            p.docs-info-title.section-title  Documentation
+            p.docs-info-description Full library documentation may be found by clicking the Docs link above, or by visting the github page at 
+                a(href="https://github.com/edean11/3Datajs").docs-link 3Datajs
+            .docs-info-content
+                p.docs-info-content-header Dependencies
+                code 1.  jQuery
+                    | 2.  lodash
+                    | 3.  threejs
+                blockquote
+                    p The threejs build should have the following folders/files in
+                        | the 'build' folder in addition to the standard three.min.js:
+                code * build/controls/OrbitControls.js
+                br
+                code * build/renderers/CanvasRenderer.js
+                br
+                code * build/renderers/CSS3DRenderer.js
+                br
+                code * build/renderers/Projector.js
+                br
+                code * build/Detector.js
+                p.docs-info-content-header Using 3Datajs
+                p There are two primary inputs 3datajs needs in order to create your 3D data scene:
+                ol
+                    li JS Data Object
+                    li JS Options Object
+                p.docs-info-content-header-small JS Data Object
+                p This object holds all the relvant data that you would like to map.  
+                    | The data object should contain unique id's for each data point (entered as keys of the data object), 
+                    | and within each of those keys should be the data that corresponds to that data point.  
+                    | The only property required in each data point is called "links" and it contains an array of references to each unique id the data point links to.  
+                    | If links are not desired, there are no requirements as to what must be in the data object.  
+                    | See examples below for more details.
+                p.docs-info-content-header-small JS Options Object
+                p This object can contain a wide variety of available output options as defined by 3datajs.  
+                    | Simply include the options property and the desired value in the options object and pass it into the main 3datajs function with the data object.  
+                    | See below for details.
+                p.docs-info-content-header Example
+                p.docs-info-content-header-small Sample Data Object With Name
+                code data = {
+                    |    1: {
+                    |        name: 'test1'
+                    |    },
+                    |    2: {
+                    |        name: 'test2'
+                    |    },
+                    |    3: {
+                    |        name: 'test3'
+                    |    },
+                    |    4: {
+                    |        name: 'test4'
+                    |    },
+                    |    5: {
+                    |        name: 'test5'
+                    |    },
+                    | }
+                p.docs-info-content-header-small Sample Options Object
+                code options = {
+                    |  positioningType: random
+                    | }
+                p.docs-info-content-header-small Creating the scene
+                p Now that we have a data and options object, all we have to do to create a 3datajs scene is pass those two objects as arguments to the _3DATA.create() function</p>
+                p
+                    code _3DATA.create(data,options)
+                p Congratulations! You have just created your first 3datajs scene!
+
+                p.docs-info-content-header User Facing Functions
+                code _3DATA.create(data,options)
+                p.userfunction-desc Creates the scene with the data and options specified.  The return value is an object that contains: the data point scene and renderer as well as the popup scene and renderer.
+                    | These can be manipulated after the create function has been run to modify the scene as needed.  If modified, run the _3DATA.render() function specified below to show the changes
+                    | &gt; Once the 3DATA.create() function has been called as seen
+                    | &gt; above, the user will have access to a number of other
+                    | &gt; functions that will help the user get the most out of
+                    | &gt; their newly created scene
+                code _3DATA.render()
+                p.userfunction-desc Takes no arguments.  This function forces the re-rendering of the scene in order to show any changes made to the scene
+                code _3DATA.getCamera()
+                p.userfunction-desc Takes no arguments. This returns the camera object with all its useful properties to be examined or manipulated
+                code _3DATA.getNodeScene,_3DATA.getPopupScene,_3DATA.getNodeRenderer,_3DATA.getPopupRenderer
+                p.userfunction-desc Behave like getCamera() described above
+                code _3DATA.remove(objectName)
+                p.userfunction-desc This removes the specified object from the scene.  Here, the user must specify the Object Name of the object to be removed.  This object name can be found/changed by digging through the node scene returned in the _3DATA.create() function
+                code _3DATA.search(key,value)
+                p.userfunction-desc Searches the scene for any objects matching the key,value pair provided.  It returns an array of all matching object and colors the matching nodes in the scene according to the defined nodeHighlightColor
+                code _3DATA.zoomNode(zoomObjMesh,zoomOut,showNodeInfo)
+                p.userfunction-desc This allows the user to define and zoom into a specific node. You must provide the entire mesh of the node to be zoomed into, the amount you want to zoom out from that object once zoomed in (i.e. 10,100 etc.), and a boolean value of whether the popup displays when zoomed in
+                code _3DATA.zoomPosition(position,zoomOut)
+                p.userfunction-desc This allows the user to zoom into any particular point in the scene.  Simply provide the position in an x,y,z array (i.e. [10,12,100]) and the amount to zoom out once zoomed in on that position
+                code _3DATA.revertColor(revertNode)
+                p.userfunction-desc This allows the user to revert a node's color back to its original color.  Simply pass in the entire node object into the function.
+        .docs-image
+    .examples
+        p.section-title Examples
+        .links-container
+            .test-link.example-link
+                a(href="/test.jade")
+                    p.link-container-description Test
+            .spotifly-link.example-link
+                a(href="/spotifly.jade")
+                    p.link-container-description Spotifly
     //- h1.wikimapTitle WikiMap
     //- .wikimapContainer
     //-     .searchContainer

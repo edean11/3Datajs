@@ -1,0 +1,70 @@
+
+.infoBox {
+ 	padding: 50px;
+	border: 20px solid black !important;
+	border-radius: 100px;
+	font-size: 40em;
+	background-color: white;
+ 	img {
+		text-align: center;
+		display: inline-block;
+ 	}
+ }
+
+.wikimapTitle {
+	position: absolute;
+ 	z-index: 1000;
+ 	top: 20px;
+ 	left: 45%;
+ 	margin: auto;
+ 	border: 2px solid steelblue;
+ 	padding: 5px;
+ 	border-radius: 5px;
+ 	background-color: white;
+}
+
+.wikimapContainer{
+ 	width: 35%;
+ 	height: 450px;
+ 	margin: 100px auto;
+ 	border: 2px solid black;
+ 	border-radius: 10px;
+ 	.searchContainer{
+ 		text-align: center;
+ 		width: 75%;
+ 		margin: 10px auto;
+ 		input {
+			display: block;
+			margin: 50px auto;
+			padding: 10px;
+			width: 80%;
+			border-radius: 25px;
+		}
+		.searchButton {
+			margin-bottom: 50px;
+			width: 100px;
+			height: 50px;
+			border-radius: 5px;
+			font-size: 1.7em;
+			background-color: black;
+			color: white;
+			&:hover {
+				color: white;
+				background-color: steelblue;
+			}
+		}
+ 	}
+}
+
+.wikimapInfoBox {
+	padding: 70px;
+	border: 40px solid steelblue;
+	border-radius: 50px;
+	img {
+		width: 2000px;
+		height: 1600px;
+	}
+	.fn {
+		font-size: 8em;
+	}
+}

@@ -1,0 +1,162 @@
+
+.title {
+	padding: 40px;
+	text-align: center;
+	background-color: steelblue;
+	color: white;
+	border-bottom: 2px solid darkgrey;
+
+	.logo {
+		font-size: 3em;
+		font-family: 'Lobster', cursive;
+	}
+}
+
+.section-title {
+	font-size: 1.6em;
+	font-family: 'PT Sans Narrow', sans-serif;
+	font-weight: bold;
+}
+
+.navbar {
+	display: block;
+	border-bottom: 2px solid darkgrey;
+	padding: 25px;
+	text-align: center;
+	background-color: lightgrey;
+
+	button {
+		font-family: 'Poiret One', cursive;
+		font-size: 1.3em;
+		padding: 5px;
+		margin: 0 120px;
+		width: 120px;
+		height: 60px;
+		background-color: white;
+		border: 2px solid steelblue;
+
+		&:hover {
+			color: white;
+			background-color: steelblue;
+			border: 2px solid darkgrey;
+		}
+	}
+}
+
+.description {
+	text-align: center;
+	font-size: 1.3em;
+	font-family: 'Alegreya', serif;
+	width: 60%;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+.install {
+	width: 100%;
+	margin-bottom: 100px;
+
+	.install-info {
+		width: 55%;
+		margin-right: 0;
+		margin-left: auto;
+		border-left: 2px solid lightgrey;
+		padding: 30px;
+
+		.install-info-description {
+			font-size: 1.1em;
+			font-family: 'PT Sans Narrow', sans-serif;
+		}
+
+		code {
+			background-color: lightgrey;
+			padding: 15px;
+		}
+	}
+}
+
+.docs {
+	width: 100%;
+
+	.docs-info {
+		width: 55%;
+		margin-left: 0;
+		margin-right: auto;
+		border-right: 2px solid lightgrey;
+		padding: 30px;
+	}
+
+	.docs-info-description {
+		font-size: 1.1em;
+		font-family: 'PT Sans Narrow', sans-serif;
+
+		.docs-link {
+			color: steelblue;
+		}
+	}
+
+	.docs-info-content {
+		.docs-info-content-header {
+			font-size: 1.3em;
+			font-family: 'PT Sans Narrow', sans-serif;
+			font-weight: bold;
+		}
+
+		.docs-info-content-header-small {
+			font-size: 1.2em;
+			font-family: 'PT Sans Narrow', sans-serif;
+		}
+
+		p,ol {
+			font-family: 'PT Sans Narrow', sans-serif;
+		}
+
+		.userfunction-desc {
+			padding: 20px;
+		}
+
+		code {
+			background-color: lightgrey;
+			padding: 5px;
+		}
+	}
+}
+
+.examples {
+	text-align: center;
+	.links-container {
+		text-align: center;
+		width: 80%;
+		margin: 0 auto;
+
+		.link-container-description {
+			font-family: 'Poiret One', cursive;
+			font-size: 1.8em;
+		}
+
+		a {
+			text-decoration: none;
+			color: black;
+		}
+
+		.example-link {
+			width: 200px;
+			height: 100px;
+			margin: 20px auto;
+			display: inline-block;
+		}
+
+		.spotifly-link {
+			border: 2px solid black;
+			background-color: #B2D72C;
+		}
+
+		.test-link {
+			border: 2px solid black;
+			background-color: steelblue;
+			a {
+				color: white;
+			}
+		}
+	}
+}
