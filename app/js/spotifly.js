@@ -61,6 +61,7 @@ function init(url,type){
     hasDblClickZoom : false,
     autoAppendPopup : true,
     allowZoomThrough : true,
+    popupRendererContainerClass : 'spotiflyPopup',
     zoomSpeed : 0.08,
     positioningType : 'defined', //random, automatic, grouped, or defined
       //if defined

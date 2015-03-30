@@ -8,11 +8,12 @@ _3DATA.create = function(data,optionsObj,cb){
 
 //Get Options
   //target
-    var rendererTarget = optionsObj.rendererTarget || null,
+    var rendererTarget = optionsObj.rendererTarget,
     //objects
     hasAmbientLight = optionsObj.hasAmbientLight || false,
     hasDirectionalLight = optionsObj.hasDirectionalLight || false,
     hasDblClickZoom = optionsObj.hasDblClickZoom,
+    popupRendererContainerClass = optionsObj.popupRendererContainerClass || 'popupRendererContainer',
     showLinks = optionsObj.showLinks,
     autoAppendPopup = optionsObj.autoAppendPopup,
     allowZoomThrough = optionsObj.allowZoomThrough,
@@ -457,7 +458,12 @@ _3DATA.create = function(data,optionsObj,cb){
       cssRenderer = new THREE.CSS3DRenderer();
       cssRenderer.setSize(renderSizeWidth,renderSizeHeight);
       cssRenderer.domElement.style.position = 'absolute';
-      cssRenderer.domElement.style.top = 0;
+      cssRenderer.domElement.className = popupRendererContainerClass;
+      // if(rendererTarget){
+        var nodeRenderTargetPos = $(rendererTarget).children('canvas').offset();
+        cssRenderer.domElement.style.top = nodeRenderTargetPos.top;
+        cssRenderer.domElement.style.left = nodeRenderTargetPos.left;
+      // } else {cssRenderer.domElement.style.top = 0}
 
   //create plane mesh
   var lastPlaneMeshName = [];
@@ -500,6 +506,9 @@ _3DATA.create = function(data,optionsObj,cb){
     return cssObject;
   }
 
+  var objIterator = 0;
+  _3DATA.cssObj = {};
+
   function appendPopup(node,remove){
     //set cssMesh position
     var cssPos = node.position;
@@ -511,6 +520,8 @@ _3DATA.create = function(data,optionsObj,cb){
     var cssObj = createDomElement(nodePopupFunction(node.userData.nodeInfo),cssMesh,remove);
     document.body.appendChild(cssRenderer.domElement);
     cssRenderer.render(cssScene,camera);
+    _3DATA.cssObj[objIterator] = [cssObj,cssMesh]
+    objIterator++;
   }
 
   //Render scene and camera
@@ -657,6 +668,7 @@ _3DATA.create = function(data,optionsObj,cb){
       }
     })
   }
+
   if(cb){cb()}
   return {node: {scene: scene,renderer: renderer},popup: {scene: cssScene,renderer: cssRenderer}}
 } // End Create function

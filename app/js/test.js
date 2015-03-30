@@ -12,8 +12,8 @@ function createTestData(numOfKeys, numOfLinks){
   var obj = {};
   for(var i=0;i<numOfKeys;i++){
     var color = function(){if(i%2 !== 0){return [0,1,0]}else{return [0,0,1]}}
-    var linkColor = function(){if(i%2 !== 0){return [150,0,150]}else{return [1,0,0]}}
-    var nodeSize = function(){if(i%2 !== 0){return 5}else{return 2}}
+    var linkColor = function(){if(i%2 !== 0){return [0,20,150]}else{return [200,0,0]}}
+    var nodeSize = function(){if(i%2 !== 0){return 400}else{return 200}}
     var group = function(){if(i%3 === 0 && i%2 !== 0){return 1}else if(i%2 !== 0){return 3}else{return 2}}
     var position = function(){return [getRandomInt(-300,300),getRandomInt(-300,300),getRandomInt(-300,300)]}
     var popup = function(){
@@ -45,7 +45,7 @@ function createTestData(numOfKeys, numOfLinks){
   return obj;
 }
 
-var testData = createTestData(20,2);
+var testData = createTestData(10,2);
 
   nodeAppenderFunction = function(elem){
     var element = document.createElement('div');
@@ -61,66 +61,66 @@ var testData = createTestData(20,2);
 ////////////////////////////////////////////////
 
   var optionsObj = {
-    // rendererTarget: null,
+    rendererTarget: '.container',
     // hasAmbientLight : true,
     // hasDirectionalLight : false,
-    // hasDblClickZoom : true,
-    // showLinks : true,
+     hasDblClickZoom : true,
+     showLinks : true,
     // autoAppendPopup : true,
     // allowZoomThrough : true,
     positioningType : 'random', //random, automatic, grouped, or defined
     //   //if automatic
-    //   groupSize : 2,
+       groupSize : 1,
     //   //if grouped
     //   groupingVariable: 'group',
     //   groupingDensity: 30,
     //   //if defined
     //   positioningVariable: 'position',
-    // nodeColorFunction : function(node){
+     nodeColorFunction : function(node){
     //   if(node){
-    //     return node.nodeColor;
+         return node.nodeColor;
     //   }else{return false}
-    // },
-    // nodeSizeFunction : function(node){
+     },
+     nodeSizeFunction : function(node){
     //   if(node){
-    //     return node.links.length;
+         return node.links.length;
     //   }else{return false}
-    // },
-    // nodePopupFunction : function(node){
+     },
+     nodePopupFunction : function(node){
     //   if(node){
-    //     return node.popup;
+         return node.popup;
     //   }else{return false}
-    // },
-    // linkColorFunction : function(srcNode){
+     },
+     linkColorFunction : function(srcNode){
     //   if(srcNode){
-    //     return srcNode.linkColor;
+         return srcNode.linkColor;
     //   }else{return false}
-    // },
-    // renderSizeWidth : null,
-    // renderSizeHeight : null,
-    // nodeSize : 2,
-    // nodeWidthSegments : 128,
-    // nodeHeightSegments : 128,
-    // maxBound : 10000,
-    // xSpread : 40,
-    // ySpread : 40,
-    // zSpread : 40,
-    // backgroundType : 'color', //image or color
-    // backgroundColor : [0,0,0],
-    // backgroundImage : 'http://i.imgur.com/x4egEw1.jpg',
-    // nodeColor : [0,1,0],
-    // nodeHighlightColor : [1,0,0],
-    // linkColor : 0x00ff00,
-    // ambientLightColor : 0xffffff,
-    // directionalLightColor : 0xffffff,
-    // directionalLightPosX : 1,
-    // directionalLightPosY : 1,
-    // directionalLightPosZ : 1,
-    // meshPosX : 2+(2*1.5),
-    // meshPosY : -1,
-    // meshPosZ : -2,
-    // wireframeMesh: true,
-    // wireframeWidth: 1
+     },
+    renderSizeWidth : 400,
+    renderSizeHeight : 400,
+    nodeSize : 20,
+    nodeWidthSegments : 128,
+    nodeHeightSegments : 128,
+    maxBound : 10000,
+    xSpread : 40,
+    ySpread : 40,
+    zSpread : 40,
+    backgroundType : 'color', //image or color
+    backgroundColor : [150,150,0],
+    backgroundImage : 'http://i.imgur.com/x4egEw1.jpg',
+    nodeColor : [0,1,0],
+    nodeHighlightColor : [1,0,0],
+    linkColor : 0x00ff00,
+    ambientLightColor : 0xffffff,
+    directionalLightColor : 0xffffff,
+    directionalLightPosX : 1,
+    directionalLightPosY : 1,
+    directionalLightPosZ : 1,
+    meshPosX : 2+(2*1.5),
+    meshPosY : -1,
+    meshPosZ : -2,
+    wireframeMesh: true,
+    wireframeWidth: 1
   }
 
 // Create 3DATA Scene

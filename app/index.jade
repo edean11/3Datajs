@@ -17,9 +17,15 @@ html(lang="en-US")
         a(href="https://s3.amazonaws.com/3datajs.com/downloads/README.md")
             button.navbtn.docs-nav Docs
     .description
-        p.description-text 3Datajs is a small, customizable javascript library used to quickly implement 3D visualizations of data and html content
+        p.description-text
+            a(href="https://github.com/edean11/3Datajs") 3Datajs
+            |  is a small, customizable javascript library used to quickly implement 3D visualizations of data and html content.
+            | It is built upon the 
+            a(href="https://github.com/mrdoob/three.js") threejs
+            |  3D library.
     .install
         .install-image
+            img(src="https://s3.amazonaws.com/3datajs.com/images/Screen+Shot+2015-03-26+at+10.31.14+PM.png")
         .install-info
             p.install-info-title.section-title Installation
             p.install-info-description To install 3datajs, click the download link above and include it in your project folder, or use bower as shown below:
@@ -95,10 +101,10 @@ html(lang="en-US")
                 code _3DATA.create(data,options)
                 p.userfunction-desc Creates the scene with the data and options specified.  The return value is an object that contains: the data point scene and renderer as well as the popup scene and renderer.
                     | These can be manipulated after the create function has been run to modify the scene as needed.  If modified, run the _3DATA.render() function specified below to show the changes
-                    | &gt; Once the 3DATA.create() function has been called as seen
-                    | &gt; above, the user will have access to a number of other
-                    | &gt; functions that will help the user get the most out of
-                    | &gt; their newly created scene
+                    | Once the 3DATA.create() function has been called as seen
+                    | above, the user will have access to a number of other
+                    | functions that will help the user get the most out of
+                    | their newly created scene
                 code _3DATA.render()
                 p.userfunction-desc Takes no arguments.  This function forces the re-rendering of the scene in order to show any changes made to the scene
                 code _3DATA.getCamera()
@@ -120,11 +126,14 @@ html(lang="en-US")
         p.section-title Examples
         .links-container
             .test-link.example-link
-                a(href="/test.jade")
+                a(href="/test.html")
                     p.link-container-description Test
             .spotifly-link.example-link
-                a(href="/spotifly.jade")
+                a(href="/spotifly.html")
                     p.link-container-description Spotifly
+            .navbar3d-link.example-link
+                a(href="/3dnavbar.html")
+                    p.link-container-description 3D Navbar
     //- h1.wikimapTitle WikiMap
     //- .wikimapContainer
     //-     .searchContainer

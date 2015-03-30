@@ -50,16 +50,31 @@
 	width: 60%;
 	margin: 0 auto;
 	padding: 20px;
+
+	.description-text {
+		a {
+			color: black;
+		}
+	}
 }
 
 .install {
 	width: 100%;
 	margin-bottom: 100px;
 
+	.install-image{
+		margin: 20px;
+		display: inline-block;
+		width: 35%;
+
+		img {
+			width: 90%;
+		}
+	}
+
 	.install-info {
 		width: 55%;
-		margin-right: 0;
-		margin-left: auto;
+		display: inline-block;
 		border-left: 2px solid lightgrey;
 		padding: 30px;
 
@@ -81,7 +96,6 @@
 	.docs-info {
 		width: 55%;
 		margin-left: 0;
-		margin-right: auto;
 		border-right: 2px solid lightgrey;
 		padding: 30px;
 	}
@@ -120,6 +134,14 @@
 			padding: 5px;
 		}
 	}
+
+	.docs-image {
+		width: 30%;
+		display: inline-block;
+		img {
+			width: 80%;
+		}
+	}
 }
 
 .examples {
@@ -136,6 +158,7 @@
 
 		a {
 			text-decoration: none;
+			height: 100%;
 			color: black;
 		}
 
@@ -157,6 +180,10 @@
 			a {
 				color: white;
 			}
+		}
+
+		.navbar3d-link {
+			border: 2px solid black;
 		}
 	}
 }
