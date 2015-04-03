@@ -459,11 +459,11 @@ _3DATA.create = function(data,optionsObj,cb){
       cssRenderer.setSize(renderSizeWidth,renderSizeHeight);
       cssRenderer.domElement.style.position = 'absolute';
       cssRenderer.domElement.className = popupRendererContainerClass;
-      // if(rendererTarget){
+      if(rendererTarget){
         var nodeRenderTargetPos = $(rendererTarget).children('canvas').offset();
         cssRenderer.domElement.style.top = nodeRenderTargetPos.top;
         cssRenderer.domElement.style.left = nodeRenderTargetPos.left;
-      // } else {cssRenderer.domElement.style.top = 0}
+      } else {cssRenderer.domElement.style.top = 0}
 
   //create plane mesh
   var lastPlaneMeshName = [];

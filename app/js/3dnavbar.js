@@ -1,37 +1,30 @@
 
+
 var popup = function(name){
       var elem = document.createElement('div');
       elem.className = 'navLink';
-      elem.innerHTML = name;
+      elem.innerHTML = '<a class="navbarLink" href="./#'+name+'">'+name+'</a>';
       return elem;
     }
 
 navLinks = {
 	home: {
 		name: 'home',
-		href: '/#home',
-		color: [1,0,0],
 		position: [0,0,6],
 		popup: popup('Home')
 	},
 	about: {
 		name: 'about',
-		href: '/#about',
-		color: [0,1,0],
 		position: [6,0,0],
 		popup: popup('About')
 	},
 	contact: {
 		name: 'contact',
-		href: '/#contact',
-		color: [0,0,1],
 		position: [0,0,-6],
 		popup: popup('Contact')
 	},
 	downloads: {
 		name: 'downloads',
-		href: '/#downloads',
-		color: [200,50,0],
 		position: [-6,0,0],
 		popup: popup('Downloads')
 	}
@@ -40,13 +33,12 @@ navLinks = {
 options = {
 	positioningType: 'defined',
 	positioningVariable: 'position',
+	backgroundColor : [1,1,1],
 	rendererTarget: '.navbarExample',
+	popupRendererContainerClass : 'navbarContainer',
 	renderSizeWidth: 500,
 	renderSizeHeight: 150,
 	autoAppendPopup: true,
-	nodeColorFunction : function(node){
-         return node.color;
-    },
     nodePopupFunction : function(node){
          return node.popup;
      },
@@ -63,9 +55,13 @@ var camera = _3DATA.getCamera()[1];
 camera.autoRotate = true;
 camera.noPan = true;
 camera.noZoom = true;
+camera.minPolarAngle = 1.6073009183012759;
+camera.maxPolarAngle = 1.6073009183012759;
 
 var scene = _3DATA.getNodeScene();
 
-_3DATA.cssObj[1][0].rotation.y = 90;
-_3DATA.cssObj[2][0].rotation.y = 90;
-_3DATA.cssObj[3][0].rotation.y = 180;
+scene.children[0].visible = false;
+
+_3DATA.cssObj[1][0].rotation.y = -55;
+_3DATA.cssObj[2][0].rotation.y = -110;
+_3DATA.cssObj[3][0].rotation.y = -165;

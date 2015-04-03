@@ -1,24 +1,42 @@
 
 .navbarExampleTitle {
 	text-align: center;
+	font-size: 1.8em;
+	font-family: 'PT Sans Narrow', sans-serif;
+	font-weight: bold;
 }
 
 .navbarExample {
-	position: absolute;
-	margin-left: 30%;
-	border-bottom: 2px solid darkgrey;
-	text-align: center;
-	background-color: lightgrey;
-}
-
-.popupRendererContainer {
 	margin-left: 30%;
 }
 
 .navLink {
-	background-color: white;
+	background-color: black;
+	color: white;
 	padding: 100px;
 	padding-bottom: 200px;
 	font-size: 20em;
-	border: 20px solid black;
+	border: 40px double steelblue;
+	width: 2500px;
+	text-align: center;
+}
+
+.navbarLink {
+	text-decoration: none;
+	color: white;
+}
+
+.row {
+	height: 150px;
+	border-top: 3px solid black;
+	border-bottom: 3px solid black;
+	background: steelblue;
+	width: 100%;
+}
+
+.navbarContainer {
+	border: 3px solid black;
+	position: absolute;
+	top: 75px;
+	margin-left: 30%;
 }
