@@ -83,6 +83,7 @@ Congratulations! You have just created your first 3datajs scene!
 
 ## Available Options
 
+```
 allOptions = {
 	rendererTarget: null,
     hasAmbientLight : true,
