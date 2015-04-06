@@ -87,8 +87,12 @@ allOptions = {
 	rendererTarget: null,
     hasAmbientLight : true,
     hasDirectionalLight : false,
+    hasDblClickZoom : true,
+    dblClickAppendPopup : true,
+    popupRendererContainerClass : 'testContainer',
     showLinks : false,
-    autoAppendPopup : false
+    autoAppendPopup : false,
+    zoomSpeed : 0.5,
     // random, automatic, grouped, or defined
     positioningType : 'automatic',
       //if automatic
@@ -116,8 +120,8 @@ allOptions = {
     renderSizeWidth : null,
     renderSizeHeight : null,
     nodeSize : 2,
-    nodeWidthSegments : 128,
-    nodeHeightSegments : 128,
+    nodeWidthSegments : 32,
+    nodeHeightSegments : 32,
     maxBound : 10000,
     xSpread : 40,
     ySpread : 40,
@@ -125,6 +129,9 @@ allOptions = {
     backgroundType : 'color', //image or color
     backgroundColor : [0,0,0],
     backgroundImage : 'http://i.imgur.com/x4egEw1.jpg',
+    backgroundRotationX : -0.9,
+    backgroundRotationY : -0.5,
+    backgroundRotationZ : 0.4,
     nodeColor : [0,1,0],
     nodeHighlightColor : [1,0,0],
     linkColor : [0,0,1],
@@ -184,7 +191,7 @@ allOptions = {
 
 - nodeColor = default node color if nodeColorFunction returns undefined for any data point
 
-- nodeHighlightColor = RGB array for the color of the node when selected
+- nodeHighlightColor = RGB array or hex string for the color of the node when selected. If left blank, the object will not be highlighted
 
 - linkColor = RGB array for the default link color if linkColorFunction returns undefined for any data point
 
@@ -212,6 +219,10 @@ allOptions = {
 
 - _3DATA.render() = takes no arguments.  This function forces the re-rendering of the scene in order to show any changes made to the scene
 
+- _3DATA.appendPopup(node,remove) = Shows the popup for the node passed into hte function. The remove argument takes a true or false value determining whether the popup is removed when a new one is created.
+
+- _3DATA.getSkyBox() = Takes no arguments. Returns the skybox with its properties.
+
 - _3DATA.getCamera() = takes no arguments. This returns the camera object with all its useful properties to be examined or manipulated
 
 - _3DATA.getNodeScene,_3DATA.getPopupScene,_3DATA.getNodeRenderer,_3DATA.getPopupRenderer = behave like getCamera() described above
@@ -223,6 +234,8 @@ allOptions = {
 - _3DATA.zoomNode(zoomObjMesh,zoomOut,showNodeInfo) = this allows the user to define and zoom into a specific node. You must provide the entire mesh of the node to be zoomed into, the amount you want to zoom out from that object once zoomed in (i.e. 10,100 etc.), and a boolean value of whether the popup displays when zoomed in
 
 - _3DATA.zoomPosition(position,zoomOut) = this allows the user to zoom into any particular point in the scene.  Simply provide the position in an x,y,z array (i.e. [10,12,100]) and the amount to zoom out once zoomed in on that position
+
+- _3DATA.removePopup(meshName,popupName) = Removes the popup and corresponding mesh passed into the function from the scene. If no parameters are given, it removes the first(or only) popup appended.
 
 - _3DATA.revertColor(revertNode) = this allows the user to revert a node's color back to its original color.  Simply pass in the entire node object into the function.
 

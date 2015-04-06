@@ -18,7 +18,7 @@ function init(url,type){
 			var elem = document.createElement('div');
 			elem.className = 'result';
 			elem.innerHTML = embed;
-			var position = [-8+(gapVar*key),0,lastPos];
+			var position = [-8.25+(gapVar*key),0,lastPos];
 			lastPos = lastPos - gapVar;
 			dataObj[id] = {};
 			dataObj[id].embed = elem;
@@ -28,11 +28,17 @@ function init(url,type){
 				function genre(){if(result.genres){return result.genres[0]}else{return ''}}
 				function popularity(){if(result.popularity){return result.popularity}else{return ''}}
 				var genreEl = $('<p class="genre">'+genre()+'</p>');
-				var imageUrl = $('<img class="playImage" src="'+result.images[0].url+'"></img>');
+				function imageUrl(){if(result.images){
+					var img = $('<img class="playImage" src="'+result.images[0].url+'"></img>');
+					return img;
+				}else{
+					var img = $('<img class="playImage" src="'+result.album.images[0].url+'"></img>');
+					return img;
+				}}
 				var name = $('<p class="playName">'+result.name+'</p>');
 				var popularityEl = $('<p class="playPopularity">'+popularity()+'</p>');
 				var $resultContainer = $('<div class="resultContainer"></div>');
-				$resultContainer.append(imageUrl);
+				$resultContainer.append(imageUrl());
 				$resultContainer.append(name);
 				$resultContainer.append(genre);
 				$resultContainer.append(popularity);
@@ -49,6 +55,7 @@ function init(url,type){
 		orbitControls.center.z = -18;
 		orbitControls.noPan = true;
 		orbitControls.noRotate = true;
+
 		_3DATA.render();
 	});
 }
@@ -62,7 +69,7 @@ function init(url,type){
     autoAppendPopup : true,
     allowZoomThrough : true,
     popupRendererContainerClass : 'spotiflyPopup',
-    zoomSpeed : 0.08,
+    zoomSpeed : 0.06,
     positioningType : 'defined', //random, automatic, grouped, or defined
       //if defined
       positioningVariable: 'position',
@@ -72,17 +79,20 @@ function init(url,type){
     nodeSize : 0.3,
     nodeWidthSegments : 16,
     nodeHeightSegments : 16,
-    maxBound : 66,
-    backgroundType : 'color', //image or color
+    maxBound : 282,
+    backgroundType : 'image', //image or color
     backgroundColor : [1,1,1],
-    backgroundImage : 'http://i.imgur.com/x4egEw1.jpg',
+    backgroundImage : 'img/recordcollection.jpg',
+    backgroundRotationY : -0.85,
     nodeColor : '0xafd92c',//[0,235,10],
     meshPosX : 0.5,
     meshPosY : 0,
     meshPosZ : 0,
     wireframeMesh: true,
-    wireframeWidth: 1
+    wireframeWidth: 3
   }
+
+
 
 //////////////////////////////////////////
 //////// Container Functions ////////////
@@ -172,6 +182,10 @@ function attachPlayButtonListener(){
 		$searchContainer.append(AAContainer);
 	})
 }
+
+// Get Song Lyrics
+
+
 
 
 

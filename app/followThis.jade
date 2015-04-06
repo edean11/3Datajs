@@ -8,6 +8,11 @@ html(lang="en-US")
 		link(rel="stylesheet" href="css/main.css")
 
 	body
+		.menu
+			p.numberSelectText Number of Nodes
+			input(type="text" placeholder="Pick Any Number 2-25").numberSelect
+			button.playButton.
+				PLAY
 		// [if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]
 		script(src="vendor/jquery/dist/jquery.min.js")
 		script(src="vendor/lodash/lodash.min.js")
@@ -19,5 +24,6 @@ html(lang="en-US")
 		script(src="vendor/threejs/build/Detector.js")
 		script(src="vendor/threejs/build/tquery.min.js")
 		script(src="vendor/jquery/dist/attrchange.js")
+		script(src="vendor/tweenjs/src/Tween.js")
 		script(src="js/3data.js")
-		script(src="js/test.js")
+		script(src="js/followThis.js")

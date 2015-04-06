@@ -1,0 +1,9 @@
+{
+  "firebase": "3datajs",
+  "public": "public",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}

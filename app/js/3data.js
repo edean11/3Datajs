@@ -10,13 +10,13 @@ _3DATA.create = function(data,optionsObj,cb){
   //target
     var rendererTarget = optionsObj.rendererTarget,
     //objects
-    hasAmbientLight = optionsObj.hasAmbientLight || false,
-    hasDirectionalLight = optionsObj.hasDirectionalLight || false,
+    hasAmbientLight = optionsObj.hasAmbientLight,
+    hasDirectionalLight = optionsObj.hasDirectionalLight,
     hasDblClickZoom = optionsObj.hasDblClickZoom,
+    dblClickAppendPopup = optionsObj.dblClickAppendPopup || true,
     popupRendererContainerClass = optionsObj.popupRendererContainerClass || 'popupRendererContainer',
     showLinks = optionsObj.showLinks,
     autoAppendPopup = optionsObj.autoAppendPopup,
-    allowZoomThrough = optionsObj.allowZoomThrough,
     zoomSpeed = optionsObj.zoomSpeed || 1,
     //grouping
     positioningType = optionsObj.positioningType || 'random', //random, automatic, defined group, or defined position
@@ -50,9 +50,12 @@ _3DATA.create = function(data,optionsObj,cb){
     backgroundType = optionsObj.backgroundType || 'color', //image or color
     backgroundColor = optionsObj.backgroundColor || [0,0,0],
     backgroundImage = optionsObj.backgroundImage || null,
+    backgroundRotationX = optionsObj.backgroundRotationX || 0,
+    backgroundRotationY = optionsObj.backgroundRotationY || 0,
+    backgroundRotationZ = optionsObj.backgroundRotationZ || 0,
     //color
     nodeColor = optionsObj.nodeColor || [0,1,0],
-    nodeHighlightColor = optionsObj.zoomNodeColor || [1,0,0],
+    nodeHighlightColor = optionsObj.nodeHighlightColor || null,
     linkColor = optionsObj.linkColor || [0,0,1],
     ambientLightColor = optionsObj.ambientLightColor || 0xffffff,
     directionalLightColor = optionsObj.directionalLightColor || 0xffffff,
@@ -61,9 +64,9 @@ _3DATA.create = function(data,optionsObj,cb){
     directionalLightPosY = optionsObj.directionalLightPosY || 1,
     directionalLightPosZ = optionsObj.directionalLightPosZ || 1,
     //mesh pos
-    meshPosX = optionsObj.meshPosX || nodeSize+(nodeSize*1.5),
-    meshPosY = optionsObj.meshPosY || -nodeSize/2,
-    meshPosZ = optionsObj.meshPosZ || -nodeSize,
+    meshPosX = optionsObj.meshPosX || 0,
+    meshPosY = optionsObj.meshPosY || 0,
+    meshPosZ = optionsObj.meshPosZ || 0,
     wireframeMesh = optionsObj.wireframeMesh || false,
     wireframeWidth = optionsObj.wireframeWidth || 1;
 
@@ -147,6 +150,7 @@ _3DATA.create = function(data,optionsObj,cb){
       positionObj[i] = {x:{},y:{},z:{}};
       //if needs a new x and y coordinate
       if(lastGroupEndPos[0]+groupSideLength >= sceneLength/2 && lastGroupEndPos[1]-groupSideLength <= -(sceneLength/2)){
+        console.log('1');
         positionObj[i].x.start = -(sceneLength/2);
         positionObj[i].x.end = -(sceneLength/2)+groupSideLength;
         positionObj[i].y.start = sceneLength/2;
@@ -157,6 +161,7 @@ _3DATA.create = function(data,optionsObj,cb){
         lastGroupEndPos.push(positionObj[i].x.end,positionObj[i].y.end,positionObj[i].z.end)
       //if needs a new y coordinate
       } else if(lastGroupEndPos[0]+groupSideLength >= sceneLength/2 && lastGroupEndPos[1]-groupSideLength>= -(sceneLength/2)){
+        console.log('2');
         positionObj[i].x.start = -(sceneLength/2);
         positionObj[i].x.end = -(sceneLength/2)+groupSideLength;
         positionObj[i].y.start = lastGroupEndPos[1]+groupSideLength;
@@ -167,6 +172,7 @@ _3DATA.create = function(data,optionsObj,cb){
         lastGroupEndPos.push(positionObj[i].x.end,positionObj[i].y.end,positionObj[i].z.end)
       //if does not need any new coordinates
       } else{
+        console.log('3');
         positionObj[i].x.start = lastGroupEndPos[0];
         positionObj[i].x.end = lastGroupEndPos[0]+groupSideLength;
         positionObj[i].y.start = lastGroupEndPos[1]+groupSideLength;
@@ -181,6 +187,7 @@ _3DATA.create = function(data,optionsObj,cb){
   }
 
   function placeGroupPos(mesh,groupPosObj,groupNumber){
+    console.log(groupNumber);
     mesh.position.x = getRandomInt(groupPosObj[groupNumber].x.start,groupPosObj[groupNumber].x.end);
     mesh.position.y = getRandomInt(groupPosObj[groupNumber].y.start,groupPosObj[groupNumber].y.end);
     mesh.position.z = getRandomInt(groupPosObj[groupNumber].z.start,groupPosObj[groupNumber].z.end);
@@ -191,7 +198,7 @@ _3DATA.create = function(data,optionsObj,cb){
   function createNodeMesh(nodeSize,nodeWidthSegments,nodeHeightSegments,nodeColor,isWireframe,wireframeWidth){
     var geometry  = new THREE.SphereGeometry( nodeSize,nodeWidthSegments,nodeHeightSegments);
     var material  = new THREE.MeshBasicMaterial({ wireframe: isWireframe, wireframeLinewidth: wireframeWidth});
-    if(nodeColor[1] === 'x'){material.color.setHex(nodeColor)}else{material.color.setRGB(nodeColor[0],nodeColor[1],nodeColor[2])};
+    if(nodeColor[1] === 'x'){material.color = new THREE.Color().setHex(nodeColor)}else{material.color = new THREE.Color(nodeColor[0],nodeColor[1],nodeColor[2])};
     var mesh = new THREE.Mesh(geometry, material);
     return mesh;
   }
@@ -250,7 +257,7 @@ _3DATA.create = function(data,optionsObj,cb){
         groupIterator++;
       });
     } else if(positioningType === 'grouped'){
-      var groupedData = groupData(testData);
+      var groupedData = groupData(data);
       var groupedDataPos = findGroupPos(groupedData)
       _.forEach(groupedData,function(group,groupNumber){
         _.forEach(group,function(node,nodeKey){
@@ -312,9 +319,9 @@ _3DATA.create = function(data,optionsObj,cb){
 
   function createNodeLink(id,pos2,mesh2){
     var linkMaterial = new THREE.LineBasicMaterial();
-    var linkColor = linkColorFunction(id) || linkColor;
-    if(linkColor[1]==='x'){linkMaterial.color.setHex(linkColor)}
-      else{linkMaterial.color.setRGB(linkColor[0],linkColor[1],linkColor[2])}
+    var linkColor = function(){if(typeof linkColorFunction === 'function'){return linkColorFunction(id)}else{return linkColor}}
+    if(linkColor()[1]==='x'){linkMaterial.color.setHex(linkColor())}
+      else{linkMaterial.color.setRGB(linkColor()[0],linkColor()[1],linkColor()[2])}
     var pos1 = id.mesh.position;
     var linkGeometry = new THREE.Geometry();
       linkGeometry.vertices.push(new THREE.Vector3(pos1.x, pos1.y, pos1.z));
@@ -366,10 +373,10 @@ _3DATA.create = function(data,optionsObj,cb){
   //Camera//
 
     var camera  = new THREE.PerspectiveCamera(45, renderSizeWidth / renderSizeHeight, 0.01, maxBound+100);
-    camera.position.z = 150;
+    camera.position.z = maxBound/5;
     //Initialize Orbit Controls
     var controls = new THREE.OrbitControls(camera);
-    controls.maxDistance = maxBound-10;
+    controls.maxDistance = (maxBound/5);
       controls.zoomSpeed = zoomSpeed;
       controls.addEventListener('change', render);
 
@@ -386,10 +393,15 @@ _3DATA.create = function(data,optionsObj,cb){
   function createSkyBox(){
     var skyGeometry = new THREE.BoxGeometry(maxBound,maxBound,maxBound);
     if(backgroundType==='image'){
+      THREE.ImageUtils.crossOrigin = '';
       var texture = THREE.ImageUtils.loadTexture(backgroundImage,{},function(){
       var skyMaterial = new THREE.MeshBasicMaterial({map:texture});
       var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+        skyBox.name = 'skyBox';
         skyBox.scale.x = -1;
+        skyBox.rotation.x = backgroundRotationX;
+        skyBox.rotation.y = backgroundRotationY;
+        skyBox.rotation.z = backgroundRotationZ;
         scene.add(skyBox);
       });
     }else{
@@ -397,7 +409,11 @@ _3DATA.create = function(data,optionsObj,cb){
       if(skyMaterial[1] === 'x'){skyMaterial.color.setHex(backgroundColor)}
         else{skyMaterial.color.setRGB(backgroundColor[0],backgroundColor[1],backgroundColor[2])}
       var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+        skyBox.name = 'skyBox';
         skyBox.scale.x = -1;
+        skyBox.rotation.x = backgroundRotationX;
+        skyBox.rotation.y = backgroundRotationY;
+        skyBox.rotation.z = backgroundRotationZ;
         scene.add(skyBox);
     }
   }
@@ -427,9 +443,7 @@ _3DATA.create = function(data,optionsObj,cb){
       //Updates mouseX and mouseY coords
       window.addEventListener( 'mousemove', onMouseMove, false );
       //zoom into dbl clicked node and grab/append node info
-      if(hasDblClickZoom){
-        window.addEventListener( 'dblclick', dblClickNode, false );
-      }
+      window.addEventListener( 'dblclick', dblClickNode, false );
 
     //Call animation loop on init
     animate();
@@ -447,9 +461,8 @@ _3DATA.create = function(data,optionsObj,cb){
       controls.dollyIn(scaler);
     }else{}
     camera.updateProjectionMatrix();
-    //obj.object.material.color = new THREE.Color( 0xff0000 );
-    if(nodeHighlightColor[1] === 'x'){obj.object.material.color.setHex(nodeHighlightColor)}
-      else{obj.object.material.color.setRGB(nodeHighlightColor[0],nodeHighlightColor[1],nodeHighlightColor[2])}
+    if(nodeHighlightColor&&nodeHighlightColor[1] === 'x'){obj.object.material.color.setHex(nodeHighlightColor)}
+      else if(nodeHighlightColor){obj.object.material.color.setRGB(nodeHighlightColor[0],nodeHighlightColor[1],nodeHighlightColor[2])}
     render();
   }
 
@@ -558,18 +571,22 @@ _3DATA.create = function(data,optionsObj,cb){
 
   var lastClickedNode;
   function dblClickNode(e) {
-    raycaster.setFromCamera(mouse,camera);
     // calculate objects intersecting the picking ray
+    raycaster.setFromCamera(mouse,camera);
     var intersects = raycaster.intersectObjects(nodes.children);
-    var children = nodes.children;
-    var objPos = intersects[0].object.position;
-    revertColor(lastClickedNode);
-    lastClickedNode = intersects[0];
-    //zoom into object
-    zoomIntoNode(intersects[0]);
-    //append popup
-    appendPopup(intersects[0].object,true);
-    if(dblClickFunction){dblClickFunction(intersects[0].object)}else{};
+    if(hasDblClickZoom){
+      var children = nodes.children;
+      var objPos = intersects[0].object.position;
+      revertColor(lastClickedNode);
+      lastClickedNode = intersects[0];
+      //zoom into object
+      zoomIntoNode(intersects[0]);
+    }
+    if(dblClickAppendPopup){
+      //append popup
+      appendPopup(intersects[0].object,true);
+    }
+    if(typeof dblClickFunction === 'function'){dblClickFunction(intersects[0].object)}else{};
   }
 
   function revertColor(revertNode){
@@ -586,13 +603,20 @@ _3DATA.create = function(data,optionsObj,cb){
   ///////////// USER FACING FUNCTIONS ////////////
   ////////////////////////////////////////////////
 
-  _3DATA.search = function(searchKey,searchValue){
+  _3DATA.search = function(searchKey,searchValue,highlightFound){
     var foundNodes = [];
-    _.forEach(scene.children[1].children,function(val,key){
+    function object3DID(){
+      for(var i=0;i<scene.children.length-1;i++){
+        if(scene.children[i].type==='Object3D'){return i}
+      }
+    }
+    _.forEach(scene.children[object3DID()].children,function(val,key){
       var nodeInfo = val.userData.nodeInfo;
       var nodeSearchKey = nodeInfo[searchKey];
       if(nodeSearchKey === searchValue){
-        val.material.color.setRGB(nodeHighlightColor[0],nodeHighlightColor[1],nodeHighlightColor[2]);
+        if(highlightFound){
+          val.material.color.setRGB(nodeHighlightColor[0],nodeHighlightColor[1],nodeHighlightColor[2]);
+        }
         foundNodes.push(val);
       }
     });
@@ -628,8 +652,28 @@ _3DATA.create = function(data,optionsObj,cb){
     render();
   }
 
+  _3DATA.appendPopup = function(node,remove){
+    //set cssMesh position
+    var cssPos = node.position;
+    cssPos.x += meshPosX;
+    cssPos.y += meshPosY;
+    cssPos.z += meshPosZ;
+    //render css3D
+    var cssMesh = createMesh(cssPos,remove);
+    var cssObj = createDomElement(nodePopupFunction(node.userData.nodeInfo),cssMesh,remove);
+    document.body.appendChild(cssRenderer.domElement);
+    cssRenderer.render(cssScene,camera);
+    _3DATA.cssObj[objIterator] = [cssObj,cssMesh]
+    objIterator++;
+  }
+
   _3DATA.getCamera = function(){
     return [camera,controls];
+  }
+
+  _3DATA.getSkyBox = function(){
+    var skyBox = scene.getObjectByName('skyBox');
+    return skyBox;
   }
 
   _3DATA.getNodeScene = function(){
@@ -653,10 +697,29 @@ _3DATA.create = function(data,optionsObj,cb){
     cssRenderer.render(cssScene,camera);
   }
 
-  _3DATA.remove = function(objectName){
-    var deleteObject = scene.getObjectByName(objectName);
-    scene.remove(deleteObject);
+  _3DATA.remove = function(objectName, sceneType){
+    if(sceneType === 'node'){
+      var deleteObject = scene.getObjectByName(objectName);
+      scene.remove(deleteObject);
+    } else {
+      var deleteObject = cssScene.getObjectByName(objectName);
+      cssScene.remove(deleteObject);
+    }
     render();
+  }
+
+  _3DATA.removePopup = function(meshName,popupName){
+    if(meshName&&popupName){
+      var popupObjectMesh = scene.getObjectByName ( meshName, true );
+      var popupObject = cssScene.getObjectByName ( popupName, true );
+      scene.remove(popupObjectMesh);
+      cssScene.remove(popupObject);
+    }else{
+      var popupObjectMesh = scene.getObjectByName ( 'planeMesh', true );
+      var popupObject = cssScene.getObjectByName ( 'cssObject', true );
+      scene.remove(popupObjectMesh);
+      cssScene.remove(popupObject);
+    }
   }
 
   _3DATA.revertColor = function(revertNode){

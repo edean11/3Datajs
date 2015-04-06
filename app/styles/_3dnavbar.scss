@@ -40,3 +40,18 @@
 	top: 75px;
 	margin-left: 30%;
 }
+
+.navbar-content {
+	width: 70%;
+	margin: 60px auto;
+	border-top: 2px solid grey;
+	border-bottom: 2px solid grey;
+	text-align: center;
+	padding: 30px;
+
+	p {
+		padding: 10px 90px;
+		font-family: 'PT Sans Narrow', sans-serif;
+		font-size: 1.3em;
+	}
+}

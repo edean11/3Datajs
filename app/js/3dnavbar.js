@@ -42,7 +42,7 @@ options = {
     nodePopupFunction : function(node){
          return node.popup;
      },
-    maxBound : 20,
+    maxBound : 55,
     nodeSize: 0.5,
     meshPosX: -0.05,
     meshPosY: -0.6,
@@ -51,12 +51,12 @@ options = {
 
 _3DATA.create(navLinks,options);
 
-var camera = _3DATA.getCamera()[1];
-camera.autoRotate = true;
-camera.noPan = true;
-camera.noZoom = true;
-camera.minPolarAngle = 1.6073009183012759;
-camera.maxPolarAngle = 1.6073009183012759;
+var orbit = _3DATA.getCamera()[1];
+orbit.autoRotate = true;
+orbit.noPan = true;
+orbit.noZoom = true;
+orbit.minPolarAngle = 1.6073009183012759;
+orbit.maxPolarAngle = 1.6073009183012759;
 
 var scene = _3DATA.getNodeScene();
 

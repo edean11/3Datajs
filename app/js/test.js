@@ -61,13 +61,15 @@ var testData = createTestData(10,2);
 ////////////////////////////////////////////////
 
   var optionsObj = {
-    rendererTarget: '.container',
+    //rendererTarget: '.container',
     // hasAmbientLight : true,
     // hasDirectionalLight : false,
      hasDblClickZoom : true,
+    // dblClickAppendPopup : false,
+    // popupRendererContainerClass : 'testContainer',
      showLinks : true,
     // autoAppendPopup : true,
-    // allowZoomThrough : true,
+    // zoomSpeed : 0.4,
     positioningType : 'random', //random, automatic, grouped, or defined
     //   //if automatic
        groupSize : 1,
@@ -96,18 +98,16 @@ var testData = createTestData(10,2);
          return srcNode.linkColor;
     //   }else{return false}
      },
-    renderSizeWidth : 400,
-    renderSizeHeight : 400,
-    nodeSize : 20,
-    nodeWidthSegments : 128,
-    nodeHeightSegments : 128,
-    maxBound : 10000,
-    xSpread : 40,
-    ySpread : 40,
-    zSpread : 40,
-    backgroundType : 'color', //image or color
+    nodeSize : 40,
+    nodeWidthSegments : 32,
+    nodeHeightSegments : 32,
+    maxBound : 1000,
+    xSpread : 10,
+    ySpread : 5,
+    zSpread : 5,
+    backgroundType : 'image', //image or color
     backgroundColor : [150,150,0],
-    backgroundImage : 'http://i.imgur.com/x4egEw1.jpg',
+    backgroundImage : 'img/stars.jpeg',
     nodeColor : [0,1,0],
     nodeHighlightColor : [1,0,0],
     linkColor : 0x00ff00,
@@ -116,9 +116,9 @@ var testData = createTestData(10,2);
     directionalLightPosX : 1,
     directionalLightPosY : 1,
     directionalLightPosZ : 1,
-    meshPosX : 2+(2*1.5),
-    meshPosY : -1,
-    meshPosZ : -2,
+    meshPosX : 0,
+    meshPosY : 0,
+    meshPosZ : 0,
     wireframeMesh: true,
     wireframeWidth: 1
   }
