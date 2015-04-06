@@ -152,8 +152,12 @@ allOptions = {
 - rendererTarget = If null, 3datajs append directly to the body of the html.  Otherwise, provide a jquery style selector to define the target of the data rendering (i.e. '#container')
 - hasAmbientLight = boolean, defines if the scene has an ambient light
 - hasDirectionalLight = boolean, defines if the scene has a directional light
+- hasDblClickZoom = boolean, determines if double clicking a node zooms into it
+- dblClickAppendPopup = boolean, determines if popups are appended when zooming into a node
+- popupRendererContainerClass = string, class given to the popup container
 - showLinks = boolean, defines if the links are shown in the scene
 - autoAppendPopup = boolean, determines if the popups are appended for all nodes to start (true) or if they should only be appended when the node is selected (false)
+- zoomSpeed = determines how fast the camera zooms in/out. 1 is the default
 - positioningType = this property has a large impact on how the data is positioned in the scene.  There are 4 possible choices:
 
 	1. random - this is the easiest type to implement as it requires no other positioning properties to be defined.  It simply places all data points into the scene randomly, within the bounds set in the xSpread,ySpread and zSpread properties
@@ -172,7 +176,7 @@ allOptions = {
 
 - linkColorFunction = similar to the above, this takes in each individual data point as an argument, thus allowing the user to color links based off of any property in the data set
 
-- linkColorFunction = similar to the above, this takes in each individual data point as an argument, thus allowing the user to run any custom function upon the dblClick event. (note: the node argument for this function is slightly different than the above.  Console.log the result to find its structure)
+- dblClickFunction = similar to the above, this takes in each individual data point as an argument, thus allowing the user to run any custom function upon the dblClick event. (note: the node argument for this function is slightly different than the above.  Console.log the result to find its structure)
 
 - renderSizeWidth,renderSizeHeight = sets the width and height of the rendered scene, only used if a renderTarget was defined
 
@@ -189,6 +193,8 @@ allOptions = {
 - backgroundColor = RGB array (i.e. [0,255,0]) if 'color' was chosen for backgroundType
 
 - backgroundImage = image URL if 'image' was chosen as the backgroundType
+
+- backgroundRotationX,Y,Z = determine how much to rotate the background over each axis
 
 - nodeColor = default node color if nodeColorFunction returns undefined for any data point
 
