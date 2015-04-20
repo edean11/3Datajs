@@ -9,14 +9,18 @@ _3DATA.create = function(data,optionsObj,cb){
 //Get Options
   //target
     var rendererTarget = optionsObj.rendererTarget,
-    //objects
+    //object booleans
     hasAmbientLight = optionsObj.hasAmbientLight,
     hasDirectionalLight = optionsObj.hasDirectionalLight,
+    autoRotate = optionsObj.autoRotate || false,
     hasDblClickZoom = optionsObj.hasDblClickZoom,
+    zoomAutoRotate = optionsObj.zoomAutoRotate || false,
     dblClickAppendPopup = optionsObj.dblClickAppendPopup || true,
-    popupRendererContainerClass = optionsObj.popupRendererContainerClass || 'popupRendererContainer',
     showLinks = optionsObj.showLinks,
     autoAppendPopup = optionsObj.autoAppendPopup,
+    // class assignment
+    popupRendererContainerClass = optionsObj.popupRendererContainerClass || 'popupRendererContainer',
+    // camera controls
     zoomSpeed = optionsObj.zoomSpeed || 1,
     //grouping
     positioningType = optionsObj.positioningType || 'random', //random, automatic, defined group, or defined position
@@ -29,17 +33,24 @@ _3DATA.create = function(data,optionsObj,cb){
       positioningVariable = optionsObj.positioningVariable || [0,0,0],
     //general variables
     nodeColorFunction = optionsObj.nodeColorFunction || null,
+    //formatting of nodeSize depends on geometryType
+      //requires one value for sphere, array of three values for Box
     nodeSizeFunction = optionsObj.nodeSizeFunction || null,
     nodePopupFunction = optionsObj.nodePopupFunction || null,
     linkColorFunction = optionsObj.linkColorFunction || null,
     dblClickFunction = optionsObj.dblClickFunction || null,
-    //size
+    customGeometryFunction = optionsObj.customGeometryFunction,
+    //geometry
+    geometryType = optionsObj.geometryType || 'Sphere',
+    //render size
     renderSizeWidth = optionsObj.renderSizeWidth || window.innerWidth,
     renderSizeHeight = optionsObj.renderSizeHeight || window.innerHeight,
-    nodeSize = optionsObj.nodeSize || 1,
+    //node size(format depends on geometryType)
+    nodeSize = optionsObj.nodeSize || 1, //pass in an array of three values if geometryType = Box
     //node resolution
     nodeWidthSegments = optionsObj.nodeWidthSegments || 32,
     nodeHeightSegments = optionsObj.nodeHeightSegments || 32,
+    nodeDepthSegments = optionsObj.nodeHeightSegments || 32, //only used in box geometry
     //bound
     maxBound = optionsObj.maxBound || 10000,
     //density
@@ -53,7 +64,7 @@ _3DATA.create = function(data,optionsObj,cb){
     backgroundRotationX = optionsObj.backgroundRotationX || 0,
     backgroundRotationY = optionsObj.backgroundRotationY || 0,
     backgroundRotationZ = optionsObj.backgroundRotationZ || 0,
-    //color
+    //color defaults
     nodeColor = optionsObj.nodeColor || [0,1,0],
     nodeHighlightColor = optionsObj.nodeHighlightColor || null,
     linkColor = optionsObj.linkColor || [0,0,1],
@@ -63,7 +74,8 @@ _3DATA.create = function(data,optionsObj,cb){
     directionalLightPosX = optionsObj.directionalLightPosX || 1,
     directionalLightPosY = optionsObj.directionalLightPosY || 1,
     directionalLightPosZ = optionsObj.directionalLightPosZ || 1,
-    //mesh pos
+    //mesh
+    materialType = optionsObj.materialType || 'Basic',
     meshPosX = optionsObj.meshPosX || 0,
     meshPosY = optionsObj.meshPosY || 0,
     meshPosZ = optionsObj.meshPosZ || 0,
@@ -102,7 +114,7 @@ _3DATA.create = function(data,optionsObj,cb){
   }
 
   var boundsArr = [];
-
+  //find outer bounds for automatic positioning
   function findFullBound(mesh,groupNum,totalGroups){
     var posArr = []
     posArr.push(10*(xSpread*(groupNum/totalGroups)));
@@ -111,6 +123,7 @@ _3DATA.create = function(data,optionsObj,cb){
     return posArr;
   }
 
+  //get automatic pos
   function getRandomNodePosGroup(mesh,groupNum,totalGroups){
     var pos = findFullBound(mesh,groupNum,totalGroups);
     mesh.position.x = (Math.random() - 0.5)*pos[0];
@@ -118,10 +131,10 @@ _3DATA.create = function(data,optionsObj,cb){
     mesh.position.z = (Math.random() - 0.5)*pos[2];
   }
 
-  function getNodeUserDataOnClick(node){
-    var nodeInfo = node.object.userData.nodeInfo || null;
-    return nodeInfo;
-  }
+  // function getNodeUserDataOnClick(node){
+  //   var nodeInfo = node.object.userData.nodeInfo || null;
+  //   return nodeInfo;
+  // }
 
   // Grouped Positioning Type
 
@@ -138,6 +151,7 @@ _3DATA.create = function(data,optionsObj,cb){
     return grouped;
   }
 
+  //using the maxBound and groupingDensity provided, find the bounds for each group
   function findGroupPos(groupedData){
     var totalGroups = _.keys(groupedData).length;
     var sceneLength = maxBound/groupingDensity;
@@ -196,10 +210,35 @@ _3DATA.create = function(data,optionsObj,cb){
   // Create Node Objects
 
   function createNodeMesh(nodeSize,nodeWidthSegments,nodeHeightSegments,nodeColor,isWireframe,wireframeWidth){
-    var geometry  = new THREE.SphereGeometry( nodeSize,nodeWidthSegments,nodeHeightSegments);
-    var material  = new THREE.MeshBasicMaterial({ wireframe: isWireframe, wireframeLinewidth: wireframeWidth});
-    if(nodeColor[1] === 'x'){material.color = new THREE.Color().setHex(nodeColor)}else{material.color = new THREE.Color(nodeColor[0],nodeColor[1],nodeColor[2])};
-    var mesh = new THREE.Mesh(geometry, material);
+    var geometry  = function(){
+      if(geometryType === 'Sphere'){
+        var geom = new THREE.SphereGeometry( nodeSize,nodeWidthSegments,nodeHeightSegments);
+        return geom;
+      }
+      else if(geometryType === 'Box'){
+        var geom = new THREE.BoxGeometry(nodeSize[0], nodeSize[1], nodeSize[2], nodeWidthSegments, nodeHeightSegments, nodeDepthSegments)
+        return geom;
+      } else if(geometryType === 'Custom'){
+        var geom = customGeometryFunction();
+        return geom;
+      }
+    }
+    var material  = function(){
+      if(materialType === 'Basic'){
+        var mat = new THREE.MeshBasicMaterial({ wireframe: isWireframe, wireframeLinewidth: wireframeWidth});
+        if(nodeColor[1] === 'x'){mat.color = new THREE.Color().setHex(nodeColor)}else{mat.color = new THREE.Color(nodeColor[0],nodeColor[1],nodeColor[2])};
+        return mat
+      } else if(materialType === 'Lambert'){
+        var mat = new THREE.MeshLambertMaterial({ wireframe: isWireframe, wireframeLinewidth: wireframeWidth});
+        if(nodeColor[1] === 'x'){mat.color = new THREE.Color().setHex(nodeColor)}else{mat.color = new THREE.Color(nodeColor[0],nodeColor[1],nodeColor[2])};
+        return mat
+      } else if(materialType === 'Phong'){
+        var mat = new THREE.MeshPhongMaterial({ wireframe: isWireframe, wireframeLinewidth: wireframeWidth});
+        if(nodeColor[1] === 'x'){mat.color = new THREE.Color().setHex(nodeColor)}else{mat.color = new THREE.Color(nodeColor[0],nodeColor[1],nodeColor[2])};
+        return mat
+      } else {console.log('invalid material type')}
+    }
+    var mesh = new THREE.Mesh(geometry(), material());
     return mesh;
   }
 
@@ -379,6 +418,9 @@ _3DATA.create = function(data,optionsObj,cb){
     controls.maxDistance = (maxBound/5);
       controls.zoomSpeed = zoomSpeed;
       controls.addEventListener('change', render);
+      if(autoRotate){
+        controls.autoRotate = true;
+      }
 
   //Action!//
 
@@ -463,6 +505,9 @@ _3DATA.create = function(data,optionsObj,cb){
     camera.updateProjectionMatrix();
     if(nodeHighlightColor&&nodeHighlightColor[1] === 'x'){obj.object.material.color.setHex(nodeHighlightColor)}
       else if(nodeHighlightColor){obj.object.material.color.setRGB(nodeHighlightColor[0],nodeHighlightColor[1],nodeHighlightColor[2])}
+    if(zoomAutoRotate){
+      controls.autoRotate = true;
+    }
     render();
   }
 
@@ -615,7 +660,8 @@ _3DATA.create = function(data,optionsObj,cb){
       var nodeSearchKey = nodeInfo[searchKey];
       if(nodeSearchKey === searchValue){
         if(highlightFound){
-          val.material.color.setRGB(nodeHighlightColor[0],nodeHighlightColor[1],nodeHighlightColor[2]);
+          if(revertColor[1]==='x'){val.material.color.setHex(revertColor)}
+          else{val.material.color.setRGB(revertColor[0],revertColor[1],revertColor[2])}
         }
         foundNodes.push(val);
       }
@@ -730,6 +776,10 @@ _3DATA.create = function(data,optionsObj,cb){
           else{node.material.color.setRGB(revertColor[0],revertColor[1],revertColor[2])}
       }
     })
+  }
+
+  _3DATA.stopAutoRotate = function(){
+    controls.autoRotate = false;
   }
 
   if(cb){cb()}

@@ -109,7 +109,8 @@ function createSoundNodes(numOfKeys){
          return node.popup;
      },
      dblClickFunction : function(node){
-     	appendSound(node,true);
+     	//appendSound(node,true);
+     	humanTurn(node);
      },
     nodeSize : 1,
     nodeWidthSegments : 16,
@@ -140,7 +141,7 @@ function createSoundNodes(numOfKeys){
 	var $playButton = $('.playButton');
 	$playButton.click(function(){
 		createGameScene();
-		// computerTurn();
+		computerTurn();
 	});
 
 	function createGameScene(){

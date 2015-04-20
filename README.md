@@ -1,7 +1,7 @@
 3Datajs
 =======
 
-## A small, customizable javascript library built on threejs for visualizing data in 3d space
+## A small, customizable javascript library built on threejs for visualizing data and HTML content in 3d space
 
 
 Installation
@@ -94,6 +94,7 @@ allOptions = {
     showLinks : false,
     autoAppendPopup : false,
     zoomSpeed : 0.5,
+    zoomAutoRotate : false,
     // random, automatic, grouped, or defined
     positioningType : 'automatic',
       //if automatic
@@ -107,7 +108,7 @@ allOptions = {
         return node.color;
     },
     nodeSizeFunction : function(node){
-        return node.links.length;
+        return [node.links.length,node.links.length,node.links.length];
     },
     nodePopupFunction : function(node){
         return node.popup;
@@ -117,12 +118,17 @@ allOptions = {
     },
     dblClickFunction : function(clickedNode){
       return clickedNode.userData.nodeInfo.exampleFunction();
-    }
+    },
+    customGeometryFunction : function(){
+         var box = new THREE.BoxGeometry(100,100,100);
+         return box;
+    },
     renderSizeWidth : null,
     renderSizeHeight : null,
-    nodeSize : 2,
+    nodeSize : [2,2,2],
     nodeWidthSegments : 32,
     nodeHeightSegments : 32,
+    nodeDepthSegments : 32,
     maxBound : 10000,
     xSpread : 40,
     ySpread : 40,
@@ -136,11 +142,13 @@ allOptions = {
     nodeColor : [0,1,0],
     nodeHighlightColor : [1,0,0],
     linkColor : [0,0,1],
-    ambientLightColor : 0xffffff,
-    directionalLightColor : 0xffffff,
+    ambientLightColor : 0x404040,
+    directionalLightColor : 0x808080,
     directionalLightPosX : 1,
     directionalLightPosY : 1,
     directionalLightPosZ : 1,
+    materialType : 'Phong', // Phong,Lambert, or Basic
+    geometryType : 'Box', // Sphere, Box or Custom
     meshPosX : 2+(2*1.5),
     meshPosY : -1,
     meshPosZ : -2,
@@ -158,6 +166,7 @@ allOptions = {
 - showLinks = boolean, defines if the links are shown in the scene
 - autoAppendPopup = boolean, determines if the popups are appended for all nodes to start (true) or if they should only be appended when the node is selected (false)
 - zoomSpeed = determines how fast the camera zooms in/out. 1 is the default
+- zoomAutoRotate = determines if the camera automatically rotates around a zoomed-in object
 - positioningType = this property has a large impact on how the data is positioned in the scene.  There are 4 possible choices:
 
 	1. random - this is the easiest type to implement as it requires no other positioning properties to be defined.  It simply places all data points into the scene randomly, within the bounds set in the xSpread,ySpread and zSpread properties
@@ -170,7 +179,7 @@ allOptions = {
 
 - nodeColorFunction = this property should contain a function which returns a color value in RGB array form (i.e. [255,0,0]).  3datajs automatically provides each individual data point as an argument to this function, therefore allowing the user to define colors for each data point based off of any property contained in the data object.
 
-- nodeSizeFunciton = similar to the nodeColorFunction, this property provides the individual data point as a built-in argument to this function.  In the example above, each data point's size is determined by how many links it has.
+- nodeSizeFunciton = similar to the nodeColorFunction, this property provides the individual data point as a built-in argument to this function.  This should be a single number if the geometry is set to 'Sphere', an array of three numbers[width,height,depth] if set to 'Box', ignored if set to 'Custom'. In the example above, each data point's size is determined by how many links it has.
 
 - nodePopupFunction = this function behaves similar to the two functions above, but in this case, it needs to return a dom element.  This dom element may contain anything the user desires and will determine what shows on each node when dblclicked
 
@@ -178,9 +187,11 @@ allOptions = {
 
 - dblClickFunction = similar to the above, this takes in each individual data point as an argument, thus allowing the user to run any custom function upon the dblClick event. (note: the node argument for this function is slightly different than the above.  Console.log the result to find its structure)
 
+- customGeometryFunction = Used only if geometryType = 'Custom'. Must return a custom geometry using standard THREEJS format
+
 - renderSizeWidth,renderSizeHeight = sets the width and height of the rendered scene, only used if a renderTarget was defined
 
-- nodeSize = this is the default node size if a node size function returns undefined for any node
+- nodeSize = this is the default node size if a node size function returns undefined for any node.  This should be a single number if the geometry is set to 'Sphere', an array of three numbers[width,height,depth] if set to 'Box', ignored if set to 'Custom'
 
 - nodeWidthSegments,nodeHeightSegments = this determines the resolution for each spherical node.  The higher the number, the higher the resolution **these properties have a significant effect on latency.  Unless high resolutions are required stay in the 8-64 range
 
@@ -208,6 +219,10 @@ allOptions = {
 
 - directionalLightPosX,directionalLightPosY,directionalLightPosZ = position of the directional light if hasDirectionalLight === true
 
+- materialType = 'Basic','Phong' or 'Lambert'.  Only Phong and Lambert are affected by lights
+
+- geometryType = 'Sphere','Box' or 'Custom'.  This choice affects the format of node size properties. If 'Custom' is chosen, you must provide a customGeometryFunction which returns the custom geometry.
+
 - meshPosX,meshPosY,meshPosZ = position of the popup mesh relative to the node (i.e. 0,0,0 would be the center of the node)
 
 - wireframeMesh = boolean, determines if the nodes should have wireframe material or not
@@ -234,9 +249,9 @@ allOptions = {
 
 - _3DATA.getNodeScene,_3DATA.getPopupScene,_3DATA.getNodeRenderer,_3DATA.getPopupRenderer = behave like getCamera() described above
 
-- _3DATA.remove(objectName) = this removes the specified object from the scene.  Here, the user must specify the Object Name of the object to be removed.  This object name can be found/changed by digging through the node scene returned in the _3DATA.create() function
+- _3DATA.remove(objectName) = this removes the specified object from the scene.  Here, the user must specify the Object Name of the object to be removed.  This object name can be found/changed by digging through the node scene returned in the _3DATA.create() or _3DATA.getNodeScene() functions
 
-- _3DATA.search(key,value) = searches the scene for any objects matching the key,value pair provided.  It returns an array of all matching object and colors the matching nodes in the scene according to the defined nodeHighlightColor
+- _3DATA.search(key,value) = searches the scene for any objects matching the key,value pair provided.  It returns an array of all matching objects and colors the matching nodes in the scene according to the defined nodeHighlightColor
 
 - _3DATA.zoomNode(zoomObjMesh,zoomOut,showNodeInfo) = this allows the user to define and zoom into a specific node. You must provide the entire mesh of the node to be zoomed into, the amount you want to zoom out from that object once zoomed in (i.e. 10,100 etc.), and a boolean value of whether the popup displays when zoomed in
 
@@ -245,6 +260,8 @@ allOptions = {
 - _3DATA.removePopup(meshName,popupName) = Removes the popup and corresponding mesh passed into the function from the scene. If no parameters are given, it removes the first(or only) popup appended.
 
 - _3DATA.revertColor(revertNode) = this allows the user to revert a node's color back to its original color.  Simply pass in the entire node object into the function.
+
+- _3DATA.stopAutoRotate() = stops auto rotation when called.
 
 
 

@@ -40,7 +40,7 @@ function init(url,type){
 				var $resultContainer = $('<div class="resultContainer"></div>');
 				$resultContainer.append(imageUrl());
 				$resultContainer.append(name);
-				$resultContainer.append(genre);
+				$resultContainer.append(genreEl);
 				$resultContainer.append(popularity);
 				$('.playContainer').append($resultContainer);
 			}

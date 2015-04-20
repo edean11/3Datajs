@@ -13,7 +13,7 @@ function createTestData(numOfKeys, numOfLinks){
   for(var i=0;i<numOfKeys;i++){
     var color = function(){if(i%2 !== 0){return [0,1,0]}else{return [0,0,1]}}
     var linkColor = function(){if(i%2 !== 0){return [0,20,150]}else{return [200,0,0]}}
-    var nodeSize = function(){if(i%2 !== 0){return 400}else{return 200}}
+    var nodeSize = function(){if(i%2 !== 0){return [4,4,4]}else{return [2,2,2]}}
     var group = function(){if(i%3 === 0 && i%2 !== 0){return 1}else if(i%2 !== 0){return 3}else{return 2}}
     var position = function(){return [getRandomInt(-300,300),getRandomInt(-300,300),getRandomInt(-300,300)]}
     var popup = function(){
@@ -62,14 +62,15 @@ var testData = createTestData(10,2);
 
   var optionsObj = {
     //rendererTarget: '.container',
-    // hasAmbientLight : true,
-    // hasDirectionalLight : false,
-     hasDblClickZoom : true,
+    hasAmbientLight : true,
+    hasDirectionalLight : true,
+    hasDblClickZoom : true,
     // dblClickAppendPopup : false,
     // popupRendererContainerClass : 'testContainer',
      showLinks : true,
     // autoAppendPopup : true,
     // zoomSpeed : 0.4,
+    zoomAutoRotate : true,
     positioningType : 'random', //random, automatic, grouped, or defined
     //   //if automatic
        groupSize : 1,
@@ -85,7 +86,7 @@ var testData = createTestData(10,2);
      },
      nodeSizeFunction : function(node){
     //   if(node){
-         return node.links.length;
+         return node.nodeSize;
     //   }else{return false}
      },
      nodePopupFunction : function(node){
@@ -98,9 +99,14 @@ var testData = createTestData(10,2);
          return srcNode.linkColor;
     //   }else{return false}
      },
+     customGeometryFunction : function(){
+         var box = new THREE.BoxGeometry(100,100,100);
+         return box;
+     },
     nodeSize : 40,
     nodeWidthSegments : 32,
     nodeHeightSegments : 32,
+    nodeDepthSegments : 32,
     maxBound : 1000,
     xSpread : 10,
     ySpread : 5,
@@ -111,15 +117,17 @@ var testData = createTestData(10,2);
     nodeColor : [0,1,0],
     nodeHighlightColor : [1,0,0],
     linkColor : 0x00ff00,
-    ambientLightColor : 0xffffff,
-    directionalLightColor : 0xffffff,
+    ambientLightColor : 0x404040,
+    directionalLightColor : 0x808080,
     directionalLightPosX : 1,
     directionalLightPosY : 1,
     directionalLightPosZ : 1,
+    materialType : 'Phong',
+    geometryType : 'Box',
     meshPosX : 0,
     meshPosY : 0,
     meshPosZ : 0,
-    wireframeMesh: true,
+    wireframeMesh: false,
     wireframeWidth: 1
   }
 
