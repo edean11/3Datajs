@@ -7,7 +7,7 @@ var _3DATA = {VERSION: '0.1'};
 _3DATA.create = function(data,optionsObj,cb){
 
 //Get Options
-  //target
+    //target
     var rendererTarget = optionsObj.rendererTarget,
     //object booleans
     hasAmbientLight = optionsObj.hasAmbientLight,
@@ -18,6 +18,7 @@ _3DATA.create = function(data,optionsObj,cb){
     dblClickAppendPopup = optionsObj.dblClickAppendPopup || true,
     showLinks = optionsObj.showLinks,
     autoAppendPopup = optionsObj.autoAppendPopup,
+    respondToWindowResizing = optionsObj.respondToWindowResizing || false,
     // class assignment
     popupRendererContainerClass = optionsObj.popupRendererContainerClass || 'popupRendererContainer',
     // camera controls
@@ -41,7 +42,8 @@ _3DATA.create = function(data,optionsObj,cb){
     dblClickFunction = optionsObj.dblClickFunction || null,
     customGeometryFunction = optionsObj.customGeometryFunction,
     //geometry
-    geometryType = optionsObj.geometryType || 'Sphere',
+    geometryTypeFunction = optionsObj.geometryTypeFunction || null,
+    defaultGeometryType = optionsObj.defaultGeometryType || 'Sphere'
     //render size
     renderSizeWidth = optionsObj.renderSizeWidth || window.innerWidth,
     renderSizeHeight = optionsObj.renderSizeHeight || window.innerHeight,
@@ -209,20 +211,27 @@ _3DATA.create = function(data,optionsObj,cb){
 
   // Create Node Objects
 
-  function createNodeMesh(nodeSize,nodeWidthSegments,nodeHeightSegments,nodeColor,isWireframe,wireframeWidth){
-    var geometry  = function(){
-      if(geometryType === 'Sphere'){
-        var geom = new THREE.SphereGeometry( nodeSize,nodeWidthSegments,nodeHeightSegments);
+  function createGeometryType(geometryName,nSize){
+    if(geometryName === 'Sphere'){
+        var geom = new THREE.SphereGeometry( nSize,nodeWidthSegments,nodeHeightSegments);
         return geom;
       }
-      else if(geometryType === 'Box'){
-        var geom = new THREE.BoxGeometry(nodeSize[0], nodeSize[1], nodeSize[2], nodeWidthSegments, nodeHeightSegments, nodeDepthSegments)
+      else if(geometryName === 'Box'){
+        var geom = new THREE.BoxGeometry(nSize[0], nSize[1], nSize[2], nodeWidthSegments, nodeHeightSegments, nodeDepthSegments)
         return geom;
-      } else if(geometryType === 'Custom'){
+      } else if(geometryName === 'Custom'){
         var geom = customGeometryFunction();
         return geom;
-      }
     }
+  }
+
+  function createNodeMesh(val,nodeSize,nodeColor,isWireframe,wireframeWidth){
+    var computedGeom = function(){
+      if(geometryTypeFunction){
+        return geometryTypeFunction(val);
+      }else {return defaultGeometryType}
+    }
+    var geometry  = createGeometryType(computedGeom(),nodeSize);
     var material  = function(){
       if(materialType === 'Basic'){
         var mat = new THREE.MeshBasicMaterial({ wireframe: isWireframe, wireframeLinewidth: wireframeWidth});
@@ -238,14 +247,14 @@ _3DATA.create = function(data,optionsObj,cb){
         return mat
       } else {console.log('invalid material type')}
     }
-    var mesh = new THREE.Mesh(geometry(), material());
+    var mesh = new THREE.Mesh(geometry, material());
     return mesh;
   }
 
   function createNodeFunction(val,key){
     var nColor = function(){if(nodeColorFunction && nodeColorFunction(val)){return nodeColorFunction(val)}else{return nodeColor}}
     var nSize = function(){if(nodeSizeFunction && nodeSizeFunction(val)){return nodeSizeFunction(val)}else{return nodeSize}}
-    var mesh = createNodeMesh(nSize(),nodeWidthSegments,nodeHeightSegments,nColor(),wireframeMesh,wireframeWidth);
+    var mesh = createNodeMesh(val,nSize(),nColor(),wireframeMesh,wireframeWidth);
     val._nodeColor = [nColor()[0],nColor()[1],nColor()[2]];
     val.mesh = mesh;
     mesh.userData.nodeInfo = val;
@@ -599,7 +608,12 @@ _3DATA.create = function(data,optionsObj,cb){
   function onWindowResize() {
     camera.aspect = renderSizeWidth/renderSizeHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(renderSizeWidth,renderSizeHeight);
+    if(respondToWindowResizing){
+      rSizeWidth = optionsObj.renderSizeWidth || window.innerWidth;
+      rSizeHeight = optionsObj.renderSizeHeight || window.innerHeight;
+      renderer.setSize(rSizeWidth,rSizeHeight);
+      cssRenderer.setSize(rSizeWidth,rSizeHeight);
+    }
     render();
   }
 
