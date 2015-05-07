@@ -10,16 +10,36 @@ function getRandomInt(min, max) {
 }
 
 //Get US City Coordinates//
+function parseMapData(){
+  var obj = createMapData(),
+  locations = {};
+  $.each(obj, function(index,value){
+    console.log(obj[index])
+    var popup = function(){
+      var elem = document.createElement('div');
+      elem.className = 'infoBox';
+      if(obj[index] && obj[index].src){
+        elem.innerHTML = '<p class="cityStateTitle">'+obj[index].city+', '+obj[index].state+
+        '</p><img class="flag" src="'+obj[index].src[0]+
+        '"></img><img class="seal" src="'+obj[index].src[1]+'"></img><a href="'+obj[index].wikiUrl+'">Link</a>';
+      }else{
+        elem.innerHTML = '<p class="cityStateTitle">'+obj[index].city+', '+obj[index].state+'</p>'
+      }
+      return elem;
+    }
+    locations[index] = {
+      name: obj[index].city+', '+obj[index].state,
+      nodeColor: [1,1,1],
+      nodeSize: 10,
+      popup: popup()
+      //position: position()
+    }
 
-
-nodeAppenderFunction = function(elem){
-    var element = document.createElement('div');
-    element.innerHTML = elem;
-    element.style.background = 'white';
-    element.style.border = '2px solid black';
-    element.className = element.className + ' infoBox';
-    return element;
+  })
+  return locations;
 }
+
+var dataObj = parseMapData();
 
 ////////////////////////////////////////////////
 ///////////////// OPTIONS //////////////////////
@@ -35,7 +55,7 @@ nodeAppenderFunction = function(elem){
     respondToWindowResizing : true,
     // zoomSpeed : 0.4,
     zoomAutoRotate : true,
-    positioningType : 'defined', //random, automatic, grouped, or defined
+    positioningType : 'random', //random, automatic, grouped, or defined
     //   //if defined
     positioningVariable: 'position',
      nodePopupFunction : function(node){
@@ -48,12 +68,13 @@ nodeAppenderFunction = function(elem){
      },
     //defaultGeometryType : 'Box',
     //nodeSize : [4,4,4],
-    nodeWidthSegments : 32,
-    nodeHeightSegments : 32,
-    nodeDepthSegments : 32,
+    nodeWidthSegments : 8,
+    nodeHeightSegments : 8,
+    nodeDepthSegments : 8,
     maxBound : 1000,
-    backgroundType : 'image', //image or color
+    backgroundType : 'color', //image or color
     backgroundImage : 'img/stars.jpeg',
+    backgroundColor : [150,150,0],
     nodeColor : [0,1,0],
     nodeHighlightColor : [1,0,0],
     ambientLightColor : 0x404040,
@@ -71,5 +92,5 @@ nodeAppenderFunction = function(elem){
 
 // Create 3DATA Scene
 
-//_3DATA.create(testData,optionsObj);
+_3DATA.create(dataObj,optionsObj);
 
