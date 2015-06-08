@@ -47,10 +47,6 @@ _3DATA.create(navLinks,options);
 
 var orbit = _3DATA.getCamera()[1];
 orbit.autoRotate = true;
-orbit.noPan = true;
-orbit.noZoom = true;
-orbit.minPolarAngle = 1.6073009183012759;
-orbit.maxPolarAngle = 1.6073009183012759;
 
 var scene = _3DATA.getNodeScene();
 

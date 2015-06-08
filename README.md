@@ -104,6 +104,9 @@ allOptions = {
       groupingDensity: 30,
       //if defined
       positioningVariable: 'position',
+      //if carousel
+      carouselSize = optionsObj.carouselSize || 1,//radius
+      carouselOrientation = optionsObj.carouselOrientation || 'horizontal',//or vertical
     nodeColorFunction : function(node){
         return node.color;
     },

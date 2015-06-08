@@ -38,6 +38,8 @@ _3DATA.create = function(data,optionsObj,cb){
       //if carousel
       carouselSize = optionsObj.carouselSize || 1,//radius
       carouselOrientation = optionsObj.carouselOrientation || 'horizontal',//or vertical
+      carouselAutoRotateMesh = optionsObj.carouselAutoRotateMesh || true,
+      carouselCameraLock = optionsObj.carouselCameraLock || true,
     //general variables
     nodeColorFunction = optionsObj.nodeColorFunction || null,
     //formatting of nodeSize depends on geometryType
@@ -224,13 +226,16 @@ _3DATA.create = function(data,optionsObj,cb){
       mesh.position.x = 0;
       mesh.position.y = Math.sin(alpha*objNum)*carouselSize;
       mesh.position.z = Math.cos(alpha*objNum)*carouselSize;
-      mesh.rotation.x = alpha*objNum*-1;
+      if(carouselAutoRotateMesh){
+        mesh.rotation.x = alpha*objNum*-1;
+      }
     }else if(carouselOrientation == 'horizontal'){
       mesh.position.x = Math.sin(alpha*objNum)*carouselSize;
       mesh.position.y = 0;
       mesh.position.z = Math.cos(alpha*objNum)*carouselSize;
-      mesh.rotation.y = alpha*objNum;
-      console.log(mesh.position)
+      if(carouselAutoRotateMesh){
+        mesh.rotation.y = alpha*objNum;
+      }
     }
     return mesh;
   }
@@ -471,6 +476,12 @@ _3DATA.create = function(data,optionsObj,cb){
       controls.addEventListener('change', render);
       if(autoRotate){
         controls.autoRotate = true;
+      }
+      if(carouselCameraLock && carouselOrientation === 'horizontal'){
+        controls.noPan = true;
+        controls.noZoom = true;
+        controls.minPolarAngle = 1.6073009183012759;
+        controls.maxPolarAngle = 1.6073009183012759;
       }
 
   //Action!//

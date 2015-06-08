@@ -74,7 +74,7 @@ var testData = createTestData(11,2);
     respondToWindowResizing : true,
     // zoomSpeed : 0.4,
     zoomAutoRotate : false,
-    positioningType : 'carousel', //random, automatic, grouped, or defined
+    positioningType : 'random', //random, automatic, grouped, or defined
     //   //if automatic
        groupSize : 1,
     //   //if grouped
