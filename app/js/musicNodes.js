@@ -56,6 +56,12 @@ function findOctave(path){
 	}else{return 2}
 }
 
+function appendSound(node,remove){
+    _3DATA.appendPopup(node,remove);
+    var sound = node.userData.nodeInfo.audioSrc;
+    node.userData.nodeInfo.popup.innerHTML = '<audio autoplay><source src="'+sound+'" type="audio/wav"></audio>'
+}
+
 function createSoundNodes(numOfKeys){
   var obj = {};
   for(var i=0;i<numOfKeys;i++){
@@ -89,6 +95,7 @@ function createSoundNodes(numOfKeys){
 ////////////////////////////////////////////////
 
   var optionsObj = {
+    respondToWindowResizing : true,
   	hasAmbientLight : true,
     hasDirectionalLight : true,
     ambientLightColor : 0xffffff,
@@ -109,13 +116,12 @@ function createSoundNodes(numOfKeys){
          return node.popup;
      },
      dblClickFunction : function(node){
-     	//appendSound(node,true);
-     	humanTurn(node);
+     	appendSound(node,true);
      },
     nodeSize : 1,
     nodeWidthSegments : 16,
     nodeHeightSegments : 16,
-    maxBound : 450,
+    maxBound : 500,
     backgroundType : 'color', //image or color
     backgroundColor : [0,0.5,1],
     backgroundImage : 'http://i.imgur.com/x4egEw1.jpg',
@@ -124,80 +130,7 @@ function createSoundNodes(numOfKeys){
     wireframeMesh: false
   }
 
-// Create Game Functions
-
-	//Get Random Node
-	//console.log(getRandomNode()[0].userData.nodeInfo);
-	function getRandomNode(numOfNodes){
-		var id = getRandomInt(0,numOfNodes-1);
-		var node = _3DATA.search('name',id,false);
-		return node;
-	}
-
-	var gameState;
-	var gameIterator = 1;
-	var playerTurn = 0;
-	var chosenNodeNum;
-	var $playButton = $('.playButton');
-	$playButton.click(function(){
-		createGameScene();
-		computerTurn();
-	});
-
-	function createGameScene(){
-		var selectedVal = $('.numberSelect').val();
-		chosenNodeNum = $('.numberSelect').val();
-		var soundNodes = createSoundNodes(selectedVal);
-		_3DATA.create(soundNodes,optionsObj);
-		$('.menu').empty();
-		var highScore = $('<div class="highScoreContainer"><p class="highScoreTitle">Score</p><p class="highScore">0</p></div>');
-		$('.menu').append(highScore);
-	}
-
-	function appendSound(node,remove){
-		_3DATA.appendPopup(node,remove);
-		var sound = node.userData.nodeInfo.audioSrc;
-     	node.userData.nodeInfo.popup.innerHTML = '<audio autoplay><source src="'+sound+'" type="audio/wav"></audio>'
-	}
-
-	function selectNode(){
-		var node = getRandomNode(chosenNodeNum)[0];
-		appendSound(node);
-		gameKeys.push(node.userData.nodeInfo.name);
-		console.log('bleh',gameKeys)
-	}
-
-	function computerTurn(){
-		gameState='comp';
-		$('.userTurnIndicator').remove();
-		var iterations = gameIterator;
-		console.log('iteratoins',iterations);
-		gameKeys = [];
-		for(var i=0;i<iterations;i++){
-			setTimeout(selectNode(),2000);
-		}
-		gameState='human';
-	}
-
-	function humanTurn(clickedNode){
-		if(gameState==='human'){
-			$('.menu').append('<p class="userTurnIndicator">User Turn</p>')
-			var clock = 5000;
-			for(var i=0;i<=playerTurn;i++){
-				if(clickedNode.userData.nodeInfo.name===gameKeys[playerTurn]){
-					playerTurn++;
-					console.log('yes',playerTurn);
-					humanTurn(clickedNode);
-				} else if(playerTurn===gameKeys.length){
-					gameIterator++;
-					playerTurn=0;
-					console.log('win');
-					computerTurn();
-				} else {console.log(clickedNode.userData.nodeInfo.name);console.log(gameKeys[playerTurn]);console.log('doh')}
-			}
-		}
-	}
-
+_3DATA.create(createSoundNodes(24),optionsObj);
 
 
 

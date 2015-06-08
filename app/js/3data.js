@@ -467,7 +467,7 @@ _3DATA.create = function(data,optionsObj,cb){
 
   //Camera//
 
-    var camera  = new THREE.PerspectiveCamera(45, renderSizeWidth / renderSizeHeight, 0.01, maxBound+100);
+    var camera  = new THREE.PerspectiveCamera(45, renderSizeWidth / renderSizeHeight, 0.01, maxBound+200);
     camera.position.z = maxBound/5;
     //Initialize Orbit Controls
     var controls = new THREE.OrbitControls(camera);
@@ -477,7 +477,7 @@ _3DATA.create = function(data,optionsObj,cb){
       if(autoRotate){
         controls.autoRotate = true;
       }
-      if(carouselCameraLock && carouselOrientation === 'horizontal'){
+      if(positioningType === 'carousel' && carouselCameraLock && carouselOrientation === 'horizontal'){
         controls.noPan = true;
         controls.noZoom = true;
         controls.minPolarAngle = 1.6073009183012759;
