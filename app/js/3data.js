@@ -224,10 +224,12 @@ _3DATA.create = function(data,optionsObj,cb){
       mesh.position.x = 0;
       mesh.position.y = Math.sin(alpha*objNum)*carouselSize;
       mesh.position.z = Math.cos(alpha*objNum)*carouselSize;
+      mesh.rotation.x = alpha*objNum*-1;
     }else if(carouselOrientation == 'horizontal'){
       mesh.position.x = Math.sin(alpha*objNum)*carouselSize;
       mesh.position.y = 0;
       mesh.position.z = Math.cos(alpha*objNum)*carouselSize;
+      mesh.rotation.y = alpha*objNum;
       console.log(mesh.position)
     }
     return mesh;
@@ -376,11 +378,16 @@ _3DATA.create = function(data,optionsObj,cb){
           iterator++;
         });
       } else if(positioningType == 'carousel'){
+        var index = 0
         for(var key in data){
           var val = data[key]
           var mesh = createNodeFunction(val,key);
-          var positionedMesh = getCarouselPos(mesh,key,Object.keys(data).length);
+          var positionedMesh = getCarouselPos(mesh,index,Object.keys(data).length);
           nodes.add(positionedMesh);
+          if(autoAppendPopup){
+            appendPopup(mesh,false);
+          }
+          index++;
         };
       } else{console.log('You must define a positioning type')}
     }
@@ -567,7 +574,7 @@ _3DATA.create = function(data,optionsObj,cb){
 
   //Create Plane Mesh
   var lastPlaneMeshName = [];
-  function createMesh(pos,remove){
+  function createMesh(pos,rotation,remove){
     if(remove){
       var lastObject = scene.getObjectByName ( 'planeMesh', true );
       if(lastPlaneMeshName[0]){scene.remove(lastObject)};
@@ -581,6 +588,9 @@ _3DATA.create = function(data,optionsObj,cb){
       planeMesh.position.x = pos.x;
       planeMesh.position.y = pos.y;
       planeMesh.position.z = pos.z;
+      planeMesh.rotation.x = rotation.x;
+      planeMesh.rotation.y = rotation.y;
+      planeMesh.rotation.z = rotation.z;
       planeMesh.name = 'planeMesh';
     scene.add(planeMesh);
     lastPlaneMeshName.push(planeMesh.name);
@@ -598,7 +608,7 @@ _3DATA.create = function(data,optionsObj,cb){
     container.appendChild(elem);
     var cssObject = new THREE.CSS3DObject(container);
     cssObject.position.set(planeMesh.position.x,planeMesh.position.y,planeMesh.position.z);
-    cssObject.rotation = planeMesh.rotation;
+    cssObject.rotation.set(planeMesh.rotation.x,planeMesh.rotation.y,planeMesh.rotation.z);
     cssObject.name = 'cssObject';
     lastCssObjectName.push(cssObject.name);
     cssObject.scale.multiplyScalar(1/350);
@@ -615,8 +625,9 @@ _3DATA.create = function(data,optionsObj,cb){
     cssPos.x += meshPosX;
     cssPos.y += meshPosY;
     cssPos.z += meshPosZ;
+    var cssRot = node.rotation;
     //render css3D
-    var cssMesh = createMesh(cssPos,remove);
+    var cssMesh = createMesh(cssPos,cssRot,remove);
     var cssObj = createDomElement(nodePopupFunction(node.userData.nodeInfo),cssMesh,remove);
     document.body.appendChild(cssRenderer.domElement);
     cssRenderer.render(cssScene,camera);
@@ -725,12 +736,13 @@ _3DATA.create = function(data,optionsObj,cb){
     zoomObjMesh.material.color = new THREE.Color( 0xff0000 );
     if(showNodeInfo){
       var cssPos = zoomObjMesh.position;
+      var cssRot = zoomObjMesh.rotation;
       //set cssMesh position
       cssPos.x += meshPosX;
       cssPos.y += meshPosY;
       cssPos.z += meshPosZ;
       //render css3D
-      var cssMesh = createMesh(cssPos);
+      var cssMesh = createMesh(cssPos,cssRot,true);
       var cssObj = createDomElement(nodePopupFunction(zoomObjMesh.userData.nodeInfo),cssMesh);
       document.body.appendChild(cssRenderer.domElement);
     }
@@ -752,8 +764,9 @@ _3DATA.create = function(data,optionsObj,cb){
     cssPos.x += meshPosX;
     cssPos.y += meshPosY;
     cssPos.z += meshPosZ;
+    var cssRot = node.rotation;
     //render css3D
-    var cssMesh = createMesh(cssPos,remove);
+    var cssMesh = createMesh(cssPos,cssRot,remove);
     var cssObj = createDomElement(nodePopupFunction(node.userData.nodeInfo),cssMesh,remove);
     document.body.appendChild(cssRenderer.domElement);
     cssRenderer.render(cssScene,camera);
