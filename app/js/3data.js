@@ -35,6 +35,9 @@ _3DATA.create = function(data,optionsObj,cb){
       groupingDensity = optionsObj.groupingDensity || 30,
       //if defined group
       positioningVariable = optionsObj.positioningVariable || [0,0,0],
+      //if carousel
+      carouselSize = optionsObj.carouselSize || 1,//radius
+      carouselOrientation = optionsObj.carouselOrientation || 'horizontal',//or vertical
     //general variables
     nodeColorFunction = optionsObj.nodeColorFunction || null,
     //formatting of nodeSize depends on geometryType
@@ -168,7 +171,6 @@ _3DATA.create = function(data,optionsObj,cb){
         positionObj[i] = {x:{},y:{},z:{}};
         //if needs a new x and y coordinate
         if(lastGroupEndPos[0]+groupSideLength >= sceneLength/2 && lastGroupEndPos[1]-groupSideLength <= -(sceneLength/2)){
-          console.log('1');
           positionObj[i].x.start = -(sceneLength/2);
           positionObj[i].x.end = -(sceneLength/2)+groupSideLength;
           positionObj[i].y.start = sceneLength/2;
@@ -179,7 +181,6 @@ _3DATA.create = function(data,optionsObj,cb){
           lastGroupEndPos.push(positionObj[i].x.end,positionObj[i].y.end,positionObj[i].z.end)
         //if needs a new y coordinate
         } else if(lastGroupEndPos[0]+groupSideLength >= sceneLength/2 && lastGroupEndPos[1]-groupSideLength>= -(sceneLength/2)){
-          console.log('2');
           positionObj[i].x.start = -(sceneLength/2);
           positionObj[i].x.end = -(sceneLength/2)+groupSideLength;
           positionObj[i].y.start = lastGroupEndPos[1]+groupSideLength;
@@ -190,7 +191,6 @@ _3DATA.create = function(data,optionsObj,cb){
           lastGroupEndPos.push(positionObj[i].x.end,positionObj[i].y.end,positionObj[i].z.end)
         //if does not need any new coordinates
         } else{
-          console.log('3');
           positionObj[i].x.start = lastGroupEndPos[0];
           positionObj[i].x.end = lastGroupEndPos[0]+groupSideLength;
           positionObj[i].y.start = lastGroupEndPos[1]+groupSideLength;
@@ -205,11 +205,33 @@ _3DATA.create = function(data,optionsObj,cb){
     }
 
     function placeGroupPos(mesh,groupPosObj,groupNumber){
-      console.log(groupNumber);
       mesh.position.x = getRandomInt(groupPosObj[groupNumber].x.start,groupPosObj[groupNumber].x.end);
       mesh.position.y = getRandomInt(groupPosObj[groupNumber].y.start,groupPosObj[groupNumber].y.end);
       mesh.position.z = getRandomInt(groupPosObj[groupNumber].z.start,groupPosObj[groupNumber].z.end);
     }
+
+  ////////////////////////////////////////////////
+
+  ///// Carousel Positioning Type ////////////////
+
+  function getCarouselPos(mesh,objNum,totalObjs){
+    var alpha = Math.PI*2/totalObjs
+    if(objNum === '0'){
+      mesh.position.x = 0;
+      mesh.position.y = 0;
+      mesh.position.z = Math.cos(0)*carouselSize;
+    }else if(carouselOrientation == 'vertical'){
+      mesh.position.x = 0;
+      mesh.position.y = Math.sin(alpha*objNum)*carouselSize;
+      mesh.position.z = Math.cos(alpha*objNum)*carouselSize;
+    }else if(carouselOrientation == 'horizontal'){
+      mesh.position.x = Math.sin(alpha*objNum)*carouselSize;
+      mesh.position.y = 0;
+      mesh.position.z = Math.cos(alpha*objNum)*carouselSize;
+      console.log(mesh.position)
+    }
+    return mesh;
+  }
 
   ////////////////////////////////////////////////
 
@@ -353,6 +375,13 @@ _3DATA.create = function(data,optionsObj,cb){
           cb(mesh,key);
           iterator++;
         });
+      } else if(positioningType == 'carousel'){
+        for(var key in data){
+          var val = data[key]
+          var mesh = createNodeFunction(val,key);
+          var positionedMesh = getCarouselPos(mesh,key,Object.keys(data).length);
+          nodes.add(positionedMesh);
+        };
       } else{console.log('You must define a positioning type')}
     }
 

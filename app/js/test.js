@@ -47,7 +47,7 @@ function createTestData(numOfKeys, numOfLinks){
   return obj;
 }
 
-var testData = createTestData(10,2);
+var testData = createTestData(11,2);
 
   nodeAppenderFunction = function(elem){
     var element = document.createElement('div');
@@ -73,8 +73,8 @@ var testData = createTestData(10,2);
     // autoAppendPopup : true,
     respondToWindowResizing : true,
     // zoomSpeed : 0.4,
-    zoomAutoRotate : true,
-    positioningType : 'random', //random, automatic, grouped, or defined
+    zoomAutoRotate : false,
+    positioningType : 'carousel', //random, automatic, grouped, or defined
     //   //if automatic
        groupSize : 1,
     //   //if grouped
@@ -82,6 +82,9 @@ var testData = createTestData(10,2);
     //   groupingDensity: 30,
     //   //if defined
     //   positioningVariable: 'position',
+    //   //if carousel
+         carouselSize : 20,
+         carouselOrientation : 'vertical',
      nodeColorFunction : function(node){
     //   if(node){
          return node.nodeColor;
