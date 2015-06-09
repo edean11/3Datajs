@@ -28,12 +28,14 @@ html(lang="en-US")
             img(src="https://s3.amazonaws.com/3datajs.com/images/Screen+Shot+2015-03-26+at+10.31.14+PM.png")
         .install-info
             p.install-info-title.section-title Installation
-            p.install-info-description To install 3datajs, click the download link above and include it in your project folder, or use bower as shown below:
+            p.install-info-description To install 3datajs, click the download link above
+                | and include it in your project folder, or use bower as shown below:
             p.install-info-code bower install 3datajs-bundle --save
     .docs
         .docs-info
             p.docs-info-title.section-title  Documentation
-            p.docs-info-description Full library documentation may be found by clicking the Docs link above, or by visting the github page at 
+            p.docs-info-description Full library documentation may be found by clicking the
+                | Docs link above, or by visting the github page at 
                 a(href="https://github.com/edean11/3Datajs").docs-link 3Datajs
             .docs-info-content
                 p.docs-info-content-header Dependencies
@@ -62,7 +64,8 @@ html(lang="en-US")
                     | See examples below for more details.
                 p.docs-info-content-header-small JS Options Object
                 p This object can contain a wide variety of available output options as defined by 3datajs.  
-                    | Simply include the options property and the desired value in the options object and pass it into the main 3datajs function with the data object.  
+                    | Simply include the options property and the desired value
+                    | in the options object and pass it into the main 3datajs function with the data object.  
                     | See below for details.
                 p.docs-info-content-header Example
                 p.docs-info-content-header-small Sample Data Object With Name
@@ -88,41 +91,64 @@ html(lang="en-US")
                     |  positioningType: random
                     | }
                 p.docs-info-content-header-small Creating the scene
-                p Now that we have a data and options object, all we have to do to create a 3datajs scene is pass those two objects as arguments to the _3DATA.create() function</p>
+                p Now that we have a data and options object, all we have to do to create
+                    | a 3datajs scene is pass those two objects as arguments to the _3DATA.create() function
                 p
                     code _3DATA.create(data,options)
                 p Congratulations! You have just created your first 3datajs scene!
 
                 p.docs-info-content-header User Facing Functions
                 code _3DATA.create(data, options)
-                p.userfunction-desc Creates the scene with the data and options specified.  The return value is an object that contains: the data point scene and renderer as well as the popup scene and renderer.
-                    | These can be manipulated after the create function has been run to modify the scene as needed.  If modified, run the _3DATA.render() function specified below to show the changes
+                p.userfunction-desc Creates the scene with the data and options specified.  
+                    | The return value is an object that contains: the data point scene and
+                    | renderer as well as the popup scene and renderer.
+                    | These can be manipulated after the create function has been run to modify
+                    | the scene as needed.  If modified, run the _3DATA.render() function specified
+                    | below to show the changes
                     | Once the 3DATA.create() function has been called as seen
                     | above, the user will have access to a number of other
                     | functions that will help the user get the most out of
                     | their newly created scene
                 code _3DATA.render()
-                p.userfunction-desc Takes no arguments.  This function forces the re-rendering of the scene in order to show any changes made to the scene
+                p.userfunction-desc Takes no arguments.  This function forces the re-rendering of the scene
+                    | in order to show any changes made to the scene
                 code _3DATA.appendPopup(node,remove)
-                p.userfunction-desc Shows the popup for the node passed into the function. The remove argument takes a true or false value determining whether the popup is removed when a new one is created.
+                p.userfunction-desc Shows the popup for the node passed into the function. 
+                    | The remove argument takes a true or false value determining whether the popup
+                    | is removed when a new one is created.
                 code _3DATA.getSkyBox()
                 p.userfunction-desc Takes no arguments. Returns the skybox with its properties.
                 code _3DATA.getCamera()
-                p.userfunction-desc Takes no arguments. This returns the camera object with all its useful properties to be examined or manipulated
+                p.userfunction-desc Takes no arguments. This returns the camera object with all its useful
+                    | properties to be examined or manipulated
                 code _3DATA.getNodeScene, _3DATA.getPopupScene, _3DATA.getNodeRenderer, _3DATA.getPopupRenderer
                 p.userfunction-desc Behave like getCamera() described above
                 code _3DATA.remove(objectName)
-                p.userfunction-desc This removes the specified object from the scene.  Here, the user must specify the Object Name of the object to be removed.  This object name can be found/changed by digging through the node scene returned in the _3DATA.create() function or _3DATA.getNodeScene() function.
+                p.userfunction-desc This removes the specified object from the scene.  
+                    | Here, the user must specify the Object Name of the object to be removed.
+                    |  This object name can be found/changed by digging through the node
+                    | scene returned in the _3DATA.create() function or _3DATA.getNodeScene() function.
                 code _3DATA.search(key, value)
-                p.userfunction-desc Searches the scene for any objects matching the key,value pair provided.  It returns an array of all matching object and colors the matching nodes in the scene according to the defined nodeHighlightColor
+                p.userfunction-desc Searches the scene for any objects matching the key,value pair provided.
+                    |  It returns an array of all matching object and colors the matching nodes in the
+                    | scene according to the defined nodeHighlightColor
                 code _3DATA.zoomNode(zoomObjMesh, zoomOut, showNodeInfo)
-                p.userfunction-desc This allows the user to define and zoom into a specific node. You must provide the entire mesh of the node to be zoomed into, the amount you want to zoom out from that object once zoomed in (i.e. 10,100 etc.), and a boolean value of whether the popup displays when zoomed in
+                p.userfunction-desc This allows the user to define and zoom into a specific node. 
+                    | You must provide the entire mesh of the node to be zoomed into,
+                    | the amount you want to zoom out from that object once zoomed in
+                    | (i.e. 10,100 etc.), and a boolean value of whether the popup displays
+                    | when zoomed in
                 code _3DATA.zoomPosition(position, zoomOut)
-                p.userfunction-desc This allows the user to zoom into any particular point in the scene.  Simply provide the position in an x,y,z array (i.e. [10,12,100]) and the amount to zoom out once zoomed in on that position
+                p.userfunction-desc This allows the user to zoom into any particular point
+                    | in the scene.
+                    |  Simply provide the position in an x,y,z array (i.e. [10,12,100])
+                    | and the amount to zoom out once zoomed in on that position
                 code _3DATA.removePopup(meshName,popupName)
-                p.userfunction-desc Removes the popup and corresponding mesh passed into the function from the scene. If no parameters are given, it removes the first(or only) popup appended.
+                p.userfunction-desc Removes the popup and corresponding mesh passed into the function
+                    | from the scene. If no parameters are given, it removes the first(or only) popup appended.
                 code _3DATA.revertColor(revertNode)
-                p.userfunction-desc This allows the user to revert a node's color back to its original color.  Simply pass in the entire node object into the function.
+                p.userfunction-desc This allows the user to revert a node's color back to its original
+                    | color.  Simply pass in the entire node object into the function.
         .docs-image
             img(src="https://s3.amazonaws.com/3datajs.com/images/Screen+Shot+2015-04-05+at+5.03.47+PM.png")
             img(src="https://s3.amazonaws.com/3datajs.com/images/Screen+Shot+2015-04-05+at+5.15.16+PM.png")
