@@ -49,5 +49,4 @@ var orbit = _3DATA.getCamera()[1];
 orbit.autoRotate = true;
 
 var scene = _3DATA.getNodeScene();
-
 scene.children[0].visible = false;
