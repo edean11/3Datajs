@@ -297,106 +297,6 @@ _3DATA.create = function(data,optionsObj,cb){
       return mesh;
     }
 
-    function createNodes(data,cb){
-      var iterator = 1;
-      var groupIterator = 1;
-      if(positioningType === 'random'){
-        _.forEach(data,function(val,key){
-          var mesh = createNodeFunction(val,key);
-          getRandomNodePos(mesh,xSpread,ySpread,zSpread);
-          mesh.updateMatrix();
-          mesh.matrixAutoUpdate = false;
-          if(iterator === _.keys(data).length && showLinks){
-            _.forEach(data,function(val,key){
-              findLinkedPos(data,key);
-            });
-          }
-          nodes.add(mesh);
-          if(autoAppendPopup){
-            appendPopup(mesh,false)
-          }
-          cb(mesh,key);
-          iterator++;
-        });
-      } else if(positioningType === 'automatic') {
-        var chunkedData = chunkUserData(sortUserData(data,positioningType),positioningType,groupSize);
-        _.forEach(chunkedData,function(chunk,chunkKey){
-          _.forEach(chunk,function(node,key){
-            var mesh = createNodeFunction(node,key);
-            getRandomNodePosGroup(mesh,groupIterator,chunkedData.length);
-            mesh.updateMatrix();
-            mesh.matrixAutoUpdate = false;
-            nodes.add(mesh);
-            cb(mesh,key);
-            if(autoAppendPopup){
-              appendPopup(mesh,false);
-            }
-          });
-          if(groupIterator === chunkedData.length && showLinks){
-            _.forEach(data,function(val,key){
-              findLinkedPos(data,key);
-            });
-          }
-          groupIterator++;
-        });
-      } else if(positioningType === 'grouped'){
-        var groupedData = groupData(data);
-        var groupedDataPos = findGroupPos(groupedData)
-        _.forEach(groupedData,function(group,groupNumber){
-          _.forEach(group,function(node,nodeKey){
-            var mesh = createNodeFunction(node,nodeKey);
-            placeGroupPos(mesh,groupedDataPos,groupNumber)
-            mesh.updateMatrix();
-            mesh.matrixAutoUpdate = false;
-            nodes.add(mesh);
-            cb(mesh,nodeKey);
-            if(autoAppendPopup){
-              appendPopup(mesh,false);
-            }
-          });
-          if(groupIterator === _.keys(groupedData).length && showLinks){
-            _.forEach(data,function(val,key){
-              findLinkedPos(data,key);
-            });
-          }
-          groupIterator++;
-        });
-      } else if(positioningType == 'defined'){
-        _.forEach(data,function(val,key){
-          var mesh = createNodeFunction(val,key);
-          var posVariable = positioningVariable;
-          mesh.position.x = val[posVariable][0];
-          mesh.position.y = val[posVariable][1];
-          mesh.position.z = val[posVariable][2];
-          mesh.updateMatrix();
-          mesh.matrixAutoUpdate = false;
-          if(iterator === _.keys(data).length && showLinks){
-            _.forEach(data,function(val,key){
-              findLinkedPos(data,key);
-            });
-          }
-          nodes.add(mesh);
-          if(autoAppendPopup){
-            appendPopup(mesh,false);
-          }
-          cb(mesh,key);
-          iterator++;
-        });
-      } else if(positioningType == 'carousel'){
-        var index = 0
-        for(var key in data){
-          var val = data[key]
-          var mesh = createNodeFunction(val,key);
-          var positionedMesh = getCarouselPos(mesh,index,Object.keys(data).length);
-          nodes.add(positionedMesh);
-          if(autoAppendPopup){
-            appendPopup(mesh,false);
-          }
-          index++;
-        };
-      } else{console.log('You must define a positioning type')}
-    }
-
     function findLinkedPos(data,id){
       var links = data[id].links;
       var linkPosArr = [];
@@ -425,6 +325,95 @@ _3DATA.create = function(data,optionsObj,cb){
       linkLine.sourceNode = id.mesh;
       linkLine.destNode = mesh2;
       scene.add(linkLine);
+    }
+
+    function appendLinks(iterator,length,data){
+      if(iterator === length && showLinks){
+        _.forEach(data,function(val,key){
+          findLinkedPos(data,key);
+        });
+      }
+    }
+
+    function determineAppendPopup(mesh){
+      if(autoAppendPopup){
+        appendPopup(mesh,false)
+      }
+    }
+
+    function createNodes(data,cb){
+      var iterator = 1;
+      var groupIterator = 1;
+      if(positioningType === 'random'){
+        _.forEach(data,function(val,key){
+          var mesh = createNodeFunction(val,key);
+          getRandomNodePos(mesh,xSpread,ySpread,zSpread);
+          mesh.updateMatrix();
+          mesh.matrixAutoUpdate = false;
+          appendLinks(iterator,_.keys(data).length,data)
+          nodes.add(mesh);
+          determineAppendPopup(mesh)
+          cb(mesh,key);
+          iterator++;
+        });
+      } else if(positioningType === 'automatic') {
+        var chunkedData = chunkUserData(sortUserData(data,positioningType),positioningType,groupSize);
+        _.forEach(chunkedData,function(chunk,chunkKey){
+          _.forEach(chunk,function(node,key){
+            var mesh = createNodeFunction(node,key);
+            getRandomNodePosGroup(mesh,groupIterator,chunkedData.length);
+            mesh.updateMatrix();
+            mesh.matrixAutoUpdate = false;
+            nodes.add(mesh);
+            cb(mesh,key);
+            determineAppendPopup(mesh);
+          });
+          appendLinks(groupIterator, chunkedData.length, data)
+          groupIterator++;
+        });
+      } else if(positioningType === 'grouped'){
+        var groupedData = groupData(data);
+        var groupedDataPos = findGroupPos(groupedData)
+        _.forEach(groupedData,function(group,groupNumber){
+          _.forEach(group,function(node,nodeKey){
+            var mesh = createNodeFunction(node,nodeKey);
+            placeGroupPos(mesh,groupedDataPos,groupNumber)
+            mesh.updateMatrix();
+            mesh.matrixAutoUpdate = false;
+            nodes.add(mesh);
+            cb(mesh,nodeKey);
+            determineAppendPopup(mesh);
+          });
+          appendLinks(groupIterator,_.keys(groupedData).length,data);
+          groupIterator++;
+        });
+      } else if(positioningType == 'defined'){
+        _.forEach(data,function(val,key){
+          var mesh = createNodeFunction(val,key);
+          var posVariable = positioningVariable;
+          mesh.position.x = val[posVariable][0];
+          mesh.position.y = val[posVariable][1];
+          mesh.position.z = val[posVariable][2];
+          mesh.updateMatrix();
+          mesh.matrixAutoUpdate = false;
+          appendLinks(iterator,_.keys(data).length,data);
+          nodes.add(mesh);
+          determineAppendPopup(mesh);
+          cb(mesh,key);
+          iterator++;
+        });
+      } else if(positioningType == 'carousel'){
+        var index = 0
+        for(var key in data){
+          var val = data[key]
+          var mesh = createNodeFunction(val,key);
+          var positionedMesh = getCarouselPos(mesh,index,Object.keys(data).length);
+          nodes.add(positionedMesh);
+          appendLinks(iterator,_.keys(data).length,data);
+          determineAppendPopup(mesh);
+          index++;
+        };
+      } else{console.log('You must define a positioning type')}
     }
 
 
@@ -494,31 +483,67 @@ _3DATA.create = function(data,optionsObj,cb){
 
   // Skybox
 
+    function addSkyBox(skyBox){
+      skyBox.name = 'skyBox';
+      skyBox.scale.x = -1;
+      skyBox.rotation.x = backgroundRotationX;
+      skyBox.rotation.y = backgroundRotationY;
+      skyBox.rotation.z = backgroundRotationZ;
+      scene.add(skyBox);
+    }
+
+    function setSkyMatColor(skyMat,bgColor){
+      if(backgroundColor[1] === 'x'){
+        skyMat.color.setHex(bgColor)
+      }else{
+        skyMat.color.setRGB(bgColor[0],bgColor[1],bgColor[2])
+      }
+    }
+
     function createSkyBox(){
       var skyGeometry = new THREE.BoxGeometry(maxBound,maxBound,maxBound);
       if(backgroundType==='image'){
         THREE.ImageUtils.crossOrigin = '';
-        var texture = THREE.ImageUtils.loadTexture(backgroundImage,{},function(){
-        var skyMaterial = new THREE.MeshBasicMaterial({map:texture});
-        var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
-          skyBox.name = 'skyBox';
-          skyBox.scale.x = -1;
-          skyBox.rotation.x = backgroundRotationX;
-          skyBox.rotation.y = backgroundRotationY;
-          skyBox.rotation.z = backgroundRotationZ;
-          scene.add(skyBox);
-        });
+        if(typeof(backgroundImage)==='object'){
+          var material1 = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture(backgroundImage[0]) } );
+          var material2 = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture(backgroundImage[1]) } );
+          var material3 = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture(backgroundImage[2]) } );
+          var material4 = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture(backgroundImage[3]) } );
+          var material5 = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture(backgroundImage[4]) } );
+          var material6 = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture(backgroundImage[5]) } );
+          var materials = [material1, material2, material3, material4, material5, material6];
+          var skyFaceMaterial = new THREE.MeshFaceMaterial( materials );
+          var skyBox = new THREE.Mesh(skyGeometry, skyFaceMaterial);
+          addSkyBox(skyBox);
+        }else{
+          var skyMaterial = new THREE.MeshBasicMaterial({map:THREE.ImageUtils.loadTexture(backgroundImage)});
+          var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+          addSkyBox(skyBox);
+        }
       }else{
-        var skyMaterial = new THREE.MeshBasicMaterial();
-        if(skyMaterial[1] === 'x'){skyMaterial.color.setHex(backgroundColor)}
-          else{skyMaterial.color.setRGB(backgroundColor[0],backgroundColor[1],backgroundColor[2])}
-        var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
-          skyBox.name = 'skyBox';
-          skyBox.scale.x = -1;
-          skyBox.rotation.x = backgroundRotationX;
-          skyBox.rotation.y = backgroundRotationY;
-          skyBox.rotation.z = backgroundRotationZ;
-          scene.add(skyBox);
+        if(typeof(backgroundColor)==='object' && backgroundColor.length > 3){
+          var material1 = new THREE.MeshBasicMaterial();
+            setSkyMatColor(material1,backgroundColor[0])
+          var material2 = new THREE.MeshBasicMaterial();
+            setSkyMatColor(material2,backgroundColor[1])
+          var material3 = new THREE.MeshBasicMaterial();
+            setSkyMatColor(material3,backgroundColor[2])
+          var material4 = new THREE.MeshBasicMaterial();
+            setSkyMatColor(material4,backgroundColor[3])
+          var material5 = new THREE.MeshBasicMaterial();
+            setSkyMatColor(material5,backgroundColor[4])
+          var material6 = new THREE.MeshBasicMaterial();
+            setSkyMatColor(material6,backgroundColor[5])
+          var materials = [material1, material2, material3, material4, material5, material6];
+          var skyFaceMaterial = new THREE.MeshFaceMaterial( materials );
+          var skyBox = new THREE.Mesh(skyGeometry, skyFaceMaterial);
+          addSkyBox(skyBox);
+        }else{
+          var skyMaterial = new THREE.MeshBasicMaterial();
+          setSkyMatColor(skyMaterial,backgroundColor);
+          var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+          addSkyBox(skyBox);
+        }
       }
     }
 
