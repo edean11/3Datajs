@@ -83,5 +83,6 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', ['clean', 'copy', 'sass', 'jade']);
   grunt.registerTask('serve', ['build', 'connect:server', 'watch']);
+  grunt.registerTask('heroku:production', 'build');
   grunt.registerTask('default', []);
 };
