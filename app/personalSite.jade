@@ -9,9 +9,28 @@ html(lang="en-US")
         link(rel="stylesheet" href="css/main.css")
 
     body
-        <i class="nav-icon-left fa fa-caret-square-o-left"></i>
-        <i class="nav-icon-right fa fa-caret-square-o-right"></i>
+        //- nav arrow icons
+        <i class="nav-icon-left nav-icon-left-white fa fa-caret-square-o-left"></i>
+        <i class="nav-icon-right nav-icon-right-white fa fa-caret-square-o-right"></i>
+        //- nav section icons
         <i class="nav-icon-home fa fa-home"></i>
+        <i class="nav-icon-projects fa fa-briefcase"></i>
+        <i class="nav-icon-info fa fa-cubes"></i>
+        <i class="nav-icon-links fa fa-comment-o"></i>
+        //- project descriptions
+        .projectDescriptionsContainer.hidden
+            <i class="closeProjectDescription fa fa-times-circle-o"></i>
+            p.threedatajsDescription.hidden 3Datajs is a small, customizable javascript library
+                | used to quickly implement 3D visualizations of data and html content.
+                | It is built upon the threejs 3D library.
+            p.terminalColorCaptureDescription.hidden Terminal Color Capture is a command line
+                | ruby program that allows a user to easily create, edit, activate, delete
+                | and automate both the standard terminal prompt colors as well as the colors
+                | shown in `ls` listing.
+            p.spaceRaceDescription.hidden Written in collaboration with Jacob Lewis,
+                | Tyler Black, Kyle McCormick, and Ben Taylor, this phaser/nodejs four player
+                | game allows the users to once again compete in the cold war race to space
+                | domination.
         // [if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]
         script(src="vendor/jquery/dist/jquery.min.js")
         script(src="vendor/lodash/lodash.min.js")

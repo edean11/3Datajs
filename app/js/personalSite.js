@@ -16,10 +16,16 @@ function profilePicCaptionPopup(){
       return elem;
 }
 
+var projectNameKey = {
+    threedatajs: '3Datajs',
+    terminalColorCapture: 'Terminal Color Capture',
+    spaceRace: 'Space Race'
+}
+
 function projectsPopup(projectName,imgSrc){
     var elem = document.createElement('div');
       elem.className = projectName+'Container';
-      elem.innerHTML = '<img class="'+projectName+'" src="'+imgSrc+'"></img>';
+      elem.innerHTML = '<p class="'+projectName+'Title projectTitle">'+projectNameKey[projectName]+'</p><img class="'+projectName+'" src="'+imgSrc+'"></img>';
       return elem;
 }
 
@@ -43,7 +49,7 @@ var htmlElems = {
     profilePic: {
         name: 'profile_pic',
         popup: profilePicPopup(),
-        location: [-1.5,0,-6.1],
+        location: [-1.5,0,-6.2],
         rotation: [0,0,0]
     },
     profilePicCaption: {
@@ -54,24 +60,24 @@ var htmlElems = {
     },
     threedatajs: {
         name: '3datajs',
-        popup: projectsPopup('3Datajs',
+        popup: projectsPopup('threedatajs',
             'https://s3.amazonaws.com/3datajs.com/images/Screen+Shot+2015-03-26+at+10.31.14+PM.png'),
-        location: [6,1,-1],
-        rotation: [20,10,0]
+        location: [6,1,-1.5],
+        rotation: [0,-1.5,0]
     },
     terminal_color_capture: {
-        name: 'terminal_color_capture',
-        popup: projectsPopup('terminal_color_capture',
+        name: 'terminalColorCapture',
+        popup: projectsPopup('terminalColorCapture',
             'https://s3.amazonaws.com/edean11.github.io/projects/terminal_color_capture'),
-        location: [6,1,1],
-        rotation: [50,40,0]
+        location: [6,1,1.5],
+        rotation: [0,-1.5,0]
     },
     space_race: {
-        name: 'space_race',
-        popup: projectsPopup('space_race',
+        name: 'spaceRace',
+        popup: projectsPopup('spaceRace',
             'https://s3.amazonaws.com/edean11.github.io/projects/spacerace_start.png'),
         location: [6,-1,0],
-        rotation: [50,-50,0]
+        rotation: [0,-1.5,0]
     },
     background: {
         name: 'background',
@@ -130,7 +136,7 @@ var options = {
     nodePopupFunction : function(node){
          return node.popup;
     },
-    maxBound : 2000,
+    maxBound : 40000,
     backgroundType : 'color', //image or color
     backgroundColor : [[0,0,0],[1,1,1],[0,0,0],[1,1,1],[0,0,0],[0,0,0]],
     nodeRotationVar : 'rotation'
@@ -150,34 +156,88 @@ controls.target.x = 0;
 controls.target.y = 0;
 controls.target.z = -6;
 
+
+//Nav Switches
+function hideOtherIcons(location){
+    _.forEach(locationArr,function(loc){
+        var elem = '.nav-icon-'+loc;
+        $(elem).hide()
+    })
+    var elem2 = '.nav-icon-'+location;
+    $(elem2).show();
+}
+
+function flipArrowIconColor(){
+    if($('.nav-icon-left').hasClass('nav-icon-left-white')){
+        $('.nav-icon-left').removeClass('nav-icon-left-white').addClass('nav-icon-left-black')
+        $('.nav-icon-right').removeClass('nav-icon-right-white').addClass('nav-icon-right-black')
+    }else{
+        $('.nav-icon-left').removeClass('nav-icon-left-black').addClass('nav-icon-left-white')
+        $('.nav-icon-right').removeClass('nav-icon-right-black').addClass('nav-icon-right-white')
+    }
+}
+
+function toggleProjectView(project){
+    $('.projectDescriptionsContainer').toggleClass('hidden');
+    $('.nav-icon-projects').css('display','none');
+    if(project==='threedatajs'){
+        $('.threedatajsDescription').removeClass('hidden');
+        $('.terminalColorCaptureDescription').addClass('hidden');
+        $('.spaceRaceDescription').addClass('hidden');
+        $('.terminalColorCaptureContainer').addClass('hidden');
+        $('.spaceRaceContainer').addClass('hidden');
+    } else if(project==='terminalColorCapture'){
+        $('.terminalColorCaptureDescription').removeClass('hidden');
+        $('.threedatajsDescription').addClass('hidden');
+        $('.spaceRaceDescription').addClass('hidden');
+        $('.threedatajsContainer').addClass('hidden');
+        $('.spaceRaceContainer').addClass('hidden');
+    } else if(project==='spaceRace'){
+        $('.spaceRaceDescription').removeClass('hidden');
+        $('.threedatajsDescription').addClass('hidden');
+        $('.terminalColorCaptureDescription').addClass('hidden');
+        $('.threedatajsContainer').addClass('hidden');
+        $('.terminalColorCaptureContainer').addClass('hidden');
+    }
+}
+
+//Nav Tweens
+function tweenCameraRight(target_location){
+    if(target_location==='projects'){
+        createjs.Tween.get(camera.position).to({
+            x: 0,
+            y: 10,
+            z: 0},2000)
+        .wait(300)
+        .to({
+            x: 0,
+            y: 0,
+            z: 0},2000)
+        createjs.Tween.get(controls.target).to({
+            x: -0.5,
+            y: 0,
+            z: -5}, 2000)
+        .wait(300)
+        .to({
+            x: 5,
+            y: 0,
+            z: 0}, 2000)
+    }
+}
+
 var locationArr = ['home','projects','info','links']
 var locationIndex = 0;
 
-if(locationArr[locationIndex]==='home'){
-
-}
 $('.nav-icon-right').click(function(){
-    createjs.Tween.get(camera.position).to({
-        x: 0,
-        y: 10,
-        z: 0},5000)
-    .wait(500)
-    .to({
-        x: 0,
-        y: 0,
-        z: 0},5000)
-
-    createjs.Tween.get(controls.target).to({
-        x: -0.5,
-        y: 0,
-        z: -5}, 5000)
-    .wait(500)
-    .to({
-        x: 5,
-        y: 0,
-        z: 0}, 5000)
-})
-
+    flipArrowIconColor();
+    if(locationIndex===3){
+        locationIndex=0
+    }else{
+        locationIndex++;
+    }
+    tweenCameraRight(locationArr[locationIndex]);
+    hideOtherIcons(locationArr[locationIndex]);
+});
 
 
 // .call(handleComplete);
@@ -185,6 +245,40 @@ $('.nav-icon-right').click(function(){
 //         //Tween complete
 //     }
 
+var threedatajsScale = 'scale(1.3,2)';
+var terminalColorCaptureScale = 'scale(1.7,2)'
+var spaceRaceScale = 'scale(2.3,2)'
+
+//Project Click Events
+$('.closeProjectDescription').click(function(){
+    $('body:hover .threedatajsContainer').css('transform','');
+    $('body:hover .threedatajsContainer').css('-webkit-transform','');
+    $('body:hover .terminalColorCaptureContainer').css('transform','');
+    $('body:hover .terminalColorCaptureContainer').css('-webkit-transform','');
+    $('body:hover .spaceRaceContainer').css('transform','');
+    $('body:hover .spaceRaceContainer').css('-webkit-transform','');
+    $('.threedatajsContainer').removeClass('hidden');
+    $('.terminalColorCaptureContainer').removeClass('hidden');
+    $('.spaceRaceContainer').removeClass('hidden');
+    $('.projectDescriptionsContainer').removeClass('hidden');
+    $('.nav-icon-projects').css('display','block');
+    $('.projectDescriptionsContainer').toggleClass('hidden');
+})
+
+$('.threedatajsContainer').click(function(){
+    $('body:hover .threedatajsContainer').css('transform',''+threedatajsScale+' translateY(200px)');
+    toggleProjectView('threedatajs');
+})
+
+$('.terminalColorCaptureContainer').click(function(){
+    $('body:hover .terminalColorCaptureContainer').css('transform',''+terminalColorCaptureScale+' translateY(200px) translateX(-600px)');
+    toggleProjectView('terminalColorCapture');
+})
+
+$('.spaceRaceContainer').click(function(){
+    $('body:hover .spaceRaceContainer').css('transform',''+spaceRaceScale+' translateY(-200px) translateX(-200px)');
+    toggleProjectView('spaceRace');
+})
 
 
 

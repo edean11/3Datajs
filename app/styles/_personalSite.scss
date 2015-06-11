@@ -1,18 +1,48 @@
 
 // NAVIGATION ICONS//
 
-//
-.nav-icon-left,.nav-icon-right,.nav-icon-home{
+//Default Icon Properties
+.nav-icon-left,.nav-icon-right,.nav-icon-home, .nav-icon-info, .nav-icon-links{
     position: absolute;
     z-index: 10000000;
-    color: white;
     -webkit-transition:width 2s, height 2s, color 1s, font-size 1s, opacity 1s, -webkit-transform 2s;
     transition:width 2s, height 2s, color 1s, font-size 1s, opacity 1s, transform 2s;
 }
 
-.nav-icon-left,.nav-icon-right {
+.nav-icon-projects {
+    position: absolute;
+    z-index: 10000000;
+    -webkit-transition: color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
+    transition: color 2s, font-size 1s, opacity 1s, transform 2s;
+}
+
+.nav-icon-projects, .nav-icon-info, .nav-icon-links{
+    display: none;
+}
+
+.profilePic,.profilePicCaptionContainer,.threedatajsContainer,.terminalColorCaptureContainer,
+    .spaceRaceContainer{
+    -webkit-transition: transform 5s;
+    transition: transform 5s;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+//Arrow Nav Icons
+.nav-icon-left-white,.nav-icon-right-white {
+    color: white;
     &:hover {
-        font-size: 14em;
+        font-size: 12em;
+        color: tomato;
+    }
+}
+
+.nav-icon-left-black,.nav-icon-right-black {
+    color: black;
+    &:hover {
+        font-size: 12em;
         color: tomato;
     }
 }
@@ -20,19 +50,21 @@
 .nav-icon-left{
     top: 40%;
     left: 2%;
-    font-size: 12em;
+    font-size: 10em;
 }
 
 .nav-icon-right{
     top: 40%;
     right: 2%;
-    font-size: 12em;
+    font-size: 10em;
 }
 
+// Location Nav Icons
 .nav-icon-home{
     top: 16%;
     left: 31%;
     font-size: 26em;
+    color: white;
     background-color: black;
     border: 5px solid white;
     border-radius: 20px;
@@ -43,10 +75,23 @@ body:hover .nav-icon-home{
     opacity: 0;
 }
 
-.profilePic,.profilePicCaptionContainer{
-    -webkit-transition: transform 5s;
-    transition: transform 5s;
+.nav-icon-projects{
+    top: 16%;
+    left: 31%;
+    width: 32%;
+    font-size: 26em;
+    color: black;
+    background-color: white;
+    border: 5px solid black;
+    border-radius: 20px;
+    padding: 20px;
 }
+
+body:hover .nav-icon-projects{
+    opacity: 0;
+    z-index: 0;
+}
+// PROFILE //
 
 
 .profilePic {
@@ -55,10 +100,11 @@ body:hover .nav-icon-home{
     width: 480px;
     transform: translateX(250px);
     -webkit-transform: translateX(250px);
-    &:hover {
-        transform: rotateY(360deg);
-        -webkit-transform: rotateY(360deg);
-    }
+}
+
+body:hover .profilePic:hover {
+    transform: rotateY(360deg);
+    -webkit-transform: rotateY(360deg);
 }
 
 
@@ -86,3 +132,69 @@ body:hover .profilePicCaptionContainer{
     transform: translateX(0px);
     -webkit-transform: translateX(0px);
 }
+
+
+
+// PROJECTS //
+
+.threedatajsContainer, .terminalColorCaptureContainer, .spaceRaceContainer{
+    padding: 20px;
+    border: 10px solid black;
+    border-radius: 20px;
+    background-color: white;
+    -webkit-transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
+    transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, transform 2s;
+}
+
+.threedatajsContainer{
+    transform: translateY(400px) translateX(400px);
+    -webkit-transform: translateY(400px) translateX(400px);
+    .threedatajs {
+        width: 800px;
+    }
+}
+
+.terminalColorCaptureContainer{
+    transform: translateY(400px) translateX(-400px);
+    -webkit-transform: translateY(400px) translateX(-400px);
+}
+
+.spaceRaceContainer{
+    transform: translateY(-300px);
+    -webkit-transform: translateY(-300px);
+}
+
+body:hover .threedatajsContainer, body:hover .terminalColorCaptureContainer,
+    body:hover .spaceRaceContainer{
+    transform: translateX(0px) translateY(0px);
+    -webkit-transform: translateX(0px) translateY(0px);
+}
+
+.projectTitle {
+    font-size: 3em;
+    text-align: center;
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    margin: 10px;
+}
+
+.projectDescriptionsContainer {
+    -webkit-transition: opacity 1s;
+    transition: opacity 1s;
+    position: absolute;
+    z-index: 9000000;
+    top: 16%;
+    left: 51%;
+    font-size: 1.8em;
+    width: 350px;
+    color: white;
+    background-color: black;
+    border: 5px solid white;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+
+
+
+
+
