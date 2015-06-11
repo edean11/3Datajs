@@ -61,6 +61,8 @@ _3DATA.create = function(data,optionsObj,cb){
     nodeWidthSegments = optionsObj.nodeWidthSegments || 32,
     nodeHeightSegments = optionsObj.nodeHeightSegments || 32,
     nodeDepthSegments = optionsObj.nodeHeightSegments || 32, //only used in box geometry
+    //node rotation
+    nodeRotationVar = optionsObj.nodeRotationVar || null,
     //bound
     maxBound = optionsObj.maxBound || 10000,
     //density
@@ -341,6 +343,14 @@ _3DATA.create = function(data,optionsObj,cb){
       }
     }
 
+    function rotateMesh(mesh,val){
+      if(nodeRotationVar){
+        mesh.rotation.x = val[nodeRotationVar][0];
+        mesh.rotation.y = val[nodeRotationVar][1];
+        mesh.rotation.z = val[nodeRotationVar][2];
+      }
+    }
+
     function createNodes(data,cb){
       var iterator = 1;
       var groupIterator = 1;
@@ -350,6 +360,7 @@ _3DATA.create = function(data,optionsObj,cb){
           getRandomNodePos(mesh,xSpread,ySpread,zSpread);
           mesh.updateMatrix();
           mesh.matrixAutoUpdate = false;
+          rotateMesh(mesh,val);
           appendLinks(iterator,_.keys(data).length,data)
           nodes.add(mesh);
           determineAppendPopup(mesh)

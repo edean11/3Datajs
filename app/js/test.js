@@ -17,6 +17,7 @@ function createTestData(numOfKeys, numOfLinks){
     var group = function(){if(i%3 === 0 && i%2 !== 0){return 1}else if(i%2 !== 0){return 3}else{return 2}}
     var position = function(){return [getRandomInt(-300,300),getRandomInt(-300,300),getRandomInt(-300,300)]}
     var geom = function(){if(i%2 !== 0){return 'Box'}else{return 'Sphere'}}
+    var rotation = function(){if(i%2 !== 0){return [10,10,10]}else{return [0,0,0]}}
     var popup = function(){
       var elem = document.createElement('div');
       elem.className = 'infoBox';
@@ -32,7 +33,8 @@ function createTestData(numOfKeys, numOfLinks){
       popup: popup(),
       group: group(),
       position: position(),
-      geometry: geom()
+      geometry: geom(),
+      rotation: rotation()
     }
     if(i%2 !== 0){
       for(var j=0;j<numOfLinks;j++){
@@ -117,12 +119,13 @@ var testData = createTestData(11,2);
     nodeWidthSegments : 32,
     nodeHeightSegments : 32,
     nodeDepthSegments : 32,
+    // nodeRotationVar : 'rotation',
     maxBound : 1000,
     xSpread : 10,
     ySpread : 5,
     zSpread : 5,
     backgroundType : 'image', //image or color
-    //background color and background image can be one image or color, 
+    //background color and background image can be one image or color,
       //or an array of 6 images or colors
       //corresponding to the faces of the skybox
     backgroundColor : [[150,150,0],[0,150,150],[0,150,0],[150,150,0],[0,150,120],[150,150,0]],
