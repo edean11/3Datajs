@@ -344,7 +344,7 @@ _3DATA.create = function(data,optionsObj,cb){
     }
 
     function rotateMesh(mesh,val){
-      if(nodeRotationVar){
+      if(nodeRotationVar && val[nodeRotationVar]){
         mesh.rotation.x = val[nodeRotationVar][0];
         mesh.rotation.y = val[nodeRotationVar][1];
         mesh.rotation.z = val[nodeRotationVar][2];
@@ -375,6 +375,7 @@ _3DATA.create = function(data,optionsObj,cb){
             getRandomNodePosGroup(mesh,groupIterator,chunkedData.length);
             mesh.updateMatrix();
             mesh.matrixAutoUpdate = false;
+            rotateMesh(mesh,node)
             nodes.add(mesh);
             cb(mesh,key);
             determineAppendPopup(mesh);
@@ -391,6 +392,7 @@ _3DATA.create = function(data,optionsObj,cb){
             placeGroupPos(mesh,groupedDataPos,groupNumber)
             mesh.updateMatrix();
             mesh.matrixAutoUpdate = false;
+            rotateMesh(mesh,node);
             nodes.add(mesh);
             cb(mesh,nodeKey);
             determineAppendPopup(mesh);
@@ -407,6 +409,7 @@ _3DATA.create = function(data,optionsObj,cb){
           mesh.position.z = val[posVariable][2];
           mesh.updateMatrix();
           mesh.matrixAutoUpdate = false;
+          rotateMesh(mesh,val);
           appendLinks(iterator,_.keys(data).length,data);
           nodes.add(mesh);
           determineAppendPopup(mesh);
@@ -419,6 +422,7 @@ _3DATA.create = function(data,optionsObj,cb){
           var val = data[key]
           var mesh = createNodeFunction(val,key);
           var positionedMesh = getCarouselPos(mesh,index,Object.keys(data).length);
+          rotateMesh(mesh,val);
           nodes.add(positionedMesh);
           appendLinks(iterator,_.keys(data).length,data);
           determineAppendPopup(mesh);

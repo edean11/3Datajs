@@ -43,67 +43,79 @@ var htmlElems = {
     profilePic: {
         name: 'profile_pic',
         popup: profilePicPopup(),
-        location: [-1.5,0,-6.1]
+        location: [-1.5,0,-6.1],
+        rotation: [0,0,0]
     },
     profilePicCaption: {
         name: 'profile_pic_caption',
         popup: profilePicCaptionPopup(),
-        location: [1,0,-6]
+        location: [1,0,-6],
+        rotation: [0,0,0]
     },
     threedatajs: {
         name: '3datajs',
         popup: projectsPopup('3Datajs',
             'https://s3.amazonaws.com/3datajs.com/images/Screen+Shot+2015-03-26+at+10.31.14+PM.png'),
-        location: [6,1,-1]
+        location: [6,1,-1],
+        rotation: [20,10,0]
     },
     terminal_color_capture: {
         name: 'terminal_color_capture',
         popup: projectsPopup('terminal_color_capture',
             'https://s3.amazonaws.com/edean11.github.io/projects/terminal_color_capture'),
-        location: [6,1,1]
+        location: [6,1,1],
+        rotation: [50,40,0]
     },
     space_race: {
         name: 'space_race',
         popup: projectsPopup('space_race',
             'https://s3.amazonaws.com/edean11.github.io/projects/spacerace_start.png'),
-        location: [6,-1,0]
+        location: [6,-1,0],
+        rotation: [50,-50,0]
     },
     background: {
         name: 'background',
         popup: infoPopup('background','fa fa-globe fa-5x'),
-        location: [-1,2,6]
+        location: [-1,2,6],
+        rotation: [0,0,0]
     },
     skills: {
         name: 'skills',
         popup: infoPopup('skills','fa fa-sitemap fa-5x'),
-        location: [1,2,6]
+        location: [1,2,6],
+        rotation: [0,0,0]
     },
     interests: {
         name: 'interests',
         popup: infoPopup('interests','fa fa-connectdevelop fa-5x'),
-        location: [0,-2,6]
+        location: [0,-2,6],
+        rotation: [0,0,0]
     },
     github: {
         name: 'github',
         popup: linksPopup('github','https://github.com/edean11','fa fa-github fa-5x'),
-        location: [-6,2,1]
+        location: [-6,2,1],
+        rotation: [0,0,0]
     },
     linked_in: {
         name: 'linked_in',
         popup: infoPopup('linked_in','https://www.linkedin.com/pub/ed-dean/ba/9a2/852',
             'fa fa-linkedin-square fa-5x'),
-        location: [-6,2,-1]
+        location: [-6,2,-1],
+        rotation: [0,0,0]
     },
     email: {
         name: 'email',
         popup: infoPopup('email','mailto:edean1010@gmail.com','fa fa-envelope-o fa-5x'),
-        location: [-6,-2,1]
+        location: [-6,-2,1],
+        rotation: [0,0,0]
     },
     resume: {
         name: 'resume',
         popup: infoPopup('resume','https://s3.amazonaws.com/edean11.github.io/Dean%2C+Ed+Resume_2015.pdf',
             'fa fa-newspaper-o fa-5x'),
-        location: [-6,-2,-1]
+        location: [-6,-2,-1],
+        rotation: [0,0,0]
     },
 }
 
@@ -121,6 +133,7 @@ var options = {
     maxBound : 2000,
     backgroundType : 'color', //image or color
     backgroundColor : [[0,0,0],[1,1,1],[0,0,0],[1,1,1],[0,0,0],[0,0,0]],
+    nodeRotationVar : 'rotation'
 }
 
 _3DATA.create(htmlElems,options);
