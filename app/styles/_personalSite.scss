@@ -1,0 +1,88 @@
+
+// NAVIGATION ICONS//
+
+//
+.nav-icon-left,.nav-icon-right,.nav-icon-home{
+    position: absolute;
+    z-index: 10000000;
+    color: white;
+    -webkit-transition:width 2s, height 2s, color 1s, font-size 1s, opacity 1s, -webkit-transform 2s;
+    transition:width 2s, height 2s, color 1s, font-size 1s, opacity 1s, transform 2s;
+}
+
+.nav-icon-left,.nav-icon-right {
+    &:hover {
+        font-size: 14em;
+        color: tomato;
+    }
+}
+
+.nav-icon-left{
+    top: 40%;
+    left: 2%;
+    font-size: 12em;
+}
+
+.nav-icon-right{
+    top: 40%;
+    right: 2%;
+    font-size: 12em;
+}
+
+.nav-icon-home{
+    top: 16%;
+    left: 31%;
+    font-size: 26em;
+    background-color: black;
+    border: 5px solid white;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+body:hover .nav-icon-home{
+    opacity: 0;
+}
+
+.profilePic,.profilePicCaptionContainer{
+    -webkit-transition: transform 5s;
+    transition: transform 5s;
+}
+
+
+.profilePic {
+    border: 5px solid white;
+    border-radius: 50px;
+    width: 480px;
+    transform: translateX(250px);
+    -webkit-transform: translateX(250px);
+    &:hover {
+        transform: rotateY(360deg);
+        -webkit-transform: rotateY(360deg);
+    }
+}
+
+
+.profilePicCaptionContainer {
+    width: 740px;
+    border: 10px solid white;
+    padding: 40px;
+    border-radius: 50px;
+    background-color: black;
+    transform: translateX(-400px);
+    -webkit-transform: translateX(-400px);
+    .profileCaption {
+        font-family: 'Yanone Kaffeesatz', sans-serif;
+        font-size: 5em;
+        color: white;
+    }
+}
+
+body:hover .profilePic{
+    transform: translateX(0px);
+    -webkit-transform: translateX(0px);
+}
+
+body:hover .profilePicCaptionContainer{
+    transform: translateX(0px);
+    -webkit-transform: translateX(0px);
+}
