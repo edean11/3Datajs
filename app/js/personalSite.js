@@ -276,12 +276,12 @@ function tweenCameraLeft(target_location){
     // .wait(300)
     .to({
         x: locations[oneSectionLeftKey[locationIndex]].target.x,
-        y: locations[oneSectionLeftKey[locationIndex]].target.y+1,
+        y: locations[oneSectionLeftKey[locationIndex]].target.y+2,
         z: locations[oneSectionLeftKey[locationIndex]].target.z},600)
     // .wait(300)
     .to({
         x: locations[twoSectionsLeftKey[locationIndex]].target.x,
-        y: locations[twoSectionsLeftKey[locationIndex]].target.y+1.5,
+        y: locations[twoSectionsLeftKey[locationIndex]].target.y+2,
         z: locations[twoSectionsLeftKey[locationIndex]].target.z},400)
     // .wait(300)
     .to({
@@ -362,21 +362,91 @@ $('.spaceRaceContainer').click(function(){
 
 // Info Events
 
-// function backgroundContainerAnimation(){
-//     console.log('here');
-//     $('.backgroundContainer').css('transform','translateX(-350) translateY(700)')
-    // $('.backgroundContainer').animate({transform:'translateX(-350) translateY(700)'}, 1000,function(){
-    //     console.log('here');
-    //     $('.backgroundContainer').animate({transform:'translateX(-700) translateY(0)'}, 1000,function(){
-    //         console.log('here');
-    //         $('.backgroundContainer').animate({transform:'translateX(0) translateY(0)'}, 1000, backgroundContainerAnimation());
-    //     });
-    // });
-// }
+function toggleInfoView(info){
+    $('.infoDescriptionsContainer').toggleClass('hidden');
+    $('.closeInfoDescription').toggleClass('hidden');
+    if(info==='background'){
+        $('.backgroundDescription').removeClass('hidden');
+        $('.interestsDescription').addClass('hidden');
+        $('.skillsDescription').addClass('hidden');
+        $('.interestsContainer').addClass('hidden');
+        $('.skillsContainer').addClass('hidden');
+    } else if(info==='skills'){
+        $('.skillsDescription').removeClass('hidden');
+        $('.interestsDescription').addClass('hidden');
+        $('.backgroundDescription').addClass('hidden');
+        $('.interestsContainer').addClass('hidden');
+        $('.backgroundContainer').addClass('hidden');
+    } else if(info==='interests'){
+        $('.interestsDescription').removeClass('hidden');
+        $('.backgroundDescription').addClass('hidden');
+        $('.skillsDescription').addClass('hidden');
+        $('.backgroundContainer').addClass('hidden');
+        $('.skillsContainer').addClass('hidden');
+    }
+}
 
-// backgroundContainerAnimation();
-// $('body:hover .backgroundContainer').css('transform','');
+function resetInfoStyles(className){
+    $(className).css('color','');
+    $(className).css('background-color','');
+    $(className).css('border','');
+    $(className).css('animation','rearrangeBackground 5s ease-in-out infinite');
+    $(className).css('-webkit-animation','rearrangeBackground 5s ease-in-out infinite');
+    $(className).css('-moz-animation','rearrangeBackground 5s ease-in-out infinite');
+    $('body:hover '+className).css('animation','');
+    $('body:hover '+className).css('-webkit-animation','');
+    $('body:hover '+className).css('-moz-animation','');
+    $('.backgroundContainer').removeClass('hidden');
+    $('.skillsContainer').removeClass('hidden');
+    $('.interestsContainer').removeClass('hidden');
+    $('.infoDescriptionsContainer').toggleClass('hidden');
+    $('.closeInfoDescription').toggleClass('hidden');
+}
 
+$('.closeInfoDescription').click(function(){
+    $('body:hover .backgroundContainer').css('transform','');
+    $('body:hover .backgroundContainer').css('-webkit-transform','');
+    $('body:hover .skillsContainer').css('transform','');
+    $('body:hover .skillsContainer').css('-webkit-transform','');
+    $('body:hover .interestsContainer').css('transform','');
+    $('body:hover .interestsContainer').css('-webkit-transform','');
+    resetInfoStyles('.backgroundContainer');
+    resetInfoStyles('.skillsContainer');
+    resetInfoStyles('.interestsContainer');
+})
+
+$('.backgroundContainer').click(function(){
+    $('body:hover .backgroundContainer').css('transform','translateY(-40px) translateX(-525px)');
+    $('.backgroundContainer').css('animation','none');
+    $('.backgroundContainer').css('-webkit-animation','none');
+    $('.backgroundContainer').css('-moz-animation','none');
+    $('.backgroundContainer').css('color','black');
+    $('.backgroundContainer').css('background-color','white');
+    $('.backgroundContainer').css('border','10px solid tomato');
+    toggleInfoView('background');
+})
+
+$('.skillsContainer').click(function(){
+    $('body:hover .skillsContainer').css('transform','translateY(-40px) translateX(525px)');
+    $('.skillsContainer').css('animation','none');
+    $('.skillsContainer').css('-webkit-animation','none');
+    $('.skillsContainer').css('-moz-animation','none');
+    $('.skillsContainer').css('color','black');
+    $('.skillsContainer').css('background-color','white');
+    $('.skillsContainer').css('border','10px solid tomato');
+    toggleInfoView('skills');
+})
+
+$('.interestsContainer').click(function(){
+    $('body:hover .interestsContainer').css('transform','translateY(-950px) translateX(0px)');
+    $('.interestsContainer').css('animation','none');
+    $('.interestsContainer').css('-webkit-animation','none');
+    $('.interestsContainer').css('-moz-animation','none');
+    $('.interestsContainer').css('color','black');
+    $('.interestsContainer').css('background-color','white');
+    $('.interestsContainer').css('border','10px solid tomato');
+    toggleInfoView('interests');
+})
 
 
 
