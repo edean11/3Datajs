@@ -508,7 +508,7 @@ _3DATA.create = function(data,optionsObj,cb){
     }
 
     function setSkyMatColor(skyMat,bgColor){
-      if(backgroundColor[1] === 'x'){
+      if(bgColor[1] === 'x'){
         skyMat.color.setHex(bgColor)
       }else{
         skyMat.color.setRGB(bgColor[0],bgColor[1],bgColor[2])

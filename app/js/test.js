@@ -72,7 +72,7 @@ var testData = createTestData(11,2);
     // dblClickAppendPopup : false,
     // popupRendererContainerClass : 'testContainer',
      showLinks : true,
-    autoAppendPopup : true,
+    // autoAppendPopup : true,
     respondToWindowResizing : true,
     // zoomSpeed : 0.4,
     zoomAutoRotate : false,
@@ -128,7 +128,7 @@ var testData = createTestData(11,2);
     //background color and background image can be one image or color,
       //or an array of 6 images or colors
       //corresponding to the faces of the skybox
-    backgroundColor : [[150,150,0],[0,150,150],[0,150,0],[150,150,0],[0,150,120],[150,150,0]],
+    // backgroundColor : ['0x696969','0x696969','0x696969','0x696969','0x696969','0x696969'],
     backgroundImage : 'img/stars.jpeg',
     //backgroundImage : ['img/stars.jpeg','img/recordcollection.jpg','img/stars.jpeg','img/recordcollection.jpg','img/stars.jpeg','img/recordcollection.jpg'],
     nodeColor : [0,1,0],

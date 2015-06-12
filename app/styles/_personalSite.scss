@@ -147,8 +147,8 @@ body:hover .profilePicCaptionContainer{
 }
 
 .threedatajsContainer{
-    transform: translateY(400px) translateX(400px);
-    -webkit-transform: translateY(400px) translateX(400px);
+    transform: translateY(400px) translateX(450px);
+    -webkit-transform: translateY(400px) translateX(450px);
     .threedatajs {
         width: 800px;
     }
@@ -193,7 +193,54 @@ body:hover .threedatajsContainer, body:hover .terminalColorCaptureContainer,
     padding: 20px;
 }
 
+// Info
 
+.backgroundContainer, .skillsContainer, .interestsContainer {
+    color: white;
+    background-color: black;
+    padding: 80px;
+    border: 5px solid white;
+    border-radius: 50%;
+    font-size: 3em;
+    -webkit-transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
+    transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, transform 2s;
+}
+
+.backgroundContainer {
+    -webkit-animation: rearrangeBackground 5s ease-in-out infinite;
+    -moz-animation: rearrangeBackground 5s ease-in-out infinite;
+    animation: rearrangeBackground 5s ease-in-out infinite;
+}
+
+.skillsContainer {
+    -webkit-animation: rearrangeSkills 5s ease-in-out infinite;
+    -moz-animation: rearrangeSkills 5s ease-in-out infinite;
+    animation: rearrangeSkills 5s ease-in-out infinite;
+}
+
+.interestsContainer {
+    -webkit-animation: rearrangeInterests 5s ease-in-out infinite;
+    -moz-animation: rearrangeInterests 5s ease-in-out infinite;
+    animation: rearrangeInterests 5s ease-in-out infinite;
+}
+
+// Links
+
+.githubContainer,.linked_inContainer,.emailContainer,.resumeContainer{
+    color: black;
+    background-color: white;
+    padding: 80px;
+    border: 5px solid black;
+    border-radius: 5px;
+    font-size: 3em;
+    -webkit-transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
+    transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, transform 2s;
+}
+
+.githubContainer a,.linked_inContainer a,.emailContainer a,.resumeContainer a{
+    text-decoration: none;
+    color: black;
+}
 
 
 

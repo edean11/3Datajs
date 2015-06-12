@@ -82,46 +82,46 @@ var htmlElems = {
     background: {
         name: 'background',
         popup: infoPopup('background','fa fa-globe fa-5x'),
-        location: [-1,2,6],
-        rotation: [0,0,0]
+        location: [-1.5,1.3,6],
+        rotation: [0,-3.15,0]
     },
     skills: {
         name: 'skills',
         popup: infoPopup('skills','fa fa-sitemap fa-5x'),
-        location: [1,2,6],
-        rotation: [0,0,0]
+        location: [1.5,1.3,6],
+        rotation: [0,-3.15,0]
     },
     interests: {
         name: 'interests',
         popup: infoPopup('interests','fa fa-connectdevelop fa-5x'),
-        location: [0,-2,6],
-        rotation: [0,0,0]
+        location: [0,-1.3,6],
+        rotation: [0,-3.15,0]
     },
     github: {
         name: 'github',
         popup: linksPopup('github','https://github.com/edean11','fa fa-github fa-5x'),
-        location: [-6,2,1],
-        rotation: [0,0,0]
+        location: [-6,1,1],
+        rotation: [0,1.5,0]
     },
     linked_in: {
         name: 'linked_in',
-        popup: infoPopup('linked_in','https://www.linkedin.com/pub/ed-dean/ba/9a2/852',
+        popup: linksPopup('linked_in','https://www.linkedin.com/pub/ed-dean/ba/9a2/852',
             'fa fa-linkedin-square fa-5x'),
-        location: [-6,2,-1],
-        rotation: [0,0,0]
+        location: [-6,1,-1],
+        rotation: [0,1.5,0]
     },
     email: {
         name: 'email',
-        popup: infoPopup('email','mailto:edean1010@gmail.com','fa fa-envelope-o fa-5x'),
-        location: [-6,-2,1],
-        rotation: [0,0,0]
+        popup: linksPopup('email','mailto:edean1010@gmail.com','fa fa-envelope-o fa-5x'),
+        location: [-6,-1,1],
+        rotation: [0,1.5,0]
     },
     resume: {
         name: 'resume',
-        popup: infoPopup('resume','https://s3.amazonaws.com/edean11.github.io/Dean%2C+Ed+Resume_2015.pdf',
+        popup: linksPopup('resume','https://s3.amazonaws.com/edean11.github.io/Dean%2C+Ed+Resume_2015.pdf',
             'fa fa-newspaper-o fa-5x'),
-        location: [-6,-2,-1],
-        rotation: [0,0,0]
+        location: [-6,-1,-1],
+        rotation: [0,1.5,0]
     },
 }
 
@@ -129,6 +129,7 @@ var htmlElems = {
 
 var options = {
     hasDblClickZoom : false,
+    dblClickAppendPopup : false,
     autoAppendPopup : true,
     respondToWindowResizing : true,
     positioningType : 'defined', //random, automatic, grouped, or defined
@@ -136,9 +137,10 @@ var options = {
     nodePopupFunction : function(node){
          return node.popup;
     },
-    maxBound : 40000,
+    maxBound : 200,
     backgroundType : 'color', //image or color
-    backgroundColor : [[0,0,0],[1,1,1],[0,0,0],[1,1,1],[0,0,0],[0,0,0]],
+    // ['left','right','top','bottom','back','front']
+    backgroundColor : [[1,1,1],[1,1,1],'0xc1cdc1','0xc1cdc1',[0,0,0],[0,0,0]],
     nodeRotationVar : 'rotation'
 }
 
@@ -146,10 +148,24 @@ _3DATA.create(htmlElems,options);
 
 _3DATA.getNodeScene().children[0].visible = false;
 
+var homeCameraPos = {x: 0,y: 0,z: -1},
+    homeNavCameraPos = {x: 2,y: 6,z: 0},
+    homeControlsTarget = {x: 0,y: 0,z: -6};
+var projectsCameraPos = {x: 1,y: 0,z: 0},
+    projectsNavCameraPos = {x: 0,y: 6,z: 2},
+    projectsControlsTarget = {x: 5,y: 0,z: 0};
+var infoCameraPos = {x: 0,y: 0,z: 1},
+    infoNavCameraPos = {x: -2,y: 6,z: 0},
+    infoControlsTarget = {x: 0,y: 0,z: 6};
+var linksCameraPos = {x: -1,y: 0,z: 0},
+    linksNavCameraPos = {x: 0,y: 6,z: -2},
+    linksControlsTarget = {x: -5,y: 0,z: 0};
+
+
 var camera = _3DATA.getCamera()[0]
-camera.position.x = 0;
-camera.position.y = 0;
-camera.position.z = -1;
+camera.position.x = homeCameraPos.x;
+camera.position.y = homeCameraPos.y;
+camera.position.z = homeCameraPos.z;
 
 var controls = _3DATA.getCamera()[1]
 controls.target.x = 0;
@@ -158,6 +174,7 @@ controls.target.z = -6;
 
 
 //Nav Switches
+var locationArr = ['home','projects','info','links']
 function hideOtherIcons(location){
     _.forEach(locationArr,function(loc){
         var elem = '.nav-icon-'+loc;
@@ -202,30 +219,88 @@ function toggleProjectView(project){
 }
 
 //Nav Tweens
+var oneSectionLeftKey = [3,0,1,2];
+var twoSectionsLeftKey = [2,3,0,1];
+var threeSectionsLeftKey = [1,2,3,0];
 function tweenCameraRight(target_location){
-    if(target_location==='projects'){
-        createjs.Tween.get(camera.position).to({
-            x: 0,
-            y: 10,
-            z: 0},2000)
-        .wait(300)
-        .to({
-            x: 0,
-            y: 0,
-            z: 0},2000)
-        createjs.Tween.get(controls.target).to({
-            x: -0.5,
-            y: 0,
-            z: -5}, 2000)
-        .wait(300)
-        .to({
-            x: 5,
-            y: 0,
-            z: 0}, 2000)
-    }
+    createjs.Tween.get(camera.position).to({
+        x: target_location.step.x,
+        y: target_location.step.y,
+        z: target_location.step.z},1500)
+    // .wait(300)
+    .to({
+        x: target_location.pos.x,
+        y: target_location.pos.y,
+        z: target_location.pos.z},1500)
+    createjs.Tween.get(controls.target).to({
+        x: locations[oneSectionLeftKey[locationIndex]].target.x,
+        y: locations[oneSectionLeftKey[locationIndex]].target.y,
+        z: locations[oneSectionLeftKey[locationIndex]].target.z}, 1500)
+    // .wait(300)
+    .to({
+        x: target_location.target.x,
+        y: target_location.target.y,
+        z: target_location.target.z}, 1500)
 }
 
-var locationArr = ['home','projects','info','links']
+function tweenCameraLeft(target_location){
+    createjs.Tween.get(camera.position).to({
+        x: target_location.pos.x,
+        y: target_location.pos.y+2,
+        z: target_location.pos.z},750)
+    // .wait(300)
+    .to({
+        x: locations[oneSectionLeftKey[locationIndex]].pos.x,
+        y: locations[oneSectionLeftKey[locationIndex]].pos.y+2,
+        z: locations[oneSectionLeftKey[locationIndex]].pos.z},600)
+    // .wait(300)
+    .to({
+        x: locations[twoSectionsLeftKey[locationIndex]].pos.x,
+        y: locations[twoSectionsLeftKey[locationIndex]].pos.y+2,
+        z: locations[twoSectionsLeftKey[locationIndex]].pos.z},400)
+    // .wait(300)
+    .to({
+        x: locations[threeSectionsLeftKey[locationIndex]].pos.x,
+        y: locations[threeSectionsLeftKey[locationIndex]].pos.y+2,
+        z: locations[threeSectionsLeftKey[locationIndex]].pos.z},600)
+    // .wait(300)
+    .to({
+        x: target_location.pos.x,
+        y: target_location.pos.y,
+        z: target_location.pos.z},750)
+
+    createjs.Tween.get(controls.target).to({
+        x: target_location.target.x,
+        y: target_location.target.y+2,
+        z: target_location.target.z},750)
+    // .wait(300)
+    .to({
+        x: locations[oneSectionLeftKey[locationIndex]].target.x,
+        y: locations[oneSectionLeftKey[locationIndex]].target.y+1,
+        z: locations[oneSectionLeftKey[locationIndex]].target.z},600)
+    // .wait(300)
+    .to({
+        x: locations[twoSectionsLeftKey[locationIndex]].target.x,
+        y: locations[twoSectionsLeftKey[locationIndex]].target.y+1.5,
+        z: locations[twoSectionsLeftKey[locationIndex]].target.z},400)
+    // .wait(300)
+    .to({
+        x: locations[threeSectionsLeftKey[locationIndex]].target.x,
+        y: locations[threeSectionsLeftKey[locationIndex]].target.y+2,
+        z: locations[threeSectionsLeftKey[locationIndex]].target.z},600)
+    // .wait(300)
+    .to({
+        x: target_location.target.x,
+        y: target_location.target.y,
+        z: target_location.target.z},750)
+}
+
+var locations = {
+    0:{name:'home',pos: homeCameraPos, target: homeControlsTarget, step: homeNavCameraPos},
+    1:{name:'projects',pos: projectsCameraPos, target: projectsControlsTarget, step: projectsNavCameraPos},
+    2:{name:'info',pos: infoCameraPos, target: infoControlsTarget, step: infoNavCameraPos},
+    3:{name:'links',pos: linksCameraPos, target: linksControlsTarget, step: linksNavCameraPos}
+}
 var locationIndex = 0;
 
 $('.nav-icon-right').click(function(){
@@ -235,18 +310,23 @@ $('.nav-icon-right').click(function(){
     }else{
         locationIndex++;
     }
-    tweenCameraRight(locationArr[locationIndex]);
-    hideOtherIcons(locationArr[locationIndex]);
+    tweenCameraRight(locations[locationIndex]);
+    hideOtherIcons(locations[locationIndex].name);
 });
 
+$('.nav-icon-left').click(function(){
+    flipArrowIconColor();
+    if(locationIndex===0){
+        locationIndex=3
+    }else{
+        locationIndex--;
+    }
+    tweenCameraLeft(locations[locationIndex]);
+    hideOtherIcons(locations[locationIndex].name);
+});
 
-// .call(handleComplete);
-//     function handleComplete() {
-//         //Tween complete
-//     }
-
-var threedatajsScale = 'scale(1.3,2)';
-var terminalColorCaptureScale = 'scale(1.7,2)'
+var threedatajsScale = 'scale(1.1,1.8)';
+var terminalColorCaptureScale = 'scale(1.5,2)'
 var spaceRaceScale = 'scale(2.3,2)'
 
 //Project Click Events
@@ -266,12 +346,12 @@ $('.closeProjectDescription').click(function(){
 })
 
 $('.threedatajsContainer').click(function(){
-    $('body:hover .threedatajsContainer').css('transform',''+threedatajsScale+' translateY(200px)');
+    $('body:hover .threedatajsContainer').css('transform',''+threedatajsScale+' translateY(200px) translateX(60px)');
     toggleProjectView('threedatajs');
 })
 
 $('.terminalColorCaptureContainer').click(function(){
-    $('body:hover .terminalColorCaptureContainer').css('transform',''+terminalColorCaptureScale+' translateY(200px) translateX(-600px)');
+    $('body:hover .terminalColorCaptureContainer').css('transform',''+terminalColorCaptureScale+' translateY(200px) translateX(-660px)');
     toggleProjectView('terminalColorCapture');
 })
 
@@ -280,7 +360,22 @@ $('.spaceRaceContainer').click(function(){
     toggleProjectView('spaceRace');
 })
 
+// Info Events
 
+// function backgroundContainerAnimation(){
+//     console.log('here');
+//     $('.backgroundContainer').css('transform','translateX(-350) translateY(700)')
+    // $('.backgroundContainer').animate({transform:'translateX(-350) translateY(700)'}, 1000,function(){
+    //     console.log('here');
+    //     $('.backgroundContainer').animate({transform:'translateX(-700) translateY(0)'}, 1000,function(){
+    //         console.log('here');
+    //         $('.backgroundContainer').animate({transform:'translateX(0) translateY(0)'}, 1000, backgroundContainerAnimation());
+    //     });
+    // });
+// }
+
+// backgroundContainerAnimation();
+// $('body:hover .backgroundContainer').css('transform','');
 
 
 
