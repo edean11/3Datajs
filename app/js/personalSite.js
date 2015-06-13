@@ -101,27 +101,27 @@ var htmlElems = {
         name: 'github',
         popup: linksPopup('github','https://github.com/edean11','fa fa-github fa-5x'),
         location: [-6,1,1],
-        rotation: [0,1.5,0]
+        rotation: [0,1.6,0]
     },
     linked_in: {
         name: 'linked_in',
         popup: linksPopup('linked_in','https://www.linkedin.com/pub/ed-dean/ba/9a2/852',
             'fa fa-linkedin-square fa-5x'),
         location: [-6,1,-1],
-        rotation: [0,1.5,0]
+        rotation: [0,1.6,0]
     },
     email: {
         name: 'email',
         popup: linksPopup('email','mailto:edean1010@gmail.com','fa fa-envelope-o fa-5x'),
         location: [-6,-1,1],
-        rotation: [0,1.5,0]
+        rotation: [0,1.6,0]
     },
     resume: {
         name: 'resume',
         popup: linksPopup('resume','https://s3.amazonaws.com/edean11.github.io/Dean%2C+Ed+Resume_2015.pdf',
             'fa fa-newspaper-o fa-5x'),
         location: [-6,-1,-1],
-        rotation: [0,1.5,0]
+        rotation: [0,1.6,0]
     },
 }
 

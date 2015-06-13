@@ -333,6 +333,22 @@ body:hover .interestsContainer:hover {
 
 // Links
 
+.nav-icon-links {
+    -webkit-transition: width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
+    transition: width 2s, height 2s, color 2s, font-size 1s, opacity 1s, transform 2s;
+    position: absolute;
+    top: 28%;
+    left: 38.5%;
+    font-size: 16em;
+    background-color: white;
+    border: 5px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    -webkit-animation: shrinkIcon 4s ease-in-out infinite;
+    -moz-animation: shrinkIcon 4s ease-in-out infinite;
+    animation: shrinkIcon 4s ease-in-out infinite;
+}
+
 .githubContainer,.linked_inContainer,.emailContainer,.resumeContainer{
     color: black;
     background-color: white;
@@ -347,6 +363,12 @@ body:hover .interestsContainer:hover {
 .githubContainer a,.linked_inContainer a,.emailContainer a,.resumeContainer a{
     text-decoration: none;
     color: black;
+}
+
+.githubContainer {
+    -webkit-animation: githubSpin 4s ease-in-out infinite;
+    -moz-animation: githubSpin 4s ease-in-out infinite;
+    animation: githubSpin 4s ease-in-out infinite;
 }
 
 
