@@ -333,22 +333,6 @@ body:hover .interestsContainer:hover {
 
 // Links
 
-.nav-icon-links {
-    -webkit-transition: width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
-    transition: width 2s, height 2s, color 2s, font-size 1s, opacity 1s, transform 2s;
-    position: absolute;
-    top: 28%;
-    left: 38.5%;
-    font-size: 16em;
-    background-color: white;
-    border: 5px solid black;
-    border-radius: 5px;
-    padding: 10px;
-    -webkit-animation: shrinkIcon 4s ease-in-out infinite;
-    -moz-animation: shrinkIcon 4s ease-in-out infinite;
-    animation: shrinkIcon 4s ease-in-out infinite;
-}
-
 .githubContainer,.linked_inContainer,.emailContainer,.resumeContainer{
     color: black;
     background-color: white;
@@ -358,6 +342,9 @@ body:hover .interestsContainer:hover {
     font-size: 3em;
     -webkit-transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
     transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, transform 2s;
+    a{
+        display: block;
+    }
 }
 
 .githubContainer a,.linked_inContainer a,.emailContainer a,.resumeContainer a{
@@ -369,6 +356,24 @@ body:hover .interestsContainer:hover {
     -webkit-animation: githubSpin 4s ease-in-out infinite;
     -moz-animation: githubSpin 4s ease-in-out infinite;
     animation: githubSpin 4s ease-in-out infinite;
+}
+
+.linked_inContainer {
+    -webkit-animation: linkedInSpin 4s ease-in-out infinite;
+    -moz-animation: linkedInSpin 4s ease-in-out infinite;
+    animation: linkedInSpin 4s ease-in-out infinite;
+}
+
+.emailContainer {
+    -webkit-animation: emailSpin 4s ease-in-out infinite;
+    -moz-animation: emailSpin 4s ease-in-out infinite;
+    animation: emailSpin 4s ease-in-out infinite;
+}
+
+.resumeContainer {
+    -webkit-animation: resumeSpin 4s ease-in-out infinite;
+    -moz-animation: resumeSpin 4s ease-in-out infinite;
+    animation: resumeSpin 4s ease-in-out infinite;
 }
 
 
