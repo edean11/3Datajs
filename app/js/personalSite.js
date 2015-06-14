@@ -43,6 +43,13 @@ function linksPopup(linkName,link,iconClass){
       return elem;
 }
 
+function skyLightPopup(link){
+    var elem = document.createElement('div');
+      elem.className = 'skyLightContainer';
+      elem.innerHTML = '<a href="'+link+'" class="skyLight"></a>';
+      return elem;
+}
+
 //Create HTML data object with corresponding popups
 
 var htmlElems = {
@@ -76,7 +83,7 @@ var htmlElems = {
         name: 'spaceRace',
         popup: projectsPopup('spaceRace',
             'https://s3.amazonaws.com/edean11.github.io/projects/spacerace_start.png'),
-        location: [6,-1,0],
+        location: [6,-0.8,0],
         rotation: [0,-1.5,0]
     },
     background: {
@@ -122,7 +129,13 @@ var htmlElems = {
             'fa fa-newspaper-o fa-5x'),
         location: [-6,0,0],
         rotation: [0,1.6,0]
-    },
+    }
+    // skylight: {
+    //     name: 'skylight',
+    //     popup: skyLightPopup('https://s3.amazonaws.com/3datajs.com/images/abstract.png'),
+    //     location: [0,10,0],
+    //     rotation: [0,-3.15,0]
+    // }
 }
 
 //Create Options Obj from list of 3DATAjs available properties
@@ -132,15 +145,18 @@ var options = {
     dblClickAppendPopup : false,
     autoAppendPopup : true,
     respondToWindowResizing : true,
+    nodeWidthSegments : 8,
+    nodeHeightSegments : 8,
     positioningType : 'defined', //random, automatic, grouped, or defined
     positioningVariable: 'location',
     nodePopupFunction : function(node){
          return node.popup;
     },
-    maxBound : 200,
-    backgroundType : 'color', //image or color
+    maxBound : 10000,
+    backgroundType : 'image', //image or color
+    backgroundImage : ['img/white.png','img/white.png','img/abstract.png','img/grey.png','img/black.jpg','img/black.jpg'],
     // ['left','right','top','bottom','back','front']
-    backgroundColor : [[1,1,1],[1,1,1],'0xc1cdc1','0xc1cdc1',[0,0,0],[0,0,0]],
+    // backgroundColor : [[1,1,1],[1,1,1],[0,0,0],'0xc1cdc1',[0,0,0],[0,0,0]],
     nodeRotationVar : 'rotation'
 }
 
@@ -171,52 +187,6 @@ var controls = _3DATA.getCamera()[1]
 controls.target.x = 0;
 controls.target.y = 0;
 controls.target.z = -6;
-
-
-//Nav Switches
-var locationArr = ['home','projects','info','links']
-function hideOtherIcons(location){
-    _.forEach(locationArr,function(loc){
-        var elem = '.nav-icon-'+loc;
-        $(elem).hide()
-    })
-    var elem2 = '.nav-icon-'+location;
-    $(elem2).show();
-}
-
-function flipArrowIconColor(){
-    if($('.nav-icon-left').hasClass('nav-icon-left-white')){
-        $('.nav-icon-left').removeClass('nav-icon-left-white').addClass('nav-icon-left-black')
-        $('.nav-icon-right').removeClass('nav-icon-right-white').addClass('nav-icon-right-black')
-    }else{
-        $('.nav-icon-left').removeClass('nav-icon-left-black').addClass('nav-icon-left-white')
-        $('.nav-icon-right').removeClass('nav-icon-right-black').addClass('nav-icon-right-white')
-    }
-}
-
-function toggleProjectView(project){
-    $('.projectDescriptionsContainer').toggleClass('hidden');
-    $('.nav-icon-projects').css('display','none');
-    if(project==='threedatajs'){
-        $('.threedatajsDescription').removeClass('hidden');
-        $('.terminalColorCaptureDescription').addClass('hidden');
-        $('.spaceRaceDescription').addClass('hidden');
-        $('.terminalColorCaptureContainer').addClass('hidden');
-        $('.spaceRaceContainer').addClass('hidden');
-    } else if(project==='terminalColorCapture'){
-        $('.terminalColorCaptureDescription').removeClass('hidden');
-        $('.threedatajsDescription').addClass('hidden');
-        $('.spaceRaceDescription').addClass('hidden');
-        $('.threedatajsContainer').addClass('hidden');
-        $('.spaceRaceContainer').addClass('hidden');
-    } else if(project==='spaceRace'){
-        $('.spaceRaceDescription').removeClass('hidden');
-        $('.threedatajsDescription').addClass('hidden');
-        $('.terminalColorCaptureDescription').addClass('hidden');
-        $('.threedatajsContainer').addClass('hidden');
-        $('.terminalColorCaptureContainer').addClass('hidden');
-    }
-}
 
 //Nav Tweens
 var oneSectionLeftKey = [3,0,1,2];
@@ -295,6 +265,140 @@ function tweenCameraLeft(target_location){
         z: target_location.target.z},750)
 }
 
+var posApex = 700;
+var posApexBase = 1;
+var cameraApex = 900;
+
+function tweenCameraUp(target_location){
+    //tween camera position
+    createjs.Tween.get(camera.position).to({
+        x: 0,
+        y: 0,
+        z: 0},750)
+    // .wait(300)
+    .to({
+        x: 0,
+        y: posApex,
+        z: 0},1500)
+    // .wait(300)
+    .to({
+        x: 0,
+        y: posApexBase,
+        z: 0},1500)
+    // .wait(300)
+    .to({
+        x: target_location.pos.x,
+        y: target_location.pos.y,
+        z: target_location.pos.z},750)
+
+    //tween camera target
+    createjs.Tween.get(controls.target).to({
+        x: 0,
+        y: cameraApex,
+        z: 0},750)
+    .wait(3000)
+    .to({
+        x: target_location.target.x,
+        y: target_location.target.y,
+        z: target_location.target.z},750)
+
+
+    // tween camera up position for spin effect
+    // for(i=1;i<1500;i++){
+    createjs.Tween.get(camera.up)
+    .wait(750)
+    .to({
+        x: 0,
+        y: 0,
+        z: 1},1)
+    .to({
+        x: 1,
+        y: 0,
+        z: 0},399)
+    .to({
+        x: 0,
+        y: 0,
+        z: -1},400)
+    .to({
+        x: -1,
+        y: 0,
+        z: 0},400)
+    .to({
+        x: 0,
+        y: 0,
+        z: 1},400)
+    .to({
+        x: 1,
+        y: 0,
+        z: 0},400)
+    .to({
+        x: 0,
+        y: 0,
+        z: -1},400)
+    .to({
+        x: -1,
+        y: 0,
+        z: 0},400)
+    .to({
+        x: 0,
+        y: 1,
+        z: 0},200)
+    // }
+}
+
+//Nav Switches
+var locationArr = ['home','projects','info','links']
+function hideOtherIcons(location){
+    _.forEach(locationArr,function(loc){
+        var elem = '.nav-icon-'+loc;
+        $(elem).hide()
+        var elem2 = '.'+loc+'Header';
+        $(elem2).addClass('hidden');
+    })
+    var elem3 = '.nav-icon-'+location;
+    $(elem3).show();
+    var elem4 = '.'+location+'Header';
+    $(elem4).removeClass('hidden');
+}
+
+function flipArrowIconColor(){
+    if($('.nav-icon-left').hasClass('nav-icon-left-white')){
+        $('.nav-icon-left').removeClass('nav-icon-left-white').addClass('nav-icon-left-black')
+        $('.nav-icon-right').removeClass('nav-icon-right-white').addClass('nav-icon-right-black')
+        $('.nav-icon-up').removeClass('nav-icon-up-white').addClass('nav-icon-up-black')
+    }else{
+        $('.nav-icon-left').removeClass('nav-icon-left-black').addClass('nav-icon-left-white')
+        $('.nav-icon-right').removeClass('nav-icon-right-black').addClass('nav-icon-right-white')
+        $('.nav-icon-up').removeClass('nav-icon-up-black').addClass('nav-icon-up-white')
+    }
+}
+
+function toggleProjectView(project){
+    $('.projectDescriptionsContainer').toggleClass('hidden');
+    $('.nav-icon-projects').css('display','none');
+    if(project==='threedatajs'){
+        $('.threedatajsDescription').removeClass('hidden');
+        $('.terminalColorCaptureDescription').addClass('hidden');
+        $('.spaceRaceDescription').addClass('hidden');
+        $('.terminalColorCaptureContainer').addClass('hidden');
+        $('.spaceRaceContainer').addClass('hidden');
+    } else if(project==='terminalColorCapture'){
+        $('.terminalColorCaptureDescription').removeClass('hidden');
+        $('.threedatajsDescription').addClass('hidden');
+        $('.spaceRaceDescription').addClass('hidden');
+        $('.threedatajsContainer').addClass('hidden');
+        $('.spaceRaceContainer').addClass('hidden');
+    } else if(project==='spaceRace'){
+        $('.spaceRaceDescription').removeClass('hidden');
+        $('.threedatajsDescription').addClass('hidden');
+        $('.terminalColorCaptureDescription').addClass('hidden');
+        $('.threedatajsContainer').addClass('hidden');
+        $('.terminalColorCaptureContainer').addClass('hidden');
+    }
+}
+
+// Nav Click Events
+
 var locations = {
     0:{name:'home',pos: homeCameraPos, target: homeControlsTarget, step: homeNavCameraPos},
     1:{name:'projects',pos: projectsCameraPos, target: projectsControlsTarget, step: projectsNavCameraPos},
@@ -325,11 +429,18 @@ $('.nav-icon-left').click(function(){
     hideOtherIcons(locations[locationIndex].name);
 });
 
+$('.nav-icon-up').click(function(){
+    locationIndex = twoSectionsLeftKey[locationIndex];
+    tweenCameraUp(locations[locationIndex]);
+    hideOtherIcons(locations[locationIndex].name);
+});
+
+//Project Click Events
+
 var threedatajsScale = 'scale(1.1,1.8)';
 var terminalColorCaptureScale = 'scale(1.5,2)'
 var spaceRaceScale = 'scale(2.3,2)'
 
-//Project Click Events
 $('.closeProjectDescription').click(function(){
     $('body:hover .threedatajsContainer').css('transform','');
     $('body:hover .threedatajsContainer').css('-webkit-transform','');

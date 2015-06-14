@@ -1,381 +1,529 @@
 
-// DEFAULTS
+// DEFAULTS //
 
-body {
-    font-family: 'Yanone Kaffeesatz', sans-serif;
-}
-
-// NAVIGATION ICONS//
-
-//Default Icon Properties
-.nav-icon-left,.nav-icon-right,.nav-icon-home, .nav-icon-info, .nav-icon-links{
-    position: absolute;
-    z-index: 10000000;
-    -webkit-transition:width 2s, height 2s, color 1s, font-size 1s, opacity 1s, -webkit-transform 2s;
-    transition:width 2s, height 2s, color 1s, font-size 1s, opacity 1s, transform 2s;
-}
-
-.nav-icon-projects {
-    position: absolute;
-    z-index: 10000000;
-    -webkit-transition: color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
-    transition: color 2s, font-size 1s, opacity 1s, transform 2s;
-}
-
-.nav-icon-projects, .nav-icon-info, .nav-icon-links{
-    display: none;
-}
-
-.profilePic,.profilePicCaptionContainer,.threedatajsContainer,.terminalColorCaptureContainer,
-    .spaceRaceContainer{
-    -webkit-transition: transform 5s;
-    transition: transform 5s;
-}
-
-.hidden {
-    opacity: 0;
-}
-
-//Arrow Nav Icons
-.nav-icon-left-white,.nav-icon-right-white {
-    color: white;
-    &:hover {
-        font-size: 12em;
-        color: tomato;
+    body {
+        font-family: 'Yanone Kaffeesatz', sans-serif;
+        margin: 0;
+        padding: 0;
     }
-}
 
-.nav-icon-left-black,.nav-icon-right-black {
-    color: black;
-    &:hover {
-        font-size: 12em;
-        color: tomato;
+// HEADERS //
+
+    .projectsHeader {
+        position: absolute;
+        bottom: 2%;
+        left: 46%;
+        z-index: 1;
+        color: black;
+        background-color: white;
+        border: 3px solid black;
+        border-radius: 5px;
+        padding: 10px;
     }
-}
 
-.nav-icon-left{
-    top: 40%;
-    left: 2%;
-    font-size: 10em;
-}
+    .infoHeader {
+        position: absolute;
+        bottom: 2%;
+        left: 47.5%;
+        z-index: 1;
+        color: white;
+        background-color: black;
+        border: 3px solid white;
+        border-radius: 5px;
+        padding: 10px;
+    }
 
-.nav-icon-right{
-    top: 40%;
-    right: 2%;
-    font-size: 10em;
-}
+    .linksHeader {
+        position: absolute;
+        bottom: 2%;
+        left: 47%;
+        z-index: 1;
+        color: black;
+        background-color: white;
+        border: 3px solid black;
+        border-radius: 5px;
+        padding: 10px;
+    }
 
-// Location Nav Icons
-.nav-icon-home{
-    top: 16%;
-    left: 31%;
-    font-size: 26em;
-    color: white;
-    background-color: black;
-    border: 5px solid white;
-    border-radius: 20px;
-    padding: 20px;
-}
+// NAVIGATION ICONS //
 
-body:hover .nav-icon-home{
-    opacity: 0;
-}
+    //Default Icon Properties
+    .nav-icon-left, .nav-icon-right, .nav-icon-up, .nav-icon-home, .nav-icon-info, .nav-icon-links{
+        position: absolute;
+        z-index: 10000000;
+        -webkit-transition:width 2s, height 2s, color 1s, font-size 1s, opacity 1s, -webkit-transform 2s;
+        transition:width 2s, height 2s, color 1s, font-size 1s, opacity 1s, transform 2s;
+    }
 
-.nav-icon-projects{
-    top: 16%;
-    left: 31%;
-    width: 32%;
-    font-size: 26em;
-    color: black;
-    background-color: white;
-    border: 5px solid black;
-    border-radius: 20px;
-    padding: 20px;
-}
+    .nav-icon-projects {
+        position: absolute;
+        z-index: 10000000;
+        -webkit-transition: color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
+        transition: color 2s, font-size 1s, opacity 1s, transform 2s;
+    }
 
-body:hover .nav-icon-projects{
-    opacity: 0;
-    z-index: 0;
-}
+    .nav-icon-projects, .nav-icon-info, .nav-icon-links{
+        display: none;
+    }
+
+    .profilePic,.profilePicCaptionContainer,.threedatajsContainer,.terminalColorCaptureContainer,
+        .spaceRaceContainer{
+        -webkit-transition: transform 5s;
+        transition: transform 5s;
+    }
+
+    .hidden {
+        opacity: 0;
+    }
+
+    //Arrow Nav Icons
+    .nav-icon-left-white,.nav-icon-right-white, .nav-icon-up-white {
+        color: white;
+        &:hover {
+            font-size: 12em;
+            color: tomato;
+        }
+    }
+
+    .nav-icon-left-black,.nav-icon-right-black, .nav-icon-up-black {
+        color: black;
+        &:hover {
+            font-size: 12em;
+            color: tomato;
+        }
+    }
+
+    .nav-icon-up-white {
+        color: white;
+        &:hover {
+            font-size: 4em;
+            color: tomato;
+        }
+    }
+
+    .nav-icon-up-black {
+        color: black;
+        &:hover {
+            font-size: 4em;
+            color: tomato;
+        }
+    }
+
+    .nav-icon-left{
+        top: 40%;
+        left: 2%;
+        font-size: 10em;
+    }
+
+    .nav-icon-right{
+        top: 40%;
+        right: 2%;
+        font-size: 10em;
+    }
+
+    .nav-icon-up{
+        top: 2%;
+        right: 45%;
+        font-size: 3em;
+        width: 100px;
+    }
+
+    // Location Nav Icons
+    .nav-icon-home{
+        top: 16%;
+        left: 31%;
+        font-size: 26em;
+        color: white;
+        background-color: black;
+        border: 5px solid white;
+        border-radius: 20px;
+        padding: 20px;
+    }
+
+    body:hover .nav-icon-home{
+        opacity: 0;
+    }
+
+    .nav-icon-projects{
+        top: 16%;
+        left: 31%;
+        width: 32%;
+        font-size: 26em;
+        color: black;
+        background-color: white;
+        border: 5px solid black;
+        border-radius: 20px;
+        padding: 20px;
+    }
+
+    body:hover .nav-icon-projects{
+        opacity: 0;
+        z-index: 0;
+    }
+
+
 // PROFILE //
 
-
-.profilePic {
-    border: 5px solid white;
-    border-radius: 50px;
-    width: 480px;
-    transform: translateX(250px);
-    -webkit-transform: translateX(250px);
-}
-
-body:hover .profilePic:hover {
-    transform: rotateY(360deg);
-    -webkit-transform: rotateY(360deg);
-}
-
-
-.profilePicCaptionContainer {
-    width: 740px;
-    border: 10px solid white;
-    padding: 40px;
-    border-radius: 50px;
-    background-color: black;
-    transform: translateX(-400px);
-    -webkit-transform: translateX(-400px);
-    .profileCaption {
-        font-family: 'Yanone Kaffeesatz', sans-serif;
-        font-size: 5em;
-        color: white;
+    .profilePic {
+        border: 5px solid white;
+        border-radius: 50px;
+        width: 480px;
+        transform: translateX(250px);
+        -webkit-transform: translateX(250px);
     }
-}
 
-body:hover .profilePic{
-    transform: translateX(0px);
-    -webkit-transform: translateX(0px);
-}
+    body:hover .profilePic:hover {
+        transform: rotateY(360deg);
+        -webkit-transform: rotateY(360deg);
+    }
 
-body:hover .profilePicCaptionContainer{
-    transform: translateX(0px);
-    -webkit-transform: translateX(0px);
-}
+
+    .profilePicCaptionContainer {
+        width: 740px;
+        border: 10px solid white;
+        padding: 40px;
+        border-radius: 50px;
+        background-color: black;
+        transform: translateX(-400px);
+        -webkit-transform: translateX(-400px);
+        .profileCaption {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 5em;
+            color: white;
+        }
+    }
+
+    body:hover .profilePic{
+        transform: translateX(0px);
+        -webkit-transform: translateX(0px);
+    }
+
+    body:hover .profilePicCaptionContainer{
+        transform: translateX(0px);
+        -webkit-transform: translateX(0px);
+    }
 
 
 
 // PROJECTS //
 
-.threedatajsContainer, .terminalColorCaptureContainer, .spaceRaceContainer{
-    padding: 20px;
-    border: 10px solid black;
-    border-radius: 20px;
-    background-color: white;
-    -webkit-transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
-    transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, transform 2s;
-}
-
-.threedatajsContainer{
-    transform: translateY(400px) translateX(450px);
-    -webkit-transform: translateY(400px) translateX(450px);
-    .threedatajs {
-        width: 800px;
+    .threedatajsContainer, .terminalColorCaptureContainer, .spaceRaceContainer{
+        padding: 20px;
+        border: 10px solid black;
+        border-radius: 20px;
+        background-color: white;
+        -webkit-transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
+        transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, transform 2s;
     }
-}
 
-.terminalColorCaptureContainer{
-    transform: translateY(400px) translateX(-400px);
-    -webkit-transform: translateY(400px) translateX(-400px);
-}
-
-.spaceRaceContainer{
-    transform: translateY(-300px);
-    -webkit-transform: translateY(-300px);
-}
-
-body:hover .threedatajsContainer, body:hover .terminalColorCaptureContainer,
-    body:hover .spaceRaceContainer{
-    transform: translateX(0px) translateY(0px);
-    -webkit-transform: translateX(0px) translateY(0px);
-}
-
-.projectTitle {
-    font-size: 3em;
-    text-align: center;
-    margin: 10px;
-}
-
-.projectDescriptionsContainer {
-    -webkit-transition: opacity 1s;
-    transition: opacity 1s;
-    position: absolute;
-    z-index: 9000000;
-    top: 16%;
-    left: 51%;
-    font-size: 1.8em;
-    width: 350px;
-    color: white;
-    background-color: black;
-    border: 5px solid white;
-    border-radius: 20px;
-    padding: 20px;
-}
-
-// Info
-
-.backgroundContainer, .skillsContainer, .interestsContainer {
-    color: white;
-    background-color: black;
-    padding: 80px;
-    border: 5px solid white;
-    border-radius: 50%;
-    font-size: 3em;
-    -moz-transition: width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
-    -webkit-transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
-    transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, transform 2s;
-}
-
-.backgroundContainer {
-    -webkit-animation: rearrangeBackground 5s ease-in-out infinite;
-    -moz-animation: rearrangeBackground 5s ease-in-out infinite;
-    animation: rearrangeBackground 5s ease-in-out infinite;
-}
-
-.skillsContainer {
-    -webkit-animation: rearrangeSkills 5s ease-in-out infinite;
-    -moz-animation: rearrangeSkills 5s ease-in-out infinite;
-    animation: rearrangeSkills 5s ease-in-out infinite;
-}
-
-.interestsContainer {
-    -webkit-animation: rearrangeInterests 5s ease-in-out infinite;
-    -moz-animation: rearrangeInterests 5s ease-in-out infinite;
-    animation: rearrangeInterests 5s ease-in-out infinite;
-}
-
-body:hover .backgroundContainer,body:hover .skillsContainer,body:hover .interestsContainer {
-    -webkit-animation: none;
-    -moz-animation: none;
-    animation: none;
-}
-
-body:hover .backgroundContainer {
-    transform: translateX(0px) translateY(250px);
-    -webkit-transform: translateX(0px) translateY(250px);
-    -moz-transform: translateX(0px) translateY(250px);
-}
-
-body:hover .skillsContainer {
-    transform: translateX(0px) translateY(250px);
-    -webkit-transform: translateX(0px) translateY(250px);
-    -moz-transform: translateX(0px) translateY(250px);
-}
-
-body:hover .interestsContainer {
-    transform: translateX(0px) translateY(-250px);
-    -webkit-transform: translateX(0px) translateY(-250px);
-    -moz-transform: translateX(0px) translateY(-250px);
-}
-
-body:hover .backgroundContainer:hover {
-    transform: translateX(0px) translateY(250px) rotateY(180deg);
-    -webkit-transform: translateX(0px) translateY(250px) rotateY(180deg);
-    -moz-transform: translateX(0px) translateY(250px) rotateY(180deg);
-    color: black;
-    background-color: white;
-    border: 5px solid tomato;
-}
-
-body:hover .skillsContainer:hover {
-    transform: translateX(0px) translateY(250px) rotateY(180deg);
-    -webkit-transform: translateX(0px) translateY(250px) rotateY(180deg);
-    -moz-transform: translateX(0px) translateY(250px) rotateY(180deg);
-    color: black;
-    background-color: white;
-    border: 5px solid tomato;
-}
-
-body:hover .interestsContainer:hover {
-    transform: translateX(0px) translateY(-250px) rotateY(180deg);
-    -webkit-transform: translateX(0px) translateY(-250px) rotateY(180deg);
-    -moz-transform: translateX(0px) translateY(-250px) rotateY(180deg);
-    color: black;
-    background-color: white;
-    border: 5px solid tomato;
-}
-
-.infoDescriptionsContainer {
-    -webkit-transition: opacity 1s;
-    transition: opacity 1s;
-    position: absolute;
-    z-index: 0;
-    top: 14%;
-    left: 29%;
-    font-size: 1.4em;
-    width: 500px;
-    height: 350px;
-    color: black;
-    background-color: white;
-    border: 5px solid tomato;
-    border-radius: 20px;
-    padding: 100px 20px 20px;
-}
-
-.closeInfoDescription {
-    position: absolute;
-    z-index: 1;
-    color: white;
-    font-size: 2em;
-    top: 9%;
-    left: 29%;
-}
-
-.skills-list {
-    list-style: none;
-    text-align: center;
-    margin-left: -35px;
-    li {
-        display: inline-block;
-        padding: 5px;
-        margin: 5px;
-        border: 1px solid black;
-        border-radius: 5px;
-        img {
-            width: 60px;
-            height: 60px;
+    .threedatajsContainer{
+        transform: translateY(400px) translateX(450px);
+        -webkit-transform: translateY(400px) translateX(450px);
+        .threedatajs {
+            width: 800px;
         }
     }
-}
 
-.interests-list {
-    padding: 40px 80px;
-    li {
-        margin-bottom: 30px;
+    .terminalColorCaptureContainer{
+        transform: translateY(400px) translateX(-400px);
+        -webkit-transform: translateY(400px) translateX(-400px);
     }
-}
 
-// Links
-
-.githubContainer,.linked_inContainer,.emailContainer,.resumeContainer{
-    color: black;
-    background-color: white;
-    padding: 80px;
-    border: 5px solid black;
-    border-radius: 5px;
-    font-size: 3em;
-    -webkit-transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
-    transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, transform 2s;
-    a{
-        display: block;
+    .spaceRaceContainer{
+        transform: translateY(-300px);
+        -webkit-transform: translateY(-300px);
     }
-}
 
-.githubContainer a,.linked_inContainer a,.emailContainer a,.resumeContainer a{
-    text-decoration: none;
-    color: black;
-}
+    body:hover .threedatajsContainer, body:hover .terminalColorCaptureContainer,
+        body:hover .spaceRaceContainer{
+        transform: translateX(0px) translateY(0px);
+        -webkit-transform: translateX(0px) translateY(0px);
+    }
 
-.githubContainer {
-    -webkit-animation: githubSpin 4s ease-in-out infinite;
-    -moz-animation: githubSpin 4s ease-in-out infinite;
-    animation: githubSpin 4s ease-in-out infinite;
-}
+    .projectTitle {
+        font-size: 3em;
+        text-align: center;
+        margin: 10px;
+    }
 
-.linked_inContainer {
-    -webkit-animation: linkedInSpin 4s ease-in-out infinite;
-    -moz-animation: linkedInSpin 4s ease-in-out infinite;
-    animation: linkedInSpin 4s ease-in-out infinite;
-}
+    .projectDescriptionsContainer {
+        -webkit-transition: opacity 1s;
+        transition: opacity 1s;
+        position: absolute;
+        z-index: 9000000;
+        top: 16%;
+        left: 51%;
+        font-size: 1.8em;
+        width: 350px;
+        color: white;
+        background-color: black;
+        border: 5px solid white;
+        border-radius: 20px;
+        padding: 20px;
+    }
 
-.emailContainer {
-    -webkit-animation: emailSpin 4s ease-in-out infinite;
-    -moz-animation: emailSpin 4s ease-in-out infinite;
-    animation: emailSpin 4s ease-in-out infinite;
-}
+// INFO //
 
-.resumeContainer {
-    -webkit-animation: resumeSpin 4s ease-in-out infinite;
-    -moz-animation: resumeSpin 4s ease-in-out infinite;
-    animation: resumeSpin 4s ease-in-out infinite;
-}
+    .backgroundContainer, .skillsContainer, .interestsContainer {
+        color: white;
+        background-color: black;
+        padding: 80px;
+        border: 5px solid white;
+        border-radius: 50%;
+        font-size: 3em;
+        -moz-transition: width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
+        -webkit-transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
+        transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, transform 2s;
+    }
 
+    .backgroundContainer {
+        -webkit-animation: rearrangeBackground 5s ease-in-out infinite;
+        -moz-animation: rearrangeBackground 5s ease-in-out infinite;
+        animation: rearrangeBackground 5s ease-in-out infinite;
+    }
+
+    .skillsContainer {
+        -webkit-animation: rearrangeSkills 5s ease-in-out infinite;
+        -moz-animation: rearrangeSkills 5s ease-in-out infinite;
+        animation: rearrangeSkills 5s ease-in-out infinite;
+    }
+
+    .interestsContainer {
+        -webkit-animation: rearrangeInterests 5s ease-in-out infinite;
+        -moz-animation: rearrangeInterests 5s ease-in-out infinite;
+        animation: rearrangeInterests 5s ease-in-out infinite;
+    }
+
+    body:hover .backgroundContainer,body:hover .skillsContainer,body:hover .interestsContainer {
+        -webkit-animation: none;
+        -moz-animation: none;
+        animation: none;
+    }
+
+    body:hover .backgroundContainer {
+        transform: translateX(0px) translateY(250px);
+        -webkit-transform: translateX(0px) translateY(250px);
+        -moz-transform: translateX(0px) translateY(250px);
+    }
+
+    body:hover .skillsContainer {
+        transform: translateX(0px) translateY(250px);
+        -webkit-transform: translateX(0px) translateY(250px);
+        -moz-transform: translateX(0px) translateY(250px);
+    }
+
+    body:hover .interestsContainer {
+        transform: translateX(0px) translateY(-250px);
+        -webkit-transform: translateX(0px) translateY(-250px);
+        -moz-transform: translateX(0px) translateY(-250px);
+    }
+
+    body:hover .backgroundContainer:hover {
+        transform: translateX(0px) translateY(250px) rotateY(180deg);
+        -webkit-transform: translateX(0px) translateY(250px) rotateY(180deg);
+        -moz-transform: translateX(0px) translateY(250px) rotateY(180deg);
+        color: black;
+        background-color: white;
+        border: 5px solid tomato;
+    }
+
+    body:hover .skillsContainer:hover {
+        transform: translateX(0px) translateY(250px) rotateY(180deg);
+        -webkit-transform: translateX(0px) translateY(250px) rotateY(180deg);
+        -moz-transform: translateX(0px) translateY(250px) rotateY(180deg);
+        color: black;
+        background-color: white;
+        border: 5px solid tomato;
+    }
+
+    body:hover .interestsContainer:hover {
+        transform: translateX(0px) translateY(-250px) rotateY(180deg);
+        -webkit-transform: translateX(0px) translateY(-250px) rotateY(180deg);
+        -moz-transform: translateX(0px) translateY(-250px) rotateY(180deg);
+        color: black;
+        background-color: white;
+        border: 5px solid tomato;
+    }
+
+    .infoDescriptionsContainer {
+        -webkit-transition: opacity 1s;
+        transition: opacity 1s;
+        position: absolute;
+        z-index: 0;
+        top: 14%;
+        left: 29%;
+        font-size: 1.4em;
+        width: 500px;
+        height: 350px;
+        color: black;
+        background-color: white;
+        border: 5px solid tomato;
+        border-radius: 20px;
+        padding: 100px 20px 20px;
+    }
+
+    .closeInfoDescription {
+        position: absolute;
+        z-index: 1;
+        color: white;
+        font-size: 2em;
+        top: 9%;
+        left: 29%;
+    }
+
+    .skills-list {
+        list-style: none;
+        text-align: center;
+        margin-left: -35px;
+        li {
+            display: inline-block;
+            padding: 5px;
+            margin: 5px;
+            border: 1px solid black;
+            border-radius: 5px;
+            img {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    }
+
+    .interests-list {
+        padding: 40px 80px;
+        li {
+            margin-bottom: 30px;
+        }
+    }
+
+
+// Links //
+
+    .githubContainer,.linked_inContainer,.emailContainer,.resumeContainer{
+        color: black;
+        background-color: white;
+        padding: 80px;
+        border: 5px solid black;
+        border-radius: 5px;
+        font-size: 3em;
+        -webkit-transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, -webkit-transform 2s;
+        transition:width 2s, height 2s, color 2s, font-size 1s, opacity 1s, transform 2s;
+        a{
+            display: block;
+        }
+    }
+
+    .githubContainer a,.linked_inContainer a,.emailContainer a,.resumeContainer a{
+        text-decoration: none;
+        color: black;
+    }
+
+    .githubContainer {
+        -webkit-animation: githubSpin 4s ease-in-out infinite;
+        -moz-animation: githubSpin 4s ease-in-out infinite;
+        animation: githubSpin 4s ease-in-out infinite;
+    }
+
+    .linked_inContainer {
+        -webkit-animation: linkedInSpin 4s ease-in-out infinite;
+        -moz-animation: linkedInSpin 4s ease-in-out infinite;
+        animation: linkedInSpin 4s ease-in-out infinite;
+    }
+
+    .emailContainer {
+        -webkit-animation: emailSpin 4s ease-in-out infinite;
+        -moz-animation: emailSpin 4s ease-in-out infinite;
+        animation: emailSpin 4s ease-in-out infinite;
+    }
+
+    .resumeContainer {
+        -webkit-animation: resumeSpin 4s ease-in-out infinite;
+        -moz-animation: resumeSpin 4s ease-in-out infinite;
+        animation: resumeSpin 4s ease-in-out infinite;
+    }
+
+    body:hover .githubContainer,body:hover .linked_inContainer,body:hover .emailContainer,
+        body:hover .resumeContainer {
+        -webkit-animation: none;
+        -moz-animation: none;
+        animation: none;
+    }
+
+    body:hover .githubContainer {
+        transform: translateX(-400px) translateY(-400px);
+        -webkit-transform: translateX(-400px) translateY(-400px);
+        -moz-transform: translateX(-400px) translateY(-400px);
+    }
+
+    body:hover .linked_inContainer {
+        transform: translateX(400px) translateY(-400px);
+        -webkit-transform: translateX(400px) translateY(-400px);
+        -moz-transform: translateX(400px) translateY(-400px);
+    }
+
+    body:hover .emailContainer {
+        transform: translateX(-400px) translateY(400px);
+        -webkit-transform: translateX(-400px) translateY(400px);
+        -moz-transform: translateX(-400px) translateY(400px);
+    }
+
+    body:hover .resumeContainer {
+        transform: translateX(400px) translateY(400px);
+        -webkit-transform: translateX(400px) translateY(400px);
+        -moz-transform: translateX(400px) translateY(400px);
+    }
+
+    body:hover .githubContainer:hover {
+        transform: translateX(-300px) translateY(-300px) scale(1.5);
+        -webkit-transform: translateX(-300px) translateY(-300px) scale(1.5);
+        -moz-transform: translateX(-300px) translateY(-300px) scale(1.5);
+        background-color: black;
+        border: 5px solid tomato;
+        a {
+            color: white;
+        }
+    }
+
+    body:hover .linked_inContainer:hover {
+        transform: translateX(300px) translateY(-300px) scale(1.5);
+        -webkit-transform: translateX(300px) translateY(-300px) scale(1.5);
+        -moz-transform: translateX(300px) translateY(-300px) scale(1.5);
+        background-color: black;
+        border: 5px solid tomato;
+        a {
+            color: white;
+        }
+    }
+
+    body:hover .emailContainer:hover {
+        transform: translateX(-300px) translateY(300px) scale(1.5);
+        -webkit-transform: translateX(-300px) translateY(300px) scale(1.5);
+        -moz-transform: translateX(-300px) translateY(300px) scale(1.5);
+        background-color: black;
+        border: 5px solid tomato;
+        a {
+            color: white;
+        }
+    }
+
+    body:hover .resumeContainer:hover {
+        transform: translateX(300px) translateY(300px) scale(1.5);
+        -webkit-transform: translateX(300px) translateY(300px) scale(1.5);
+        -moz-transform: translateX(300px) translateY(300px) scale(1.5);
+        color: white;
+        background-color: black;
+        border: 5px solid tomato;
+        a {
+            color: white;
+        }
+    }
+
+
+// SKYLIGHT //
+
+
+.skylight {
+    width: 1000px;
+}
 
 
 

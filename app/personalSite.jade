@@ -12,10 +12,12 @@ html(lang="en-US")
         //- nav arrow icons
         <i class="nav-icon-left nav-icon-left-white fa fa-caret-square-o-left"></i>
         <i class="nav-icon-right nav-icon-right-white fa fa-caret-square-o-right"></i>
+        <i class="nav-icon-up nav-icon-up-white fa fa-caret-square-o-up"></i>
         //- nav section icons
         <i class="nav-icon-home fa fa-home"></i>
         <i class="nav-icon-projects fa fa-briefcase"></i>
         //- project descriptions
+        .projectsHeader.hidden PROJECTS
         .projectDescriptionsContainer.hidden
             <i class="closeProjectDescription fa fa-times-circle-o"></i>
             p.threedatajsDescription.hidden 3Datajs is a small, customizable javascript library
@@ -29,6 +31,8 @@ html(lang="en-US")
                 | Tyler Black, Kyle McCormick, and Ben Taylor, this phaser/nodejs four player
                 | game allows the users to once again compete in the cold war race to space
                 | domination.
+        //- info descriptions
+        .infoHeader.hidden INFO
         .infoDescriptionsContainer.hidden
             .backgroundDescription.hidden
                 ul.background-list
@@ -73,6 +77,7 @@ html(lang="en-US")
                   li Electronics projects
                   li Philosophy and Economics
         <i class="closeInfoDescription fa fa-times-circle-o hidden"></i>
+        .linksHeader.hidden LINKS
         // [if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]
         script(src="vendor/jquery/dist/jquery.min.js")
         script(src="vendor/lodash/lodash.min.js")
