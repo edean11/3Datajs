@@ -154,7 +154,7 @@ var options = {
     },
     maxBound : 10000,
     backgroundType : 'image', //image or color
-    backgroundImage : ['img/white.png','img/white.png','img/abstract.png','img/grey.png','img/black.jpg','img/black.jpg'],
+    backgroundImage : ['img/white.png','img/white.png','img/abstract2.jpg','img/grey.png','img/black.jpg','img/black.jpg'],
     // ['left','right','top','bottom','back','front']
     // backgroundColor : [[1,1,1],[1,1,1],[0,0,0],'0xc1cdc1',[0,0,0],[0,0,0]],
     nodeRotationVar : 'rotation'
@@ -304,46 +304,35 @@ function tweenCameraUp(target_location){
 
 
     // tween camera up position for spin effect
-    // for(i=1;i<1500;i++){
-    createjs.Tween.get(camera.up)
-    .wait(750)
-    .to({
-        x: 0,
-        y: 0,
-        z: 1},1)
-    .to({
-        x: 1,
-        y: 0,
-        z: 0},399)
-    .to({
-        x: 0,
-        y: 0,
-        z: -1},400)
-    .to({
-        x: -1,
-        y: 0,
-        z: 0},400)
-    .to({
-        x: 0,
-        y: 0,
-        z: 1},400)
-    .to({
-        x: 1,
-        y: 0,
-        z: 0},400)
-    .to({
-        x: 0,
-        y: 0,
-        z: -1},400)
-    .to({
-        x: -1,
-        y: 0,
-        z: 0},400)
-    .to({
+
+    var spin = createjs.Tween.get(camera.up);
+    spin.wait(750)
+    for(i=1;i<3;i++){
+        spin.to({
+            x: 0,
+            y: 0,
+            z: 1},0.0001)
+        .to({
+            x: -1,
+            y: 0,
+            z: 0},300)
+        .to({
+            x: 0,
+            y: 0,
+            z: -1},300)
+        .to({
+            x: 1,
+            y: 0,
+            z: 0},300)
+        .to({
+            x: 0,
+            y: 0,
+            z: 1},300)
+    }
+    spin.to({
         x: 0,
         y: 1,
-        z: 0},200)
-    // }
+        z: 0},750)
 }
 
 //Nav Switches
